@@ -1,9 +1,10 @@
-require "vagrant/smartos/zones/version"
+require 'vagrant/smartos/zones/version'
+require 'vagrant/smartos/zones/action'
+require 'vagrant/smartos/zones/plugin'
 
 module Vagrant
   module Smartos
     module Zones
-      # Your code goes here...
     end
   end
 end
