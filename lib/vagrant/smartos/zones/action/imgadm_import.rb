@@ -17,16 +17,6 @@ module Vagrant
             if guest.capability?(:imgadm_import)
               guest.capability(:imgadm_import)
             end
-
-            #binding.pry
-
-            #sudo = machine.config.smartos.suexec_cmd
-            #image = machine.config.zone.image
-
-            #if !machine.communicate.test("#{sudo} imgadm get #{image}")
-              #@logger.info "Importing zone image #{image}"
-              #machine.communicate.execute("#{sudo} imgadm import #{image}")
-            #end
           end
         end
       end
