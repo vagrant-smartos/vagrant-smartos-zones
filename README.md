@@ -1,24 +1,30 @@
-# Vagrant::Smartos::Zones
+vagrant-smartos-zones
+=====================
 
-TODO: Write a gem description
+Manage SmartOS zones using Vagrant.
+
+## Dependencies
+
+This plugin depends on using a SmartOS global zone built to be vagrant
+compatible.
+
+```ruby
+config.vm.box = "livinginthepast/SmartOS-20140307T223339Z"
+```
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'vagrant-smartos-zones'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install vagrant-smartos-zones
+```ruby
+group :plugins do
+  gem 'vagrant-smartos-zones'
+end
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+TBD
 
 ## Contributing
 
