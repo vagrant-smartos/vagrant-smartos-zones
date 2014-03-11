@@ -2,7 +2,7 @@ module Vagrant
   module Smartos
     module Zones
       class ZoneConfig < Vagrant.plugin("2", :config)
-        attr_accessor :alias, :brand, :image
+        attr_accessor :brand, :image, :name
 
         def install(&block)
         end

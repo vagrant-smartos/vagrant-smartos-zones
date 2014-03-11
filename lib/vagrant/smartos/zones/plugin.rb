@@ -21,13 +21,21 @@ module Vagrant
           Cap::ImgadmImport
         end
 
+        guest_capability "global_zone", "zone_create" do
+          require_relative "cap/zone_create"
+          Cap::ZoneCreate
+        end
+
         class << self
-          def imgadm_import(hook)
+          def manage_zones(hook)
+            hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.zone_create)
             hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.imgadm_import)
           end
         end
 
-        action_hook(:image_import, :machine_action_up, &method(:imgadm_import))
+        action_hook(:image_import, :machine_action_up, &method(:manage_zones))
+        action_hook(:image_import, :machine_action_reload, &method(:manage_zones))
+        action_hook(:image_import, :machine_action_provision, &method(:manage_zones))
       end
     end
   end
