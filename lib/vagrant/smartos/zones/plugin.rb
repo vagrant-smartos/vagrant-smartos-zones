@@ -17,6 +17,11 @@ module Vagrant
           Command::Zones
         end
 
+        command "zlogin" do
+          require_relative 'commands/zlogin'
+          Command::Zlogin
+        end
+
         guest "global_zone", "smartos" do
           require_relative 'guest'
           Guest
