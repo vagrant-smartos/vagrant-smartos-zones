@@ -1,3 +1,4 @@
+require 'vagrant/smartos/zones/util/zone_info'
 module Vagrant
   module Smartos
     module Zones
@@ -36,16 +37,7 @@ module Vagrant
             zones = []
 
             with_target_vms("default") do |machine|
-              sudo = machine.config.smartos.suexec_cmd
-
-              machine.communicate.execute("#{sudo} vmadm lookup -j") do |type, output|
-                zone_data = JSON.parse(output)
-                zone_data.each do |zone|
-                  zones << [zone['alias'].to_s.ljust(25),
-                            zone['zone_state'].to_s.ljust(10),
-                            zone['zonename']].join(' ')
-                end
-              end
+              zones.concat(Util::ZoneInfo.new(machine).list)
             end
 
             @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.list",
@@ -56,10 +48,7 @@ module Vagrant
           def show(name)
             zone = {}
             with_target_vms("default") do |machine|
-              sudo = machine.config.smartos.suexec_cmd
-              machine.communicate.execute("#{sudo} vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{machine.config.zone.name}") do |type, output|
-                zone = JSON.parse(output).first
-              end
+              zone.merge!(Util::ZoneInfo.new(machine).show(name))
             end
 
             @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.show",
