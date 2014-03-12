@@ -7,8 +7,14 @@ module Vagrant
         description "SmartOS local zone support"
 
         config "zone" do
+          load_il8n
           require_relative 'zone_config'
           ZoneConfig
+        end
+
+        command "zones" do
+          require_relative 'commands/zones'
+          Command::Zones
         end
 
         guest "global_zone", "smartos" do
@@ -27,6 +33,11 @@ module Vagrant
         end
 
         class << self
+          def load_il8n
+            I18n.load_path << File.expand_path("../../locales/en.yml", __FILE__)
+            I18n.reload!
+          end
+
           def manage_zones(hook)
             hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.zone_create)
             hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.imgadm_import)

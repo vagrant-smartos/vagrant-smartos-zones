@@ -1,0 +1,16 @@
+en:
+  vagrant:
+    smartos:
+      zones:
+        commands:
+          zones:
+            list: |-
+              name                      state      uuid 
+              %{zones}
+            show: |-
+              name:      %{name}
+              state:     %{state}
+              uuid:      %{uuid}
+              brand:     %{brand}
+              image:     %{image}
+
