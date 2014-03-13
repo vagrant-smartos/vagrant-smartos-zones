@@ -1,3 +1,4 @@
+require 'vagrant'
 require 'vagrant/smartos/zones/util/zone_info'
 require 'vagrant/util/ssh'
 

@@ -1,3 +1,5 @@
+require 'vagrant'
+
 module Vagrant
   module Smartos
     module Zones

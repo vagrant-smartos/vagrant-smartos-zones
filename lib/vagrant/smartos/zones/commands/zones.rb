@@ -1,4 +1,6 @@
+require 'vagrant'
 require 'vagrant/smartos/zones/util/zone_info'
+
 module Vagrant
   module Smartos
     module Zones
