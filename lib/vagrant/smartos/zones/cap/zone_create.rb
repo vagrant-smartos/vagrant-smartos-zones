@@ -1,4 +1,3 @@
-require 'pry'
 module Vagrant
   module Smartos
     module Zones
