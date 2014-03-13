@@ -1,7 +1,7 @@
 module Vagrant
   module Smartos
     module Zones
-      VERSION = "0.0.1"
+      VERSION = "0.0.1.pre.1"
     end
   end
 end
