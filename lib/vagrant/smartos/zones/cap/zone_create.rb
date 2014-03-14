@@ -12,7 +12,7 @@ module Vagrant
               ui.info "Updating..."
               update_zone(machine)
             else
-              ui.info "Creating zone #{name}"
+              ui.info "Creating zone #{name} with image #{machine.config.zone.image}"
               create_zone(machine)
             end
           end

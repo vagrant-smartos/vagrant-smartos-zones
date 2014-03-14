@@ -8,12 +8,12 @@ module Vagrant
             sudo = machine.config.smartos.suexec_cmd
             image = machine.config.zone.image
 
-            if !machine.communicate.test("#{sudo} imgadm get #{image}")
-              ui.info "Global zone does not have #{image} installed"
-              ui.info "Importing..."
+            installed = machine.communicate.test("#{sudo} imgadm get #{image}")
+
+            ui.info "Checking for zone image #{image}: #{installed ? 'installed' : 'not installed'}"
+            if !installed
+              ui.info "  Importing..."
               machine.communicate.execute("#{sudo} imgadm import #{image}")
-            else
-              ui.info "Global zone already has #{image} installed"
             end
           end
         end
