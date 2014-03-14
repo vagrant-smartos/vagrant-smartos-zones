@@ -13,4 +13,8 @@ en:
               uuid:      %{uuid}
               brand:     %{brand}
               image:     %{image}
+            start: |-
+              Started zone %{name} %{uuid}
+            stop: |-
+              Stopped zone %{name} %{uuid}
 

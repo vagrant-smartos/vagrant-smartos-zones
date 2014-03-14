@@ -32,6 +32,18 @@ module Vagrant
             zone
           end
 
+          def start(name)
+            zone = show(name)
+            machine.communicate.execute("#{sudo} vmadm start #{zone['uuid']}")
+            zone
+          end
+
+          def stop(name)
+            zone = show(name)
+            machine.communicate.execute("#{sudo} vmadm stop #{zone['uuid']}")
+            zone
+          end
+
           def sudo
             machine.config.smartos.suexec_cmd
           end
