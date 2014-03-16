@@ -38,6 +38,9 @@ end
 
 ## Caveats
 
+* Boxes are created without the platform image boot media included.
+  Current plan is to add commands for downloading platform images into
+  .vagrant.d, then somehow getting VirtualBox to switch out the device.
 * Networking. Local zones can't route to the outside world.
 * Only one local zone per box. Working on it.
 * Usage may change with each prerelease version until I get it
@@ -65,12 +68,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 end
 ```
 
+Download or interact with SmartOS platform images:
+
+```bash
+vagrant smartos list
+vagrant smartos install [platform_image]
+```
+
+Interact with zones running in a box:
+
 ```bash
 vagrant zones list
 vagrant zones show [name]
 vagrant zones start [name]
 vagrant zones stop [name]
 ```
+
+SSH into the box and zlogin into a zone:
 
 ```bash
 vagrant zlogin [name]
