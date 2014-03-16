@@ -20,7 +20,7 @@ module Vagrant
 
             argv = parse_options(opts)
             return if !argv
-              
+
             zone_alias = argv.shift
 
             with_target_vms('default', single_target: true) do |machine|

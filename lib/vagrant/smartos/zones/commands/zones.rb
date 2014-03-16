@@ -25,10 +25,10 @@ module Vagrant
               o.separator "Options:"
               o.separator ""
             end
-            
+
             argv = parse_options(opts)
             return if !argv
-            
+
             case argv.shift
             when "list"
               list
