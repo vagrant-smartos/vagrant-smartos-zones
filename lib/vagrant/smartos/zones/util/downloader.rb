@@ -14,7 +14,7 @@ module Vagrant
           private
 
           def download_utility
-            if `which wget`
+            if system('which wget')
               'wget'
             else
               'curl'
