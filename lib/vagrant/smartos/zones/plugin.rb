@@ -8,8 +8,13 @@ module Vagrant
 
         description "SmartOS local zone support"
 
-        config "zone" do
+        config "smartos" do
           load_il8n
+          require_relative 'config/smartos'
+          Config::Smartos
+        end
+
+        config "zone" do
           require_relative 'config/zone'
           Config::Zone
         end
