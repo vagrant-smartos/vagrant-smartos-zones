@@ -13,11 +13,18 @@ module Vagrant
             setup_smartos_directories
           end
 
+          def get_platform_image(image)
+            install(image)
+            platform_image_path(image)
+          end
+
           def install(image)
             if ::File.exists?(platform_image_path(image)) && valid?(image)
-              env.ui.info "Image #{image} already exists"
+              ui.info "SmartOS platform image #{image} exists"
             else
+              ui.info "Downloading checksums for SmartOS platform image #{image}"
               Downloader.get(platform_image_checksum_url(image), platform_image_checksum_path(image))
+              ui.info "Downloading SmartOS platform image #{image}"
               Downloader.get(platform_image_url(image), platform_image_path(image))
             end
           end
@@ -27,10 +34,18 @@ module Vagrant
               File.basename(f, '.iso')
             end
 
-            env.ui.info(images.join("\n"), prefix: false)
+            ui.info(images.join("\n"), prefix: false)
           end
 
           private
+
+          def ui
+            env.respond_to?(:ui) ? env.ui : env[:ui]
+          end
+
+          def home_path
+            env.respond_to?(:home_path) ? env.home_path : env[:home_path]
+          end
 
           def valid?(image)
             checksums = ::File.read(platform_image_checksum_path(image)).split("\n")
@@ -39,15 +54,17 @@ module Vagrant
           end
 
           def images_dir
-            env.home_path.join('smartos', 'platform_images')
+            home_path.join('smartos', 'platform_images')
           end
 
           def checksums_dir
-            env.home_path.join('smartos', 'checksums')
+            home_path.join('smartos', 'checksums')
           end
 
           def setup_smartos_directories
-            env.setup_home_path
+            if env.respond_to?(:setup_home_path)
+              env.setup_home_path
+            end
             FileUtils.mkdir_p(images_dir)
             FileUtils.mkdir_p(checksums_dir)
           end

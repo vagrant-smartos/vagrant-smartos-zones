@@ -10,10 +10,6 @@ module Vagrant
           def initialize
             platform_image = UNSET_VALUE
           end
-
-          def finalize!
-            platform_image = 'latest' if platform_image== UNSET_VALUE
-          end
         end
       end
     end
