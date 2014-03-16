@@ -10,8 +10,8 @@ module Vagrant
 
         config "zone" do
           load_il8n
-          require_relative 'zone_config'
-          ZoneConfig
+          require_relative 'config/zone'
+          Config::Zone
         end
 
         command "zones" do
