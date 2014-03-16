@@ -38,9 +38,6 @@ end
 
 ## Caveats
 
-* Boxes are created without the platform image boot media included.
-  Current plan is to add commands for downloading platform images into
-  .vagrant.d, then somehow getting VirtualBox to switch out the device.
 * Networking. Local zones can't route to the outside world.
 * Only one local zone per box. Working on it.
 * Usage may change with each prerelease version until I get it
@@ -59,6 +56,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # See https://vagrantcloud.com/livinginthepast for SmartOS boxes
   config.vm.box = "livinginthepast/SmartOS-base64-13.3.1"
   config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # livinginthepast boxes include a default platform_image. Set
+  # here to download/use a different image.
+  config.global_zone.platform_image = '20140312T071408Z'
 
   config.zone.name = 'base64'
   config.zone.brand = 'joyent'
