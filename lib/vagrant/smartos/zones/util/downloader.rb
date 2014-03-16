@@ -14,7 +14,7 @@ module Vagrant
           private
 
           def download_utility
-            if system('which wget')
+            if system('which wget >/dev/null')
               'wget'
             else
               'curl'
@@ -22,11 +22,11 @@ module Vagrant
           end
 
           def wget(url, path)
-            `wget #{url} -O #{path}`
+            `wget #{url} -O #{path} --quiet`
           end
 
           def curl(url, path)
-            `curl #{url} -o #{path}`
+            `curl #{url} -o #{path} --silent`
           end
         end
       end
