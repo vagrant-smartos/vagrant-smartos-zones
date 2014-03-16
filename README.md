@@ -92,8 +92,24 @@ vagrant zlogin [name]
 
 ## References / Alternatives
 
+Any success of this project depends heavily on the work of others,
+which I've either learned from or pulled in directly.
+
 * https://github.com/joshado/vagrant-smartos - Vagrant plugin for
-  managing zones on a global zone running on an arbitary IP
+  managing zones on a global zone running on an arbitary IP.
+* https://github.com/groundwater/vagrant-smartos - Scripts for 
+  creating stand-alone boxes where GZ networking is twerked to pretend
+  that the local zone is the only thing in the box.
+* http://dlc-int.openindiana.org/aszeszo/vagrant - aszeszo's work,
+  which led to the above repo.
+* http://cuddletech.com/blog/?p=821 - [@benr](https://github.com/benr)'s
+  writeup of the above work.
+* http://vagrantup.com - Thank you so much to Michell Hashimoto for
+  making Vagrant in the first place.
+
+Please forgive any lapses of acknowledgment. I've read so many blog
+posts and so much source code in the course of working on this, many
+references have fallen by the wayside.
 
 ## Contributing
 
