@@ -19,6 +19,11 @@ module Vagrant
           Config::Zone
         end
 
+        command "smartos" do
+          require_relative 'commands/smartos'
+          Command::Smartos
+        end
+
         command "zones" do
           require_relative 'commands/zones'
           Command::Zones
@@ -42,6 +47,16 @@ module Vagrant
         guest_capability "global_zone", "zone_create" do
           require_relative "cap/zone_create"
           Cap::ZoneCreate
+        end
+
+        host_capability  "bsd", "platform_image_install" do
+          require_relative "cap/platform_image/install"
+          Cap::PlatformImage::Install
+        end
+
+        host_capability  "bsd", "platform_image_list" do
+          require_relative "cap/platform_image/list"
+          Cap::PlatformImage::List
         end
 
         class << self
