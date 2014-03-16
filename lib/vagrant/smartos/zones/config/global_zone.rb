@@ -4,7 +4,7 @@ module Vagrant
   module Smartos
     module Zones
       module Config
-        class Smartos < Vagrant.plugin("2", :config)
+        class GlobalZone < Vagrant.plugin("2", :config)
           attr_accessor :platform_image
 
           def initialize

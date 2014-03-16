@@ -6,12 +6,12 @@ module Vagrant
       class Plugin < Vagrant.plugin("2")
         name "smartos-zones"
 
-        description "SmartOS local zone support"
+        description "SmartOS zone support"
 
-        config "smartos" do
+        config "global_zone" do
           load_il8n
-          require_relative 'config/smartos'
-          Config::Smartos
+          require_relative 'config/global_zone'
+          Config::GlobalZone
         end
 
         config "zone" do
