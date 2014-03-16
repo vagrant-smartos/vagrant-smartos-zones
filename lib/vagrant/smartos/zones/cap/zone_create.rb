@@ -14,6 +14,7 @@ module Vagrant
             else
               ui.info "Creating zone #{name} with image #{machine.config.zone.image}"
               create_zone(machine)
+              ui.info "Zone created with uuid #{zone_uuid(machine)}"
             end
           end
 

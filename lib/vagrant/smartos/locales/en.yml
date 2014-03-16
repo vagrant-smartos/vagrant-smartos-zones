@@ -7,6 +7,10 @@ en:
             list: |-
               name                      state      uuid 
               %{zones}
+            destroy: |-
+              Destroying zone with name %{name}
+            destroyed: |-
+              Zone destroyed %{name} %{uuid}
             show: |-
               name:      %{name}
               state:     %{state}

@@ -23,6 +23,18 @@ module Vagrant
             zones
           end
 
+          def create(name)
+            if machine.guest.capability?(:zone_create)
+              machine.guest.capability(:zone_create)
+            end
+          end
+
+          def destroy(name)
+            zone = show(name)
+            machine.communicate.execute("#{sudo} vmadm delete #{zone['uuid']}")
+            zone
+          end
+
           def show(name)
             zone = {}
             machine.communicate.execute("#{sudo} vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{machine.config.zone.name}") do |type, output|

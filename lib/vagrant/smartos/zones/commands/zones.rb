@@ -18,6 +18,8 @@ module Vagrant
               o.separator ""
               o.separator "Commands:"
               o.separator "  list             show status of zones"
+              o.separator "  create [name]    create or update zone with alais [name]"
+              o.separator "  destroy [name]   delete zone with alais [name]"
               o.separator "  show [name]      show info on zone with alias [name]"
               o.separator "  start [name]     start zone with alais [name]"
               o.separator "  stop [name]      stop zone with alais [name]"
@@ -32,6 +34,10 @@ module Vagrant
             case argv.shift
             when "list"
               list
+            when "create"
+              create *argv
+            when "destroy"
+              destroy *argv
             when "show"
               show *argv
             when "start"
@@ -42,6 +48,30 @@ module Vagrant
               @env.ui.warn opts.to_s, prefix: false
               exit 1
             end
+          end
+
+          def create(name)
+            with_target_vms("default") do |machine|
+              Util::ZoneInfo.new(machine).create(name)
+            end
+          end
+
+          def destroy(name)
+            @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.destroy",
+                                 name: name),
+                                 prefix: false)
+
+            zone = {}
+            with_target_vms("default") do |machine|
+              zone.merge!(Util::ZoneInfo.new(machine).destroy(name))
+            end
+
+            @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.destroyed",
+                                 name: zone['alias'].to_s,
+                                 state: zone['state'].to_s,
+                                 uuid: zone['uuid'].to_s,
+                                 brand: zone['brand'].to_s,
+                                 image: zone['image_uuid'].to_s))
           end
 
           def list
