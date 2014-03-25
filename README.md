@@ -54,12 +54,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # See https://vagrantcloud.com/livinginthepast for SmartOS boxes
-  config.vm.box = "livinginthepast/SmartOS-base64-13.3.1"
+  config.vm.box = "livinginthepast/smartos"
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   # livinginthepast boxes include a default platform_image. Set
   # here to download/use a different image.
-  config.global_zone.platform_image = '20140312T071408Z'
+  # config.global_zone.platform_image = '20140312T071408Z'
 
   config.zone.name = 'base64'
   config.zone.brand = 'joyent'
