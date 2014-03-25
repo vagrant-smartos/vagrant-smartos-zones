@@ -9,7 +9,7 @@ This plugin depends on using a SmartOS global zone built to be vagrant
 compatible.
 
 ```ruby
-config.vm.box = "livinginthepast/SmartOS-20140307T223339Z"
+config.vm.box = "livinginthepast/smartos"
 ```
 
 See [Vagrant Cloud](https://vagrantcloud.com/livinginthepast) for some boxes.
