@@ -35,6 +35,10 @@ module Vagrant
               "dataset_uuid" => machine.config.zone.image,
               "quota" => machine.config.zone.disk_size || 1,
               "max_physical_memory" => machine.config.zone.memory || 64,
+              "resolvers" => [
+                "8.8.8.8",
+                "8.8.4.4"
+              ],
               "nics" => [
                 { "nic_tag" => "admin", "ip" => "dhcp"}
               ]
