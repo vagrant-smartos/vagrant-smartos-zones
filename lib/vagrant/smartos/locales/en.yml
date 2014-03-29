@@ -7,6 +7,12 @@ en:
             list: |-
               name                      state      uuid 
               %{zones}
+            create: |-
+              Created zone with name %{name}
+                uuid: %{uuid}
+                state: %{state}
+                brand: %{brand}
+                image: %{image}
             destroy: |-
               Destroying zone with name %{name}
             destroyed: |-

@@ -1,3 +1,5 @@
+require 'vagrant/smartos/zones/models/zone'
+
 module Vagrant
   module Smartos
     module Zones
@@ -26,12 +28,14 @@ module Vagrant
           def create(name)
             if machine.guest.capability?(:zone_create)
               machine.guest.capability(:zone_create)
+              show(name)
             end
           end
 
           def destroy(name)
             zone = show(name)
-            machine.communicate.execute("#{sudo} vmadm delete #{zone['uuid']}")
+            machine.communicate.execute("#{sudo} vmadm delete #{zone.uuid}")
+            zone.state = 'deleted'
             zone
           end
 
@@ -41,18 +45,24 @@ module Vagrant
               zone.merge!(JSON.parse(output).first)
             end
 
-            zone
+            Models::Zone.new.tap do |z|
+              z.name = zone['alias']
+              z.uuid = zone['uuid']
+              z.brand = zone['brand']
+              z.state = zone['state']
+              z.image = zone['image_uuid']
+            end
           end
 
           def start(name)
             zone = show(name)
-            machine.communicate.execute("#{sudo} vmadm start #{zone['uuid']}")
+            machine.communicate.execute("#{sudo} vmadm start #{zone.uuid}")
             zone
           end
 
           def stop(name)
             zone = show(name)
-            machine.communicate.execute("#{sudo} vmadm stop #{zone['uuid']}")
+            machine.communicate.execute("#{sudo} vmadm stop #{zone.uuid}")
             zone
           end
 

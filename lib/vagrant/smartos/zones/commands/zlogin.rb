@@ -25,7 +25,7 @@ module Vagrant
 
             with_target_vms('default', single_target: true) do |machine|
               zone = Util::ZoneInfo.new(machine).show(zone_alias)
-              Vagrant::Util::SSH.exec(machine.ssh_info, {extra_args: ["-t", "pfexec zlogin #{zone['uuid']}"]})
+              Vagrant::Util::SSH.exec(machine.ssh_info, {extra_args: ["-t", "pfexec zlogin #{zone.uuid}"]})
             end
           end
         end

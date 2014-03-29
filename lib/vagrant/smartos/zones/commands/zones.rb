@@ -52,26 +52,34 @@ module Vagrant
 
           def create(name)
             with_target_vms("default") do |machine|
-              Util::ZoneInfo.new(machine).create(name)
+              zone = Util::ZoneInfo.new(machine).create(name)
+              if zone
+                @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.create",
+                                     name: zone.name,
+                                     state: zone.state,
+                                     uuid: zone.uuid,
+                                     brand: zone.brand,
+                                     image: zone.image),
+                                     prefix: false)
+              end
             end
           end
 
           def destroy(name)
             @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.destroy",
-                                 name: name),
-                                 prefix: false)
+                                 name: name))
 
-            zone = {}
+            zone = nil
             with_target_vms("default") do |machine|
-              zone.merge!(Util::ZoneInfo.new(machine).destroy(name))
+              zone = Util::ZoneInfo.new(machine).destroy(name)
             end
 
             @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.destroyed",
-                                 name: zone['alias'].to_s,
-                                 state: zone['state'].to_s,
-                                 uuid: zone['uuid'].to_s,
-                                 brand: zone['brand'].to_s,
-                                 image: zone['image_uuid'].to_s))
+                                 name: zone.name,
+                                 state: zone.state,
+                                 uuid: zone.uuid,
+                                 brand: zone.brand,
+                                 image: zone.image))
           end
 
           def list
@@ -87,46 +95,46 @@ module Vagrant
           end
 
           def show(name)
-            zone = {}
+            zone = nil
             with_target_vms("default") do |machine|
-              zone.merge!(Util::ZoneInfo.new(machine).show(name))
+              zone = Util::ZoneInfo.new(machine).show(name)
             end
 
             @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.show",
-                                 name: zone['alias'].to_s,
-                                 state: zone['state'].to_s,
-                                 uuid: zone['uuid'].to_s,
-                                 brand: zone['brand'].to_s,
-                                 image: zone['image_uuid'].to_s),
+                                 name: zone.name,
+                                 state: zone.state,
+                                 uuid: zone.uuid,
+                                 brand: zone.brand,
+                                 image: zone.image),
                                  prefix: false)
           end
 
           def start(name)
-            zone = {}
+            zone = nil
             with_target_vms("default") do |machine|
-              zone.merge!(Util::ZoneInfo.new(machine).start(name))
+              zone = Util::ZoneInfo.new(machine).start(name)
             end
 
             @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.start",
-                                 name: zone['alias'].to_s,
-                                 state: zone['state'].to_s,
-                                 uuid: zone['uuid'].to_s,
-                                 brand: zone['brand'].to_s,
-                                 image: zone['image_uuid'].to_s))
+                                 name: zone.name,
+                                 state: zone.state,
+                                 uuid: zone.uuid,
+                                 brand: zone.brand,
+                                 image: zone.image))
           end
 
           def stop(name)
-            zone = {}
+            zone = nil
             with_target_vms("default") do |machine|
-              zone.merge!(Util::ZoneInfo.new(machine).stop(name))
+              zone = Util::ZoneInfo.new(machine).stop(name)
             end
 
             @env.ui.info(I18n.t("vagrant.smartos.zones.commands.zones.stop",
-                                 name: zone['alias'].to_s,
-                                 state: zone['state'].to_s,
-                                 uuid: zone['uuid'].to_s,
-                                 brand: zone['brand'].to_s,
-                                 image: zone['image_uuid'].to_s))
+                                 name: zone.name,
+                                 state: zone.state,
+                                 uuid: zone.uuid,
+                                 brand: zone.brand,
+                                 image: zone.image))
           end
         end
       end
