@@ -71,9 +71,9 @@ module Vagrant
           end
         end
 
-        action_hook(:image_import, :machine_action_up, &method(:manage_zones))
-        action_hook(:image_import, :machine_action_reload, &method(:manage_zones))
-        action_hook(:image_import, :machine_action_provision, &method(:manage_zones))
+        action_hook(:smartos_zones, :machine_action_up, &method(:manage_zones))
+        action_hook(:smartos_zones, :machine_action_reload, &method(:manage_zones))
+        action_hook(:smartos_zones, :machine_action_provision, &method(:manage_zones))
       end
     end
   end
