@@ -21,6 +21,7 @@ module Vagrant
           def self.create_zone(machine)
             sudo = machine.config.smartos.suexec_cmd
             machine.communicate.execute("echo '#{zone_json(machine)}' | #{sudo} vmadm create")
+            machine.guest.capability(:create_zone_users)
           end
 
           def self.update_zone(machine)
