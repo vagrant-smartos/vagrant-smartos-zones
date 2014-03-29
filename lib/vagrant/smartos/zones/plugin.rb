@@ -67,7 +67,6 @@ module Vagrant
 
           def manage_zones(hook)
             hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.zone_create)
-            hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.imgadm_import)
             hook.before(::VagrantPlugins::ProviderVirtualBox::Action::Import, Vagrant::Smartos::Zones::Action.virtualbox_platform_iso)
           end
         end
