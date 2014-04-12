@@ -5,16 +5,20 @@ module Vagrant
         class ZoneCreate
           def self.zone_create(machine)
             ui = machine.ui
-            name = machine.config.zone.name
 
-            if zone_exists?(machine)
-              ui.info "Zone #{name} exists"
-              ui.info "Updating..."
-              update_zone(machine)
+            if zone_valid?(machine)
+              name = machine.config.zone.name
+              if zone_exists?(machine)
+                ui.info "Zone #{name} exists"
+                ui.info "Updating..."
+                update_zone(machine)
+              else
+                ui.info "Creating zone #{name} with image #{machine.config.zone.image}"
+                create_zone(machine)
+                ui.info "Zone created with uuid #{zone_uuid(machine)}"
+              end
             else
-              ui.info "Creating zone #{name} with image #{machine.config.zone.image}"
-              create_zone(machine)
-              ui.info "Zone created with uuid #{zone_uuid(machine)}"
+              ui.info "No zone configured, skipping"
             end
           end
 
@@ -60,6 +64,10 @@ module Vagrant
               uuid << output
             end
             uuid
+          end
+
+          def self.zone_valid?(machine)
+            machine.config.zone && machine.config.zone.image && machine.config.zone.name
           end
 
           def self.list_zones(machine)
