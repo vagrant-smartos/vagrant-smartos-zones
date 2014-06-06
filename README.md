@@ -48,7 +48,7 @@ end
 ## Usage
 
 ```ruby
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+Vagrant.configure('2') do |config|
   config.vm.provider "virtualbox" do |v|
     v.memory = 3072
   end
