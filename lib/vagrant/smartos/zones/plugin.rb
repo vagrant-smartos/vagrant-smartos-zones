@@ -69,17 +69,10 @@ module Vagrant
             I18n.load_path << File.expand_path("../../locales/en.yml", __FILE__)
             I18n.reload!
           end
-
-          def manage_zones(hook)
-            hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.zone_create)
-            hook.before(::VagrantPlugins::ProviderVirtualBox::Action::Import, Vagrant::Smartos::Zones::Action.virtualbox_platform_iso)
-          end
         end
-
-        action_hook(:smartos_zones, :machine_action_up, &method(:manage_zones))
-        action_hook(:smartos_zones, :machine_action_reload, &method(:manage_zones))
-        action_hook(:smartos_zones, :machine_action_provision, &method(:manage_zones))
       end
     end
   end
 end
+
+require_relative 'hooks'
