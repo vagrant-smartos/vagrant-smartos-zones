@@ -5,7 +5,7 @@ module Vagrant
         manage_zones = lambda do |hook|
           require_relative 'action'
           hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.zone_create)
-          hook.before(::VagrantPlugins::ProviderVirtualBox::Action::Import, Vagrant::Smartos::Zones::Action.virtualbox_platform_iso)
+          hook.after(::VagrantPlugins::ProviderVirtualBox::Action::SaneDefaults, Vagrant::Smartos::Zones::Action.virtualbox_platform_iso)
         end
 
         action_hook('smartos-zones-up', :machine_action_up, &manage_zones)

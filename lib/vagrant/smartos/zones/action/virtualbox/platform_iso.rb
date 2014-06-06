@@ -12,8 +12,6 @@ module Vagrant
             end
 
             def call(env)
-              @app.call(env)
-
               @env = env
               @machine = env[:machine]
 
@@ -22,6 +20,8 @@ module Vagrant
                 machine.provider_config.customizations << remove_dvddrive
                 machine.provider_config.customizations << add_platform_image
               end
+
+              @app.call(env)
             end
 
             private
