@@ -4,7 +4,7 @@ module Vagrant
       class Plugin < Vagrant.plugin("2")
         manage_zones = lambda do |hook|
           require_relative 'action'
-          hook.before(::Vagrant::Action::Builtin::Provision, Vagrant::Smartos::Zones::Action.zone_create)
+          hook.after(::Vagrant::Action::Builtin::WaitForCommunicator, Vagrant::Smartos::Zones::Action.zone_create)
           hook.after(::VagrantPlugins::ProviderVirtualBox::Action::SaneDefaults, Vagrant::Smartos::Zones::Action.virtualbox_platform_iso)
         end
 
