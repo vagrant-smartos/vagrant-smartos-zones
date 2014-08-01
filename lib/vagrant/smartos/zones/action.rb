@@ -15,8 +15,8 @@ module Vagrant
 
           def zone_create
             @zone_create ||= ::Vagrant::Action::Builder.new.tap do |b|
-              b.use Vagrant::Smartos::Zones::Action::ZoneCreate
               b.use Vagrant::Smartos::Zones::Action::ImgadmImport
+              b.use Vagrant::Smartos::Zones::Action::ZoneCreate
             end
           end
         end

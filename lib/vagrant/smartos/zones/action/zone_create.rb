@@ -8,14 +8,14 @@ module Vagrant
           end
 
           def call(env)
-            @app.call(env)
-
             machine = env[:machine]
             guest = machine.guest
 
             if guest.capability?(:zone_create)
               guest.capability(:zone_create)
             end
+
+            @app.call(env)
           end
         end
       end

@@ -9,8 +9,6 @@ module Vagrant
           end
 
           def call(env)
-            @app.call(env)
-
             machine = env[:machine]
             @guest = machine.guest
 
@@ -18,6 +16,8 @@ module Vagrant
             if zones_supported?
               guest.capability(:imgadm_import)
             end
+
+            @app.call(env)
           end
 
           private
