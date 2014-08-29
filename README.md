@@ -14,12 +14,14 @@ config.vm.box = "livinginthepast/smartos"
 
 See [Vagrant Cloud](https://vagrantcloud.com/livinginthepast) for some boxes.
 
-This plugin also depends on Vagrant recognizing the SmartOS guest. 
-[This](https://github.com/mitchellh/vagrant/pull/3102) pull request adds
-support, but if you are attempting to use this plugin before that is
-included in an official release of Vagrant, you can install the
+This plugin also depends on Vagrant recognizing the SmartOS guest. This
+is available in Vagrant 1.5.3 or newer.
+
+Any outstanding issues with SmartOS integration in the current released
+version of Vagrant can be hacked into shape with the 
 [sax/vagrant-smartos-guest](https://github.com/sax/vagrant-smartos-guest)
-plugin to hack it in.
+plugin. This tracks fixes that have been submitted as pull requests to
+Vagrant but may have not been yet released.
 
 ## Installation
 
