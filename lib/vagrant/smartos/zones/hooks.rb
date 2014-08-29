@@ -13,7 +13,7 @@ module Vagrant
         action_hook('smartos-zones-up', :machine_action_up, &manage_zones)
         action_hook('smartos-zones-reload', :machine_action_reload, &manage_zones)
         action_hook('smartos-zones-provision', :machine_action_provision, &manage_zones)
-        action_hook('smartos-zones-provision', :machine_action_resume, &manage_zones)
+        action_hook('smartos-zones-resume', :machine_action_resume, &manage_zones)
       end
     end
   end
