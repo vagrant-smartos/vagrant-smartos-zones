@@ -66,6 +66,8 @@ Vagrant.configure('2') do |config|
   config.zone.image = 'c353c568-69ad-11e3-a248-db288786ea63'
   config.zone.memory = 2048
   config.zone.disk_size = 5
+
+  config.zone.synced_folder ".", "/vagrant", type: 'rsync'
 end
 ```
 
@@ -90,6 +92,29 @@ SSH into the box and zlogin into a zone:
 ```bash
 vagrant zlogin [name]
 ```
+
+## Synced Folders
+
+Vagrant allows synced folders into any SmartOS guest. When the guest is
+a global zone, be aware that the root partition is a RAM disk of a
+little more than 256M.
+
+### Rsync
+
+This plugin allows for synced folders of type `rsync` into local zones. 
+It works by rewriting the list of synced folders in the global zone to sync
+folders into the zone's file structure as seen by the global zone. For
+instance, `/vagrant` becomes `/zones/95fee2ea-ef89-423a-aed3-c2770fb5cadc/root/vagrant`.
+
+### NFS
+
+Pending.
+
+## User management
+
+The vagrant box with the global zone requires a `vagrant` user and
+group with which to connect. When creating a local zone, a `vagrant`
+user and group are also created.
 
 ## References / Alternatives
 
