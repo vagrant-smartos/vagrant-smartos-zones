@@ -108,6 +108,9 @@ It works by rewriting the list of synced folders in the global zone to sync
 folders into the zone's file structure as seen by the global zone. For
 instance, `/vagrant` becomes `/zones/95fee2ea-ef89-423a-aed3-c2770fb5cadc/root/vagrant`.
 
+Currently the `vagrant rsync` command does not work with zone synced
+folders, though `vagrant rsync-auto` does work.
+
 ### NFS
 
 Pending.
