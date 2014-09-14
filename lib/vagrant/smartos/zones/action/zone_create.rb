@@ -1,8 +1,12 @@
+require_relative 'helper'
+
 module Vagrant
   module Smartos
     module Zones
       module Action
         class ZoneCreate
+          include Helper
+
           def initialize(app, env)
             @app = app
           end
@@ -11,7 +15,7 @@ module Vagrant
             machine = env[:machine]
             guest = machine.guest
 
-            if guest.capability?(:zone_create)
+            if zones_supported?
               guest.capability(:zone_create)
             end
 
