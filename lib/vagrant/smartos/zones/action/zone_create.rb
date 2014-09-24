@@ -9,17 +9,16 @@ module Vagrant
 
           def initialize(app, env)
             @app = app
+            @env = env
           end
 
           def call(env)
-            @machine = env[:machine]
-            @guest = machine.guest
 
             if zones_supported?
-              @guest.capability(:zone_create)
+              guest.capability(:zone_create)
             end
 
-            @app.call(env)
+            app.call(env)
           end
         end
       end

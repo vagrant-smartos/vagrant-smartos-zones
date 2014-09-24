@@ -6,8 +6,24 @@ module Vagrant
 
           private
 
+          def app
+            @app
+          end
+
+          def env
+            @env
+          end
+
+          def machine
+            @machine ||= env[:machine]
+          end
+
+          def guest
+            @guest ||= machine.guest
+          end
+
           def zones_supported?
-            @zones_supported ||= @guest.capability?(:imgadm_import)
+            @zones_supported ||= guest.capability?(:imgadm_import)
           end
         end
       end
