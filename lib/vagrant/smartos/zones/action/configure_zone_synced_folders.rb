@@ -15,8 +15,8 @@ module Vagrant
           end
 
           def call(env)
-            machine = env[:machine]
-            guest = machine.guest
+            @machine = env[:machine]
+            @guest = machine.guest
 
             if zones_supported?
               zone = Vagrant::Smartos::Zones::Util::ZoneInfo.new(machine).show(machine.config.zone.name)

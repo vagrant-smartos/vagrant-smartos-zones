@@ -13,13 +13,13 @@ module Vagrant
           end
 
           def call(env)
-            machine = env[:machine]
+            @machine = env[:machine]
             @guest = machine.guest
 
             env[:ui].info "Checking if machine supports zones: #{zones_supported? ? 'yes' : 'no'}"
 
             if zones_supported?
-              guest.capability(:imgadm_import)
+              @guest.capability(:imgadm_import)
             end
 
             @app.call(env)

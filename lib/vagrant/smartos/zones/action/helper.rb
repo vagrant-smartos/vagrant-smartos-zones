@@ -7,7 +7,7 @@ module Vagrant
           private
 
           def zones_supported?
-            @zones_supported ||= guest.capability?(:imgadm_import)
+            @zones_supported ||= @guest.capability?(:imgadm_import)
           end
         end
       end
