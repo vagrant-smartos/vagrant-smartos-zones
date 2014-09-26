@@ -4,6 +4,7 @@ module Vagrant
       module Action
         require_relative 'action/imgadm_import'
         require_relative 'action/zone_create'
+        require_relative 'action/zone_gate'
         require_relative 'action/configure_zone_synced_folders'
         require_relative 'action/virtualbox/platform_iso'
 
@@ -18,6 +19,12 @@ module Vagrant
             @zone_create ||= ::Vagrant::Action::Builder.new.tap do |b|
               b.use Vagrant::Smartos::Zones::Action::ImgadmImport
               b.use Vagrant::Smartos::Zones::Action::ZoneCreate
+            end
+          end
+
+          def install_zone_gate
+            @install_zone_gate ||= ::Vagrant::Action::Builder.new.tap do |b|
+              b.use Vagrant::Smartos::Zones::Action::ZoneGate
             end
           end
 
