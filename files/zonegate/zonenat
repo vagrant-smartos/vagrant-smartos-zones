@@ -1,0 +1,143 @@
+#!/opt/local/bin/node
+// -*- mode: javascript; tab-width: 4; indent-tabs-mode: 1; st-rulers: [80] -*-
+
+// require
+var exec = require('child_process').exec;
+
+// global
+var zone;
+var state;
+var adminIp;
+var privateIp;
+var zoneIp;
+
+function executeNat(mapCmd, rdrCmd, cb)
+{
+	exec(mapCmd, function (err, _stdout, _stderr) {
+		if (err) {
+			cb(err);
+		} else {
+			exec(rdrCmd, function (err, _stdout, _stderr) {
+				if (err) {
+					cb(err);
+				} else {
+					cb();
+				}
+			});			
+		}
+	});
+}
+
+function enableAdminNat(cb)
+{
+	var mapCmd = 'echo "map e1000g0 0/0 -> ' + adminIp + '/32" | ipnat -f -';
+	var rdrCmd = 'echo "rdr e1000g0 0/0 -> ' + zoneIp + '" | ipnat -f -';
+
+	executeNat(mapCmd, rdrCmd, cb);
+}
+
+function disableAdminNat(cb)
+{
+	var mapCmd = 'echo "map e1000g0 0/0 -> ' + adminIp + '/32" | ipnat -r -f -';
+	var rdrCmd = 'echo "rdr e1000g0 0/0 -> ' + zoneIp + '" | ipnat -r -f -';
+
+	executeNat(mapCmd, rdrCmd, cb);
+}
+
+function enablePrivateNat(cb)
+{
+	var mapCmd = 'echo "map e1000g1 0/0 -> ' + privateIp + '/32" | ipnat -f -';
+	var rdrCmd = 'echo "rdr e1000g1 0/0 -> ' + zoneIp + '" | ipnat -f -';
+
+	executeNat(mapCmd, rdrCmd, cb);
+}
+
+function disablePrivateNat(cb)
+{
+	var mapCmd = 'echo "map e1000g1 0/0 -> ' + privateIp + '/32" | ipnat -r -f -';
+	var rdrCmd = 'echo "rdr e1000g1 0/0 -> ' + zoneIp + '" | ipnat -r -f -';
+
+	executeNat(mapCmd, rdrCmd, cb);
+}
+
+function probeAddresses(cb)
+{
+	var finished = function () {
+		if (adminIp != null && privateIp != null && zoneIp != null) {
+			cb();
+		}
+	}
+
+	// probe adminIp
+	exec("ipadm show-addr e1000g0/ -p -o ADDR | sed 's/\/.*//'", function (err, stdout, stderr) {
+		if (err) {
+			adminIp = false;
+		} else {
+			adminIp = stdout.trim();
+		}
+		finished();
+	});
+
+	// probe privateIP
+	exec("ipadm show-addr e1000g1/ -p -o ADDR | sed 's/\/.*//'", function (err, stdout, stderr) {
+		if (err) {
+			privateIP = false;
+		} else {
+			privateIP = stdout.trim();
+		}
+		finished();
+	});
+
+	// probe zoneIP
+	exec('vmadm get ' + zone + ' | json nics[0].ip', function (err, stdout, stderr) {
+		if (err) {
+			zoneIP = false;
+		} else {
+			zoneIP = ''
+		}
+		finished();
+	});
+}
+
+function main()
+{
+	var data = process.argv[2];
+
+	if (!data) {
+		process.exit(1);
+	}
+
+	data = data.trim().split(':');
+
+	zone  = data[0];
+	state = data[1];
+
+	probeAddresses(function () {
+		if (state == 'up') {
+			enableAdminNat(function (err) {
+				if (err) {
+					console.log('error enabling admin nat: ' + err.message);
+				}
+			});
+			enablePrivateNat(function (err) {
+				if (err) {
+					console.log('error enabling private nat: ' + err.message);
+				}
+			});
+		} else {
+			disableAdminNat(function (err) {
+				if (err) {
+					console.log('error disabling admin nat: ' + err.message);
+				}
+			});
+			disablePrivateNat(function (err) {
+				if (err) {
+					console.log('error disabling private nat: ' + err.message);
+				}
+			});
+		}
+	});
+
+}
+
+main();

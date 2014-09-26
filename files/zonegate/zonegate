@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+# todo: manually fire zonenat in case the zone is already running
+
+zonemon |
+  while IFS= read -r line
+  do
+    zonenat "$line"
+  done

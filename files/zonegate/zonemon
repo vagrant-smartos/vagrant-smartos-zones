@@ -1,0 +1,15 @@
+#!/usr/sbin/dtrace -qs
+
+/* up */
+zone_status_set:entry
+/ (args[0]->zone_id) != 0 && args[1] == 4 /
+{
+  printf("%s:up\n", stringof(args[0]->zone_name));
+}
+
+/* down */
+zone_status_set:entry
+/ (args[0]->zone_id) != 0 && args[1] == 7 /
+{
+  printf("%s:down\n", stringof(args[0]->zone_name));
+}
