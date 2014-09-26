@@ -46,6 +46,11 @@ function disableAdminNat(cb)
 
 function enablePrivateNat(cb)
 {
+	if (!privateIp) {
+		cb();
+		return;
+	}
+
 	var mapCmd = 'echo "map e1000g1 0/0 -> ' + privateIp + '/32" | ipnat -f -';
 	var rdrCmd = 'echo "rdr e1000g1 0/0 -> ' + zoneIp + '" | ipnat -f -';
 
@@ -54,6 +59,11 @@ function enablePrivateNat(cb)
 
 function disablePrivateNat(cb)
 {
+	if (!privateIp) {
+		cb();
+		return;
+	}
+
 	var mapCmd = 'echo "map e1000g1 0/0 -> ' + privateIp + '/32" | ipnat -r -f -';
 	var rdrCmd = 'echo "rdr e1000g1 0/0 -> ' + zoneIp + '" | ipnat -r -f -';
 
@@ -69,7 +79,7 @@ function probeAddresses(cb)
 	}
 
 	// probe adminIp
-	exec("ipadm show-addr e1000g0/ -p -o ADDR | sed 's/\/.*//'", function (err, stdout, stderr) {
+	exec("ipadm show-addr e1000g0/ -p -o ADDR | sed 's/\\\/.*//'", function (err, stdout, stderr) {
 		if (err) {
 			adminIp = false;
 		} else {
@@ -79,11 +89,11 @@ function probeAddresses(cb)
 	});
 
 	// probe privateIP
-	exec("ipadm show-addr e1000g1/ -p -o ADDR | sed 's/\/.*//'", function (err, stdout, stderr) {
+	exec("ipadm show-addr e1000g1/ -p -o ADDR | sed 's/\\\/.*//'", function (err, stdout, stderr) {
 		if (err) {
-			privateIP = false;
+			privateIp = false;
 		} else {
-			privateIP = stdout.trim();
+			privateIp = stdout.trim();
 		}
 		finished();
 	});
@@ -91,9 +101,9 @@ function probeAddresses(cb)
 	// probe zoneIP
 	exec('vmadm get ' + zone + ' | json nics[0].ip', function (err, stdout, stderr) {
 		if (err) {
-			zoneIP = false;
+			zoneIp = false;
 		} else {
-			zoneIP = ''
+			zoneIp = stdout.trim();
 		}
 		finished();
 	});
