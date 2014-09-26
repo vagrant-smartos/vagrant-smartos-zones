@@ -1,7 +1,13 @@
 #!/usr/bin/bash
 
-# todo: manually fire zonenat in case the zone is already running
+# first, we need to nat the zone if it's already running
+IFS=$'\n\t'
+for zone in $(/usr/sbin/zoneadm list -ip | grep running | tail -n +2 | awk -F":" '{ print $2 }');
+do
+  zonenat "${zone}:up"
+done
 
+# then we run a dtrace monitor and pipe the output as we receive it
 zonemon |
   while IFS= read -r line
   do
