@@ -1,3 +1,5 @@
+# This Vagrantfile exists for the purposes of development on
+# this plugin.
 Vagrant.configure('2') do |config|
   config.vm.provider "virtualbox" do |v|
     v.memory = 5120
