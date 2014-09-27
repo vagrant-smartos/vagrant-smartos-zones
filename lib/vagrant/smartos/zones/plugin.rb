@@ -8,6 +8,11 @@ module Vagrant
 
         description "SmartOS zone support"
 
+        communicator('smartos') do
+          require_relative 'communicator/smartos'
+          Communicator::Smartos
+        end
+
         config "global_zone" do
           load_il8n
           require_relative 'config/global_zone'

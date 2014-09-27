@@ -5,6 +5,7 @@ Vagrant.configure('2') do |config|
 
   # See https://vagrantcloud.com/livinginthepast for SmartOS boxes
   config.vm.box = 'livinginthepast/smartos-base64'
+  config.vm.communicator = 'smartos'
 
   # livinginthepast boxes include a default platform_image. Set
   # here to download/use a different image.
