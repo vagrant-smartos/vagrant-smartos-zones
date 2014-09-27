@@ -39,6 +39,11 @@ module Vagrant
           Guest
         end
 
+        guest_capability "global_zone", "create_gz_vnic" do
+          require_relative "cap/create_gz_vnic"
+          Cap::CreateGZVnic
+        end
+
         guest_capability "global_zone", "create_zone_users" do
           require_relative "cap/create_zone_users"
           Cap::CreateZoneUsers

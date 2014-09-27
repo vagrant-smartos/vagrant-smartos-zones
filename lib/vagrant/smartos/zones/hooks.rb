@@ -4,9 +4,11 @@ module Vagrant
       class Plugin < Vagrant.plugin("2")
         manage_zones = lambda do |hook|
           require_relative 'action'
-          hook.after(::Vagrant::Action::Builtin::WaitForCommunicator, Vagrant::Smartos::Zones::Action.zone_create)
-          hook.after(::Vagrant::Action::Builtin::WaitForCommunicator, Vagrant::Smartos::Zones::Action.install_zone_gate)
           hook.after(::VagrantPlugins::ProviderVirtualBox::Action::SaneDefaults, Vagrant::Smartos::Zones::Action.virtualbox_platform_iso)
+          hook.after(::Vagrant::Action::Builtin::WaitForCommunicator, Vagrant::Smartos::Zones::Action.create_gz_vnic)
+
+          hook.after(Vagrant::Smartos::Zones::Action::CreateGZVnic, Vagrant::Smartos::Zones::Action.install_zone_gate)
+          hook.after(Vagrant::Smartos::Zones::Action::ZoneGate, Vagrant::Smartos::Zones::Action.zone_create)
           hook.after(Vagrant::Smartos::Zones::Action::ZoneCreate, Vagrant::Smartos::Zones::Action.configure_zone_synced_folders)
           hook.after(Vagrant::Smartos::Zones::Action::ConfigureZoneSyncedFolders, Vagrant::Action::Builtin::SyncedFolders)
         end

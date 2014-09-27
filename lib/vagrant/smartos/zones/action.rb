@@ -2,6 +2,7 @@ module Vagrant
   module Smartos
     module Zones
       module Action
+        require_relative 'action/create_gz_vnic'
         require_relative 'action/imgadm_import'
         require_relative 'action/zone_create'
         require_relative 'action/zone_gate'
@@ -31,6 +32,12 @@ module Vagrant
           def configure_zone_synced_folders
             @configure_zone_synced_folders ||= ::Vagrant::Action::Builder.new.tap do |b|
               b.use Vagrant::Smartos::Zones::Action::ConfigureZoneSyncedFolders
+            end
+          end
+
+          def create_gz_vnic
+            @configure_zone_synced_folders ||= ::Vagrant::Action::Builder.new.tap do |b|
+              b.use Vagrant::Smartos::Zones::Action::CreateGZVnic
             end
           end
         end
