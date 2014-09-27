@@ -25,6 +25,10 @@ module Vagrant
           def zones_supported?
             @zones_supported ||= guest.capability?(:imgadm_import)
           end
+
+          def zone_configured?
+            !!machine.config.zone.name
+          end
         end
       end
     end

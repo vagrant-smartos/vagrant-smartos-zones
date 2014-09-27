@@ -4,6 +4,7 @@ module Vagrant
       class Plugin < Vagrant.plugin("2")
         manage_zones = lambda do |hook|
           require_relative 'action'
+          hook.before(::VagrantPlugins::ProviderVirtualBox::Action::ForwardPorts, Vagrant::Smartos::Zones::Action.forward_gz_ports)
           hook.after(::VagrantPlugins::ProviderVirtualBox::Action::SaneDefaults, Vagrant::Smartos::Zones::Action.virtualbox_platform_iso)
           hook.after(::Vagrant::Action::Builtin::WaitForCommunicator, Vagrant::Smartos::Zones::Action.create_gz_vnic)
 
