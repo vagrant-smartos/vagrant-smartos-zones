@@ -10,6 +10,24 @@ module Vagrant
         require_relative 'action/virtualbox/platform_iso'
 
         class << self
+          def configure_zone_synced_folders
+            @configure_zone_synced_folders ||= ::Vagrant::Action::Builder.new.tap do |b|
+              b.use Vagrant::Smartos::Zones::Action::ConfigureZoneSyncedFolders
+            end
+          end
+
+          def create_gz_vnic
+            @configure_zone_synced_folders ||= ::Vagrant::Action::Builder.new.tap do |b|
+              b.use Vagrant::Smartos::Zones::Action::CreateGZVnic
+            end
+          end
+
+          def install_zone_gate
+            @install_zone_gate ||= ::Vagrant::Action::Builder.new.tap do |b|
+              b.use Vagrant::Smartos::Zones::Action::ZoneGate
+            end
+          end
+
           def virtualbox_platform_iso
             @virtualbox_platform_iso ||= ::Vagrant::Action::Builder.new.tap do |b|
               b.use Vagrant::Smartos::Zones::Action::VirtualBox::PlatformISO
@@ -20,24 +38,6 @@ module Vagrant
             @zone_create ||= ::Vagrant::Action::Builder.new.tap do |b|
               b.use Vagrant::Smartos::Zones::Action::ImgadmImport
               b.use Vagrant::Smartos::Zones::Action::ZoneCreate
-            end
-          end
-
-          def install_zone_gate
-            @install_zone_gate ||= ::Vagrant::Action::Builder.new.tap do |b|
-              b.use Vagrant::Smartos::Zones::Action::ZoneGate
-            end
-          end
-
-          def configure_zone_synced_folders
-            @configure_zone_synced_folders ||= ::Vagrant::Action::Builder.new.tap do |b|
-              b.use Vagrant::Smartos::Zones::Action::ConfigureZoneSyncedFolders
-            end
-          end
-
-          def create_gz_vnic
-            @configure_zone_synced_folders ||= ::Vagrant::Action::Builder.new.tap do |b|
-              b.use Vagrant::Smartos::Zones::Action::CreateGZVnic
             end
           end
         end
