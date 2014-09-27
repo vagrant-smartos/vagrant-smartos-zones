@@ -2,11 +2,11 @@ module Vagrant
   module Smartos
     module Zones
       module Action
+        require_relative 'action/configure_zone_synced_folders'
         require_relative 'action/create_gz_vnic'
         require_relative 'action/imgadm_import'
         require_relative 'action/zone_create'
         require_relative 'action/zone_gate'
-        require_relative 'action/configure_zone_synced_folders'
         require_relative 'action/virtualbox/platform_iso'
 
         class << self
