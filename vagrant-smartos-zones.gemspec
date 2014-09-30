@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["sax@livinginthepast.org"]
   spec.summary       = %q{Manage SmartOS zones in Vagrant}
   spec.description   = %q{Manage SmartOS zones in Vagrant}
-  spec.homepage      = "https://github.com/sax/vagrant-smartos-zones"
+  spec.homepage      = "https://github.com/vagrant-smartos/vagrant-smartos-zones"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

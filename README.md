@@ -19,7 +19,7 @@ is available in Vagrant 1.5.3 or newer.
 
 Any outstanding issues with SmartOS integration in the current released
 version of Vagrant can be hacked into shape with the 
-[sax/vagrant-smartos-guest](https://github.com/sax/vagrant-smartos-guest)
+[vagrant-smartos/vagrant-smartos-guest](https://github.com/vagrant-smartos/vagrant-smartos-guest)
 plugin. This tracks fixes that have been submitted as pull requests to
 Vagrant but may have not been yet released.
 
@@ -34,7 +34,7 @@ an unreleased version of this plugin, add the following to your Gemfile.
 
 ```ruby
 group :plugins do
-  gem 'vagrant-smartos-zones', github: 'sax/vagrant-smartos-zones'
+  gem 'vagrant-smartos-zones', github: 'vagrant-smartos/vagrant-smartos-zones'
 end
 ```
 
@@ -144,7 +144,7 @@ references have fallen by the wayside.
 
 ## Contributing
 
-1. Fork it ( https://github.com/sax/vagrant-smartos-zones/fork )
+1. Fork it ( https://github.com/vagrant-smartos/vagrant-smartos-zones/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
