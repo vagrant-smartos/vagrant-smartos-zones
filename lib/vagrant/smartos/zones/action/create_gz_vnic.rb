@@ -1,4 +1,4 @@
-require_relative 'helper'
+require 'vagrant/smartos/zones/action/helper'
 
 module Vagrant
   module Smartos

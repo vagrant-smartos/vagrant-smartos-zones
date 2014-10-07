@@ -1,7 +1,7 @@
 require 'vagrant/smartos/zones/util/zone_info'
 require 'vagrant/smartos/zones/util/zone_user'
 require 'vagrant/smartos/zones/util/zone_group'
-require_relative 'helper'
+require 'vagrant/smartos/zones/action/helper'
 
 module Vagrant
   module Smartos
