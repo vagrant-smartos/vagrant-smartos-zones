@@ -90,10 +90,7 @@ module Vagrant
             end
 
             def connect(**opts)
-              if connection_valid?
-                return yield @connection if block_given?
-                return
-              end
+              return @connection if connection_valid?
 
               validate_ssh_info!
               check_ssh_key_permissions

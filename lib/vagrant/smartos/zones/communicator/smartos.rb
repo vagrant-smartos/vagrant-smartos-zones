@@ -32,7 +32,7 @@ module Vagrant
               generic_ssh_info = @connection_ssh_info
               @connection_ssh_info = global_zone_connector.ssh_info
 
-              exit_status = global_zone_connector.connect do |connection|
+              exit_status = global_zone_connector.with_connection do |connection|
                 shell_opts = {
                   sudo: opts[:sudo],
                   shell: opts[:shell],
