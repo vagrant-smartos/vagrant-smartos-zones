@@ -67,7 +67,7 @@ module Vagrant
             name = machine.config.zone.name
             sudo = machine.config.smartos.suexec_cmd
 
-            machine.communicate.test("#{sudo} vmadm list -H | awk '{print $5}' | grep #{name}")
+            machine.communicate.gz_test("#{sudo} vmadm list -H | awk '{print $5}' | grep #{name}")
           end
 
           def self.zone_uuid(machine)

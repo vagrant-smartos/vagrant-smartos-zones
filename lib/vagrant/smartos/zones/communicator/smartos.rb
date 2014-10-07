@@ -69,6 +69,11 @@ module Vagrant
             exit_status
           end
 
+          def gz_test(command, opts=nil)
+            opts = { error_check: false }.merge(opts || {})
+            gz_execute(command, opts) == 0
+          end
+
           private
 
           def global_zone_connector

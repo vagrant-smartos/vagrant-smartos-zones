@@ -9,7 +9,7 @@ module Vagrant
             image = machine.config.zone.image
 
             if image
-              installed = machine.communicate.test("#{sudo} imgadm get #{image}")
+              installed = machine.communicate.gz_test("#{sudo} imgadm get #{image}")
 
               ui.info "Checking for zone image #{image}: #{installed ? 'installed' : 'not installed'}"
               if !installed
