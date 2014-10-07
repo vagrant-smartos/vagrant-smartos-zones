@@ -24,6 +24,11 @@ module Vagrant
           Config::Zone
         end
 
+        command "global-zone" do
+          require_relative 'commands/global_zone'
+          Command::GlobalZone
+        end
+
         command "smartos" do
           require_relative 'commands/smartos'
           Command::Smartos
