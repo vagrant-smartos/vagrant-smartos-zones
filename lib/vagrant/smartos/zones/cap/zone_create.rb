@@ -30,13 +30,13 @@ module Vagrant
 
           def self.create_zone(machine)
             sudo = machine.config.smartos.suexec_cmd
-            machine.communicate.execute("echo '#{zone_json(machine)}' | #{sudo} vmadm create")
+            machine.communicate.gz_execute("echo '#{zone_json(machine)}' | #{sudo} vmadm create")
             machine.guest.capability(:create_zone_users)
           end
 
           def self.update_zone(machine)
             sudo = machine.config.smartos.suexec_cmd
-            machine.communicate.execute("echo '#{zone_json(machine)}' | #{sudo} vmadm update #{zone_uuid(machine)}")
+            machine.communicate.gz_execute("echo '#{zone_json(machine)}' | #{sudo} vmadm update #{zone_uuid(machine)}")
           end
 
           def self.zone_json(machine)
@@ -73,7 +73,7 @@ module Vagrant
           def self.zone_uuid(machine)
             sudo = machine.config.smartos.suexec_cmd
             uuid = ''
-            machine.communicate.execute("#{sudo} vmadm lookup alias=#{machine.config.zone.name}") do |type, output|
+            machine.communicate.gz_execute("#{sudo} vmadm lookup alias=#{machine.config.zone.name}") do |type, output|
               uuid << output
             end
             uuid
@@ -87,7 +87,7 @@ module Vagrant
             sudo = machine.config.smartos.suexec_cmd
             zones = ''
 
-            machine.communicate.execute("#{sudo} vmadm list -H", {}) do |type, output|
+            machine.communicate.gz_execute("#{sudo} vmadm list -H", {}) do |type, output|
               zones << output
             end
 

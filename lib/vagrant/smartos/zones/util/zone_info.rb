@@ -13,7 +13,7 @@ module Vagrant
 
           def list
             zones = []
-            machine.communicate.execute("#{sudo} vmadm lookup -j") do |type, output|
+            machine.communicate.gz_execute("#{sudo} vmadm lookup -j") do |type, output|
               zone_data = JSON.parse(output)
               zone_data.each do |zone|
                 zones << [zone['alias'].to_s.ljust(25),
@@ -34,14 +34,14 @@ module Vagrant
 
           def destroy(name)
             zone = show(name)
-            machine.communicate.execute("#{sudo} vmadm delete #{zone.uuid}")
+            machine.communicate.gz_execute("#{sudo} vmadm delete #{zone.uuid}")
             zone.state = 'deleted'
             zone
           end
 
           def show(name)
             zone = {}
-            machine.communicate.execute("#{sudo} vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{machine.config.zone.name}") do |type, output|
+            machine.communicate.gz_execute("#{sudo} vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{machine.config.zone.name}") do |type, output|
               zone.merge!(JSON.parse(output).first)
             end
 
@@ -56,13 +56,13 @@ module Vagrant
 
           def start(name)
             zone = show(name)
-            machine.communicate.execute("#{sudo} vmadm start #{zone.uuid}")
+            machine.communicate.gz_execute("#{sudo} vmadm start #{zone.uuid}")
             zone
           end
 
           def stop(name)
             zone = show(name)
-            machine.communicate.execute("#{sudo} vmadm stop #{zone.uuid}")
+            machine.communicate.gz_execute("#{sudo} vmadm stop #{zone.uuid}")
             zone
           end
 

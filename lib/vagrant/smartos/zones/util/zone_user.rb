@@ -15,7 +15,7 @@ module Vagrant
           def find(username)
             Models::ZoneUser.new.tap do |u|
               u.name = username
-              machine.communicate.execute("#{sudo} zlogin #{zone.uuid} id -u #{username}") do |type, output|
+              machine.communicate.gz_execute("#{sudo} zlogin #{zone.uuid} id -u #{username}") do |type, output|
                 u.uid = output.chomp
               end
             end

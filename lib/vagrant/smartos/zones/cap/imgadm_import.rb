@@ -14,7 +14,7 @@ module Vagrant
               ui.info "Checking for zone image #{image}: #{installed ? 'installed' : 'not installed'}"
               if !installed
                 ui.info "  Importing..."
-                machine.communicate.execute("#{sudo} imgadm import #{image}")
+                machine.communicate.gz_execute("#{sudo} imgadm import #{image}")
               end
             else
               ui.info "No zone image set, skipping import"
