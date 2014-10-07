@@ -56,7 +56,8 @@ module Vagrant
                   "nic_tag" => "stub0",
                   "ip" => "10.0.0.2",
                   "netmask" => "255.255.255.0",
-                  "gateway" => "10.0.0.1"
+                  "gateway" => "10.0.0.1",
+                  "allow_ip_spoofing" => true
                 }
               ]
             }.to_json
