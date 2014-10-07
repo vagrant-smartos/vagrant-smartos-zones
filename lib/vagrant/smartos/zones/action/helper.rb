@@ -29,6 +29,10 @@ module Vagrant
           def zone_configured?
             !!machine.config.zone.name
           end
+
+          def single_zone_mode?
+            !!machine.config.zone.name
+          end
         end
       end
     end

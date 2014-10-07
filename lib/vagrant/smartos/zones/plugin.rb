@@ -69,6 +69,11 @@ module Vagrant
           Cap::ZoneCreate
         end
 
+        guest_capability "global_zone", "zone_gate_enable" do
+          require_relative "cap/zone_gate/enable"
+          Cap::ZoneGate::Enable
+        end
+
         guest_capability "global_zone", "zone_gate_install" do
           require_relative "cap/zone_gate/install"
           Cap::ZoneGate::Install
