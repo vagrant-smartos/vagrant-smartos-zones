@@ -90,13 +90,17 @@ possible), a `zonegate` service is enabled in the global zone. This
 makes it so that inbound packets in the global zone are forwarded to the
 zone.
 
-### vagrant ssh
+#### vagrant ssh
 
 When `zonegate` is disabled or when a zone is not running, then `vagrant
 ssh` will access the global zone. When a zone is running while
 `zonegate` is enabled, then `vagrant ssh` will access the zone.
 
-### vagrant global-zone ssh
+```bash
+vagrant ssh
+```
+
+#### vagrant global-zone ssh
 
 A secondary port forward is installed in VirtualBox, which allows us to
 access the global zone even when `zonegate` forwards normal ssh to the
@@ -106,7 +110,7 @@ zone.
 vagrant global-zone ssh
 ```
 
-### vagrant zlogin [name]
+#### vagrant zlogin [name]
 
 This command accesses the zone, but through the global zone. It uses the
 global zone ssh port to connect to the global zone, then runs `zlogin`
@@ -114,6 +118,9 @@ to access the zone.
 
 This can by handy when, for instance, SSH becomes broken in the zone.
 
+```bash
+vagrant zlogin [name]
+```
 
 ## Synced Folders
 
@@ -121,11 +128,11 @@ Vagrant allows synced folders into any SmartOS guest. When the guest is
 a global zone, be aware that the root partition is a RAM disk of a
 little more than 256M.
 
-### VirtualBox guest additions
+#### VirtualBox guest additions
 
 Shared folders using VirtualBox guest additions currently do not work.
 
-### Rsync
+#### Rsync
 
 This plugin allows for synced folders of type `rsync` into local zones. 
 It works by rewriting the list of synced folders in the global zone to sync
@@ -135,7 +142,7 @@ instance, `/vagrant` becomes `/zones/95fee2ea-ef89-423a-aed3-c2770fb5cadc/root/v
 Currently the `vagrant rsync` command does not work with zone synced
 folders, though `vagrant rsync-auto` does work.
 
-### NFS
+#### NFS
 
 Pending.
 
