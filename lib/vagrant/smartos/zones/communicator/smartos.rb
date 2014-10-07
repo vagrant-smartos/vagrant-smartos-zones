@@ -7,7 +7,6 @@ module Vagrant
         class Smartos < Vagrant.plugin("2").manager.communicators[:ssh]
           def initialize(machine)
             @machine = machine
-            machine.ui.info "hey there. I'm a smartos communicator"
             super
           end
 
