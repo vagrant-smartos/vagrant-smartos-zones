@@ -134,13 +134,14 @@ Shared folders using VirtualBox guest additions currently do not work.
 
 #### Rsync
 
-This plugin allows for synced folders of type `rsync` into local zones. 
-It works by rewriting the list of synced folders in the global zone to sync
-folders into the zone's file structure as seen by the global zone. For
-instance, `/vagrant` becomes `/zones/95fee2ea-ef89-423a-aed3-c2770fb5cadc/root/vagrant`.
+In single-zone environments, synced folders of type `rsync` work as
+normal. `zonegate` forwards all packets into the zone, and the built-in
+synced folders code in Vagrant runs after the zone is configured.
 
-Currently the `vagrant rsync` command does not work with zone synced
-folders, though `vagrant rsync-auto` does work.
+```ruby
+# Vagrantfile
+config.vm.synced_folder ".", "/vagrant", type: "rsync"
+```
 
 #### NFS
 
