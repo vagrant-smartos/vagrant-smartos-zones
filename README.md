@@ -25,7 +25,7 @@ Vagrant but may have not been yet released.
 
 ## Quick Start Installation
 
-```
+```bash
 vagrant plugin install vagrant-smartos-zones
 
 mkdir <directory_name>
@@ -40,7 +40,7 @@ vagrant ssh
 ```
 
 
-## Neckbeard Installation
+## Slow Start Installation
 
 ```bash
 vagrant plugin install vagrant-smartos-zones
@@ -54,6 +54,20 @@ group :plugins do
   gem 'vagrant-smartos-zones', github: 'vagrant-smartos/vagrant-smartos-zones'
 end
 ```
+
+In a local checkout of this repository, the following will work:
+
+```bash
+gem install bundler
+bundle
+bundle exec vagrant up
+bundle exec vagrant ssh
+```
+
+Please note that this will install vagrant into your local ruby
+environment, which may overwrite or conflict with the normal vagrant
+version installed in your system.
+
 
 ## Usage
 
