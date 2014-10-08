@@ -23,7 +23,24 @@ version of Vagrant can be hacked into shape with the
 plugin. This tracks fixes that have been submitted as pull requests to
 Vagrant but may have not been yet released.
 
-## Installation
+## Quick Start Installation
+
+```
+vagrant plugin install vagrant-smartos-zones
+
+mkdir <directory_name>
+
+cd <directory_name>
+
+curl -sO https://raw.githubusercontent.com/vagrant-smartos/vagrant-smartos-zones/master/examples/Vagrantfile
+
+vagrant up
+
+vagrant ssh
+```
+
+
+## Neckbeard Installation
 
 ```bash
 vagrant plugin install vagrant-smartos-zones
