@@ -1,15 +1,60 @@
 #!/usr/bin/bash
 
-# first, we need to nat the zone if it's already running
-IFS=$'\n\t'
-for zone in $(/usr/sbin/zoneadm list -ip | grep running | tail -n +2 | awk -F":" '{ print $2 }');
-do
-  zonenat "${zone}:up"
-done
+. /lib/svc/share/smf_include.sh
 
-# then we run a dtrace monitor and pipe the output as we receive it
-zonemon |
-  while IFS= read -r line
+contract() {
+  echo $(svcprop -p restarter/contract $SMF_FMRI)
+}
+
+disable_nat_rules() {
+  IFS=$'\n\t'
+  # disable any running nat rules
+  for zone in $(/usr/sbin/zoneadm list -ip | grep running | tail -n +2 | awk -F":" '{ print $2 }');
   do
-    zonenat "$line"
+    zonenat "${zone}:down"
   done
+}
+
+start_zonenat() {
+  # then we run a dtrace monitor and pipe the output as we receive it
+  zonemon |
+    while IFS= read -r line
+    do
+      zonenat "$line"
+    done
+}
+
+stop_zonenat() {
+  local contract_id=$(contract)
+  smf_kill_contract ${contract_id} TERM
+}
+
+nat_existing_zone() {
+  IFS=$'\n\t'
+  # first, we need to nat the zone if it's already running
+  for zone in $(/usr/sbin/zoneadm list -ip | grep running | tail -n +2 | awk -F":" '{ print $2 }');
+  do
+    zonenat "${zone}:up"
+  done
+}
+
+start() {
+  echo 'enabling zonegate'
+  nat_existing_zone
+  start_zonenat &
+}
+
+stop() {
+  echo 'disabling zonegate'
+  disable_nat_rules
+  stop_zonenat
+}
+
+case $SMF_METHOD in
+start)
+  start
+  ;;
+stop)
+  stop
+  ;;
+esac
