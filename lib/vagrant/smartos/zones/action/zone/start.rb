@@ -5,7 +5,7 @@ module Vagrant
     module Zones
       module Action
         module Zone
-          class Stop
+          class Start
             include Helper
 
             def initialize(app, env)
@@ -16,7 +16,7 @@ module Vagrant
             def call(env)
 
               if zones_supported?
-                guest.capability(:zone__stop)
+                guest.capability(:zone__start)
               end
 
               app.call(env)

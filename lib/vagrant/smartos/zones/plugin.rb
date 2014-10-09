@@ -79,7 +79,12 @@ module Vagrant
           Cap::ZoneGate::Install
         end
 
-        guest_capability "global_zone", "zone_stop" do
+        guest_capability "global_zone", "zone__start" do
+          require_relative "cap/zone/start"
+          Cap::Zone::Start
+        end
+
+        guest_capability "global_zone", "zone__stop" do
           require_relative "cap/zone/stop"
           Cap::Zone::Stop
         end
