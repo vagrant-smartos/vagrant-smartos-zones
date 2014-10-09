@@ -6,7 +6,7 @@ module Vagrant
         require_relative 'action/create_gz_vnic'
         require_relative 'action/forward_gz_ports'
         require_relative 'action/imgadm_import'
-        require_relative 'action/zone_create'
+        require_relative 'action/zone/create'
         require_relative 'action/zone/start'
         require_relative 'action/zone/stop'
         require_relative 'action/zone_gate/enable'
@@ -53,7 +53,7 @@ module Vagrant
           def zone_create
             @zone_create ||= ::Vagrant::Action::Builder.new.tap do |b|
               b.use Vagrant::Smartos::Zones::Action::ImgadmImport
-              b.use Vagrant::Smartos::Zones::Action::ZoneCreate
+              b.use Vagrant::Smartos::Zones::Action::Zone::Create
             end
           end
 

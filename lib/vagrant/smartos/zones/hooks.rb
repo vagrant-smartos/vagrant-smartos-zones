@@ -10,12 +10,12 @@ module Vagrant
 
           hook.after(Vagrant::Smartos::Zones::Action::CreateGZVnic, Vagrant::Smartos::Zones::Action.install_zone_gate)
           hook.after(Vagrant::Smartos::Zones::Action::ZoneGate::Install, Vagrant::Smartos::Zones::Action.zone_create)
-          hook.after(Vagrant::Smartos::Zones::Action::ZoneCreate, Vagrant::Smartos::Zones::Action.configure_zone_synced_folders)
-          hook.after(Vagrant::Smartos::Zones::Action::ZoneCreate, Vagrant::Smartos::Zones::Action.zone_start)
+          hook.after(Vagrant::Smartos::Zones::Action::Zone::Create, Vagrant::Smartos::Zones::Action.configure_zone_synced_folders)
+          hook.after(Vagrant::Smartos::Zones::Action::Zone::Create, Vagrant::Smartos::Zones::Action.zone_start)
 
           # Currently if this runs before a zone is created, other capabilities (such as creating zone users)
           # fail with the error that the machine is not ready for guest communication.
-          hook.after(Vagrant::Smartos::Zones::Action::ZoneCreate, Vagrant::Smartos::Zones::Action.enable_zone_gate)
+          hook.after(Vagrant::Smartos::Zones::Action::Zone::Create, Vagrant::Smartos::Zones::Action.enable_zone_gate)
           hook.after(Vagrant::Smartos::Zones::Action::ConfigureZoneSyncedFolders, Vagrant::Action::Builtin::SyncedFolders)
         end
 

@@ -64,11 +64,6 @@ module Vagrant
           Cap::ImgadmImport
         end
 
-        guest_capability "global_zone", "zone_create" do
-          require_relative "cap/zone_create"
-          Cap::ZoneCreate
-        end
-
         guest_capability "global_zone", "zone_gate_enable" do
           require_relative "cap/zone_gate/enable"
           Cap::ZoneGate::Enable
@@ -77,6 +72,11 @@ module Vagrant
         guest_capability "global_zone", "zone_gate_install" do
           require_relative "cap/zone_gate/install"
           Cap::ZoneGate::Install
+        end
+
+        guest_capability "global_zone", "zone__create" do
+          require_relative "cap/zone/create"
+          Cap::Zone::Create
         end
 
         guest_capability "global_zone", "zone__start" do
