@@ -15,7 +15,7 @@ module Vagrant
             end
 
             def self.start_zone(machine)
-              return if self.zone(machine).state == 'running'
+              return if self.zone(machine).running?
               name = machine.config.zone.name
               machine.ui.info "Starting zone #{name}"
               self.zone_info(machine).start(name)
