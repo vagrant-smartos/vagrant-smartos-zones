@@ -4,18 +4,20 @@ module Vagrant
       module Cap
         class CreateGZVnic
           def self.create_gz_vnic(machine)
-            machine.ui.info "Installing vnic in global zone"
-            sudo = machine.config.smartos.suexec_cmd
+            if machine.communicate.test('test -d %s' % vm_tmp_folder)
+              machine.ui.info "Installing vnic in global zone"
+              sudo = machine.config.smartos.suexec_cmd
 
-            machine.communicate.upload(create_vnic_script, '%s/create_gz_vnic' % vm_tmp_folder)
-            machine.communicate.upload(vnic_smf_manifest, '%s/create-gz-vnic.xml' % vm_tmp_folder)
+              machine.communicate.upload(create_vnic_script, '%s/create_gz_vnic' % vm_tmp_folder)
+              machine.communicate.upload(vnic_smf_manifest, '%s/create-gz-vnic.xml' % vm_tmp_folder)
 
-            machine.communicate.execute("#{sudo} mv %s/create_gz_vnic /opt/custom/method" % vm_tmp_folder)
-            machine.communicate.execute("#{sudo} mv %s/create-gz-vnic.xml /opt/custom/smf" % vm_tmp_folder)
+              machine.communicate.execute("#{sudo} mv %s/create_gz_vnic /opt/custom/method" % vm_tmp_folder)
+              machine.communicate.execute("#{sudo} mv %s/create-gz-vnic.xml /opt/custom/smf" % vm_tmp_folder)
 
-            machine.communicate.execute("#")
+              machine.communicate.execute("#")
 
-            machine.communicate.execute("#{sudo} svccfg import /opt/custom/smf/create-gz-vnic.xml")
+              machine.communicate.execute("#{sudo} svccfg import /opt/custom/smf/create-gz-vnic.xml")
+            end
           end
 
           def self.local_files_folder
