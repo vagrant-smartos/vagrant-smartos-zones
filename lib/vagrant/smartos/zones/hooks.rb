@@ -18,10 +18,16 @@ module Vagrant
           hook.after(Vagrant::Smartos::Zones::Action::ConfigureZoneSyncedFolders, Vagrant::Action::Builtin::SyncedFolders)
         end
 
+        halt_zones = lambda do |hook|
+          require_relative 'action'
+          hook.before(::Vagrant::Action::Builtin::GracefulHalt, Vagrant::Smartos::Zones::Action.zone_stop)
+        end
+
         action_hook('smartos-zones-up', :machine_action_up, &manage_zones)
         action_hook('smartos-zones-reload', :machine_action_reload, &manage_zones)
         action_hook('smartos-zones-provision', :machine_action_provision, &manage_zones)
         action_hook('smartos-zones-resume', :machine_action_resume, &manage_zones)
+        action_hook('smartos-zones-halt', :machine_action_halt, &halt_zones)
       end
     end
   end

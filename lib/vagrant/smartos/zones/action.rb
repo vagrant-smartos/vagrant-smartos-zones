@@ -7,6 +7,7 @@ module Vagrant
         require_relative 'action/forward_gz_ports'
         require_relative 'action/imgadm_import'
         require_relative 'action/zone_create'
+        require_relative 'action/zone/stop'
         require_relative 'action/zone_gate/enable'
         require_relative 'action/zone_gate/install'
         require_relative 'action/virtualbox/platform_iso'
@@ -52,6 +53,12 @@ module Vagrant
             @zone_create ||= ::Vagrant::Action::Builder.new.tap do |b|
               b.use Vagrant::Smartos::Zones::Action::ImgadmImport
               b.use Vagrant::Smartos::Zones::Action::ZoneCreate
+            end
+          end
+
+          def zone_stop
+            @zone_stop ||= ::Vagrant::Action::Builder.new.tap do |b|
+              b.use Vagrant::Smartos::Zones::Action::Zone::Stop
             end
           end
         end

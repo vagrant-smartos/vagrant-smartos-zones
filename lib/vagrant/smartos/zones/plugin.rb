@@ -79,6 +79,11 @@ module Vagrant
           Cap::ZoneGate::Install
         end
 
+        guest_capability "global_zone", "zone_stop" do
+          require_relative "cap/zone/stop"
+          Cap::Zone::Stop
+        end
+
         host_capability  "bsd", "platform_image_install" do
           require_relative "cap/platform_image/install"
           Cap::PlatformImage::Install
