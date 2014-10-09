@@ -8,7 +8,7 @@ module Vagrant
               sudo = machine.config.smartos.suexec_cmd
               machine.ui.info "Enabling ZoneGate"
 
-              machine.communicate.gz_execute("#{sudo} svcadm enable zonegate")
+              machine.communicate.gz_execute("#{sudo} svcadm enable -s zonegate")
             end
           end
         end
