@@ -14,9 +14,8 @@ module Vagrant
               machine.communicate.execute("#{sudo} mv %s/create_gz_vnic /opt/custom/method" % vm_tmp_folder)
               machine.communicate.execute("#{sudo} mv %s/create-gz-vnic.xml /opt/custom/smf" % vm_tmp_folder)
 
-              machine.communicate.execute("#")
-
               machine.communicate.execute("#{sudo} svccfg import /opt/custom/smf/create-gz-vnic.xml")
+              machine.communicate.execute("#{sudo} svcadm enable -s create-gz-vnic")
             end
           end
 
