@@ -27,15 +27,10 @@ Vagrant but may have not been yet released.
 
 ```bash
 vagrant plugin install vagrant-smartos-zones
-
 mkdir <directory_name>
-
 cd <directory_name>
-
 curl -sO https://raw.githubusercontent.com/vagrant-smartos/vagrant-smartos-zones/master/examples/Vagrantfile
-
 vagrant up
-
 vagrant ssh
 ```
 
