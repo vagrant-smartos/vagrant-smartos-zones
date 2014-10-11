@@ -8,7 +8,7 @@ module Vagrant
           end
 
           def get(url, path)
-            self.send(download_utility, url, path)
+            send(download_utility, url, path)
           end
 
           private

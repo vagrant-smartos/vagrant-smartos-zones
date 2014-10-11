@@ -1,9 +1,7 @@
 require 'net/ssh'
 require 'stringio'
 require 'timeout'
-
 require 'vagrant/util/retryable'
-
 require 'vagrant/smartos/zones/util/global_zone/ssh_info'
 
 module Vagrant
@@ -32,6 +30,7 @@ module Vagrant
             ]
 
             class ErrorHandler < Struct.new(:error)
+              # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
               def handle!
                 case error.class
                 when Errno::EACCES
@@ -89,6 +88,7 @@ module Vagrant
               yield @connection if block_given?
             end
 
+            # rubocop:disable Metrics/MethodLength
             def connect(**opts)
               return @connection if connection_valid?
 
@@ -96,7 +96,7 @@ module Vagrant
               check_ssh_key_permissions
 
               # Default some options
-              opts[:retries] = 5 if !opts.has_key?(:retries)
+              opts[:retries] = 5 unless opts.key?(:retries)
 
               # Connect to SSH, giving it a few tries
               connection = nil
@@ -119,7 +119,7 @@ module Vagrant
                       logger.info("  - Host: #{ssh_info[:host]}")
                       logger.info("  - Port: #{ssh_info[:port]}")
                       logger.info("  - Username: #{ssh_info[:username]}")
-                      logger.info("  - Password? #{!!ssh_info[:password]}")
+                      logger.info("  - Password? #{uses_password?}")
                       logger.info("  - Key Path: #{ssh_info[:private_key_path]}")
 
                       Net::SSH.start(ssh_info[:host], ssh_info[:username], connect_opts)
@@ -139,7 +139,7 @@ module Vagrant
             end
 
             def ssh_info
-              @ssh_info ||= Vagrant::Smartos::Zones::Util::GlobalZone::SSHInfo.new(machine.provider, machine.config, machine.env).to_hash
+              @ssh_info ||= Util::GlobalZone::SSHInfo.new(machine.provider, machine.config, machine.env).to_hash
             end
 
             private
@@ -163,7 +163,7 @@ module Vagrant
                 port:                  ssh_info[:port],
                 timeout:               15,
                 user_known_hosts_file: [],
-                verbose:               :debug,
+                verbose:               :debug
               }
             end
 
@@ -183,6 +183,10 @@ module Vagrant
                 @connection = nil
                 false
               end
+            end
+
+            def uses_password?
+              !!ssh_info[:password]
             end
 
             def validate_ssh_info!

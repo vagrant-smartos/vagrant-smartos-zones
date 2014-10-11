@@ -19,7 +19,7 @@ module Vagrant
           end
 
           def install(image)
-            if ::File.exists?(platform_image_path(image)) && valid?(image)
+            if ::File.exist?(platform_image_path(image)) && valid?(image)
               ui.info "SmartOS platform image #{image} exists"
             else
               ui.info "Downloading checksums for SmartOS platform image #{image}"
@@ -62,9 +62,7 @@ module Vagrant
           end
 
           def setup_smartos_directories
-            if env.respond_to?(:setup_home_path)
-              env.setup_home_path
-            end
+            env.setup_home_path if env.respond_to?(:setup_home_path)
             FileUtils.mkdir_p(images_dir)
             FileUtils.mkdir_p(checksums_dir)
           end

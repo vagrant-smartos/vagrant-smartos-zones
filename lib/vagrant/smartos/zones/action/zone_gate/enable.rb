@@ -14,10 +14,7 @@ module Vagrant
             end
 
             def call(env)
-
-              if single_zone_mode?
-                guest.capability(:zone_gate_enable)
-              end
+              guest.capability(:zone_gate_enable) if single_zone_mode?
 
               app.call(env)
             end

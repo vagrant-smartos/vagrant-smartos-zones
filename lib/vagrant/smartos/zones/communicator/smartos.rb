@@ -10,6 +10,7 @@ module Vagrant
             super
           end
 
+          # rubocop:disable Metrics/MethodLength
           def gz_execute(command, opts={}, &block)
             opts = {
               error_check: true,

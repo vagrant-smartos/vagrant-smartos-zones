@@ -1,3 +1,4 @@
+# rubocop:disable all
 module Vagrant
   module Smartos
     module Zones

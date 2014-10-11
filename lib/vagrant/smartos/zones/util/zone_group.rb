@@ -15,7 +15,7 @@ module Vagrant
           def find(group)
             Models::ZoneGroup.new.tap do |g|
               g.name = group
-              machine.communicate.gz_execute("#{sudo} zlogin #{zone.uuid} gid -g #{group}") do |type, output|
+              machine.communicate.gz_execute("#{sudo} zlogin #{zone.uuid} gid -g #{group}") do |_type, output|
                 g.gid = output.chomp
               end
             end

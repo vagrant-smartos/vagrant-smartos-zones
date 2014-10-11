@@ -63,7 +63,7 @@ module Vagrant
                 proxy_command: proxy_command,
                 forward_agent: forward_agent,
                 forward_x11: forward_x11
-              }.delete_if { |k,v| v.nil? }
+              }.delete_if { |_k, v| v.nil? }
             end
 
             private
@@ -73,7 +73,7 @@ module Vagrant
             end
 
             def port_forward
-              @port_forward ||= provider.driver.read_forwarded_ports.detect do |fw|
+              @port_forward ||= provider.driver.read_forwarded_ports.find do |fw|
                 fw[1] == 'gz_ssh'
               end
             end

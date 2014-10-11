@@ -14,10 +14,7 @@ module Vagrant
             end
 
             def call(env)
-
-              if zones_supported?
-                guest.capability(:zone_gate_install)
-              end
+              guest.capability(:zone_gate_install) if zones_supported?
 
               app.call(env)
             end

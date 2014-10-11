@@ -13,10 +13,7 @@ module Vagrant
           end
 
           def call(env)
-
-            if zones_supported?
-              guest.capability(:create_gz_vnic)
-            end
+            guest.capability(:create_gz_vnic) if zones_supported?
 
             app.call(env)
           end

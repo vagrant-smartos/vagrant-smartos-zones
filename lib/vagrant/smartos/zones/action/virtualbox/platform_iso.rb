@@ -1,3 +1,4 @@
+require 'vagrant/smartos/zones/action/helper'
 require 'vagrant/smartos/zones/util/platform_images'
 
 module Vagrant
@@ -6,6 +7,8 @@ module Vagrant
       module Action
         module VirtualBox
           class PlatformISO
+            include Helper
+
             attr_accessor :app, :env, :machine
             def initialize(app, env)
               @app = app

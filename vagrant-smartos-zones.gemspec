@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Vagrant::Smartos::Zones::VERSION
   spec.authors       = ["Eric Saxby"]
   spec.email         = ["sax@livinginthepast.org"]
-  spec.summary       = %q{Manage SmartOS zones in Vagrant}
-  spec.description   = %q{Manage SmartOS zones in Vagrant}
+  spec.summary       = 'Manage SmartOS zones in Vagrant'
+  spec.description   = 'Manage SmartOS zones in Vagrant'
   spec.homepage      = "https://github.com/vagrant-smartos/vagrant-smartos-zones"
   spec.license       = "MIT"
 

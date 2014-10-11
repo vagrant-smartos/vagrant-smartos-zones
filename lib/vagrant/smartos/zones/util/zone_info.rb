@@ -13,7 +13,7 @@ module Vagrant
 
           def list
             zones = []
-            machine.communicate.gz_execute("#{sudo} vmadm lookup -j") do |type, output|
+            machine.communicate.gz_execute("#{sudo} vmadm lookup -j") do |_type, output|
               zone_data = JSON.parse(output)
               zone_data.each do |zone|
                 zones << [zone['alias'].to_s.ljust(25),
@@ -26,10 +26,10 @@ module Vagrant
           end
 
           def create(name)
-            if machine.guest.capability?(:zone_create)
-              machine.guest.capability(:zone_create)
-              show(name)
-            end
+            return unless machine.guest.capability?(:zone_create)
+
+            machine.guest.capability(:zone_create)
+            show(name)
           end
 
           def destroy(name)
@@ -40,8 +40,9 @@ module Vagrant
           end
 
           def show(name)
+            zone_name = name || machine.config.zone.name
             zone = {}
-            machine.communicate.gz_execute("#{sudo} vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{machine.config.zone.name}") do |type, output|
+            machine.communicate.gz_execute("#{sudo} vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{zone_name}") do |_type, output|
               zone.merge!(JSON.parse(output).first)
             end
 

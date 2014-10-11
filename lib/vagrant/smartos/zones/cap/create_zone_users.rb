@@ -5,6 +5,7 @@ module Vagrant
     module Zones
       module Cap
         class CreateZoneUsers
+          # rubocop:disable Metrics/LineLength, Metrics/MethodLength
           def self.create_zone_users(machine)
             ui = machine.ui
             sudo = machine.config.smartos.suexec_cmd
