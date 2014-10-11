@@ -4,14 +4,14 @@ module Vagrant
   module Smartos
     module Zones
       module Communicator
-        class Smartos < Vagrant.plugin("2").manager.communicators[:ssh]
+        class Smartos < Vagrant.plugin('2').manager.communicators[:ssh]
           def initialize(machine)
             @machine = machine
             super
           end
 
           # rubocop:disable Metrics/MethodLength
-          def gz_execute(command, opts={}, &block)
+          def gz_execute(command, opts = {}, &block)
             opts = {
               error_check: true,
               error_class: Vagrant::Errors::VagrantError,
@@ -19,14 +19,14 @@ module Vagrant
               good_exit:   0,
               command:     command,
               shell:       nil,
-              sudo:        false,
+              sudo:        false
             }.merge(opts)
 
             opts[:good_exit] = Array(opts[:good_exit])
 
             # Connect via SSH and execute the command in the shell.
-            stdout = ""
-            stderr = ""
+            stdout = ''
+            stderr = ''
             global_zone_connector.connect
 
             begin
@@ -36,7 +36,7 @@ module Vagrant
               exit_status = global_zone_connector.with_connection do |connection|
                 shell_opts = {
                   sudo: opts[:sudo],
-                  shell: opts[:shell],
+                  shell: opts[:shell]
                 }
 
                 shell_execute(connection, command, **shell_opts) do |type, data|
@@ -70,7 +70,7 @@ module Vagrant
             exit_status
           end
 
-          def gz_test(command, opts=nil)
+          def gz_test(command, opts = nil)
             opts = { error_check: false }.merge(opts || {})
             gz_execute(command, opts) == 0
           end

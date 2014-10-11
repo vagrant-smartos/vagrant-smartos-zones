@@ -10,7 +10,6 @@ module Vagrant
       module Util
         module GlobalZone
           class Connection < Struct.new(:machine, :logger)
-
             include Vagrant::Util::Retryable
 
             CONNECTION_TIMEOUT = 60
@@ -101,7 +100,7 @@ module Vagrant
               # Connect to SSH, giving it a few tries
               connection = nil
               begin
-                logger.info("Attempting SSH connection...")
+                logger.info('Attempting SSH connection...')
                 connection = retryable(tries: opts[:retries], on: RETRYABLE_EXCEPTIONS) do
                   Timeout.timeout(CONNECTION_TIMEOUT) do
                     begin
@@ -115,7 +114,7 @@ module Vagrant
                         connect_opts[:proxy] = Net::SSH::Proxy::Command.new(ssh_info[:proxy_command])
                       end
 
-                      logger.info("Attempting to connect to SSH...")
+                      logger.info('Attempting to connect to SSH...')
                       logger.info("  - Host: #{ssh_info[:host]}")
                       logger.info("  - Port: #{ssh_info[:port]}")
                       logger.info("  - Username: #{ssh_info[:username]}")
@@ -125,9 +124,9 @@ module Vagrant
                       Net::SSH.start(ssh_info[:host], ssh_info[:username], connect_opts)
                     ensure
                       # Make sure we output the connection log
-                      logger.debug("== Net-SSH connection debug-level log START ==")
+                      logger.debug('== Net-SSH connection debug-level log START ==')
                       logger.debug(ssh_logger.to_s)
-                      logger.debug("== Net-SSH connection debug-level log END ==")
+                      logger.debug('== Net-SSH connection debug-level log END ==')
                     end
                   end
                 end
@@ -150,10 +149,10 @@ module Vagrant
               end
             end
 
-            def common_connect_opts 
+            def common_connect_opts
               # Build the options we'll use to initiate the connection via Net::SSH
               @common_connect_opts ||= {
-                auth_methods:          ["none", "publickey", "hostbased", "password"],
+                auth_methods:          %w(none publickey hostbased password),
                 config:                false,
                 forward_agent:         ssh_info[:forward_agent],
                 keys:                  ssh_info[:private_key_path],
@@ -175,10 +174,10 @@ module Vagrant
               # 'closed?' above. To test this we need to send data through the
               # socket.
               begin
-                @connection.exec!("")
+                @connection.exec!('')
                 true
               rescue StandardError => e
-                logger.info("Connection errored, not re-using. Will reconnect.")
+                logger.info('Connection errored, not re-using. Will reconnect.')
                 logger.debug(e.inspect)
                 @connection = nil
                 false

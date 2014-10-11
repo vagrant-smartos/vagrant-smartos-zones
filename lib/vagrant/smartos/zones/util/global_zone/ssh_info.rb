@@ -4,7 +4,6 @@ module Vagrant
       module Util
         module GlobalZone
           class SSHInfo < Struct.new(:provider, :config, :env)
-
             def forward_agent
               config.ssh.forward_agent
             end

@@ -23,7 +23,7 @@ module Vagrant
           end
 
           def configure_gz_port_forward
-            machine.ui.info "Configuring a port forward to talk to the Global Zone"
+            machine.ui.info 'Configuring a port forward to talk to the Global Zone'
             machine.config.vm.network :forwarded_port, port_forward_options
           end
 

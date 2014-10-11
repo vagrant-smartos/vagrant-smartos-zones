@@ -6,29 +6,29 @@ module Vagrant
   module Smartos
     module Zones
       module Command
-        class GlobalZone < Vagrant.plugin("2", :command)
+        class GlobalZone < Vagrant.plugin('2', :command)
           def self.synopsis
-            "View and interact with the SmartOS global zone"
+            'View and interact with the SmartOS global zone'
           end
 
           def execute
             options = {}
 
             opts = OptionParser.new do |o|
-              o.banner = "Usage: vagrant global-zone [command]"
-              o.separator ""
-              o.separator "Commands:"
-              o.separator "  ssh        ssh into the global zone"
-              o.separator ""
-              o.separator "Options:"
-              o.separator ""
+              o.banner = 'Usage: vagrant global-zone [command]'
+              o.separator ''
+              o.separator 'Commands:'
+              o.separator '  ssh        ssh into the global zone'
+              o.separator ''
+              o.separator 'Options:'
+              o.separator ''
             end
 
             argv = parse_options(opts)
-            return if !argv
+            return unless argv
 
             case argv.shift
-            when "ssh"
+            when 'ssh'
               ssh
             else
               @env.ui.warn opts.to_s, prefix: false

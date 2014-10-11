@@ -68,7 +68,7 @@ module Vagrant
           end
 
           def platform_image_root
-            "https://us-east.manta.joyent.com"
+            'https://us-east.manta.joyent.com'
           end
 
           def platform_image_path(image)
@@ -91,4 +91,3 @@ module Vagrant
     end
   end
 end
-

@@ -6,7 +6,7 @@ module Vagrant
           class Install
             def self.zone_gate_install(machine)
               sudo = machine.config.smartos.suexec_cmd
-              machine.ui.info "Installing ZoneGate"
+              machine.ui.info 'Installing ZoneGate'
 
               smf_tmp_folder = '/usbkey/vagrant'
               smf_folder = '/opt/custom/smf'

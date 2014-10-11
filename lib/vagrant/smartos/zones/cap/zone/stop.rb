@@ -15,10 +15,10 @@ module Vagrant
             end
 
             def self.stop_zone(machine)
-              return unless self.zone(machine).running?
+              return unless zone(machine).running?
               name = machine.config.zone.name
               machine.ui.info "Stopping zone #{name}"
-              self.zone_info(machine).stop(name)
+              zone_info(machine).stop(name)
             end
           end
         end

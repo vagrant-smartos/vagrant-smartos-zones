@@ -10,7 +10,7 @@ module Vagrant
             include Helper
 
             attr_accessor :app, :env, :machine
-            def initialize(app, env)
+            def initialize(app, _env)
               @app = app
             end
 
@@ -19,7 +19,7 @@ module Vagrant
               @machine = env[:machine]
 
               if requires_platform_iso?
-                env[:ui].warn "Remapping platform ISO"
+                env[:ui].warn 'Remapping platform ISO'
                 machine.provider_config.customizations << remove_dvddrive
                 machine.provider_config.customizations << add_platform_image
               end
@@ -34,14 +34,19 @@ module Vagrant
             end
 
             def remove_dvddrive
-              ['pre-boot', ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--medium', 'none']]
+              ['pre-boot',
+               ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device',
+                0, '--medium', 'none']]
             end
 
             def add_platform_image
-              platform_image = Vagrant::Smartos::Zones::Util::PlatformImages.new(env).get_platform_image(machine.config.global_zone.platform_image)
-              ['pre-boot', ['storageattach', :id, '--storagectl', 'IDE Controller', 
-                            '--port', 1, '--device', 0, '--type', 'dvddrive', 
+              ['pre-boot', ['storageattach', :id, '--storagectl', 'IDE Controller',
+                            '--port', 1, '--device', 0, '--type', 'dvddrive',
                             '--medium', platform_image.to_s]]
+            end
+
+            def platform_image
+              Util::PlatformImages.new(env).get_platform_image(machine.config.global_zone.platform_image)
             end
           end
         end

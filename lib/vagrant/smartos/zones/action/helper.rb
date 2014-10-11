@@ -3,16 +3,9 @@ module Vagrant
     module Zones
       module Action
         module Helper
+          attr_reader :app, :env
 
           private
-
-          def app
-            @app
-          end
-
-          def env
-            @env
-          end
 
           def machine
             @machine ||= env[:machine]
@@ -38,4 +31,3 @@ module Vagrant
     end
   end
 end
-

@@ -5,7 +5,7 @@ module Vagrant
         class CreateGZVnic
           def self.create_gz_vnic(machine)
             if machine.communicate.test('test -d %s' % vm_tmp_folder)
-              machine.ui.info "Installing vnic in global zone"
+              machine.ui.info 'Installing vnic in global zone'
               sudo = machine.config.smartos.suexec_cmd
 
               machine.communicate.upload(create_vnic_script, '%s/create_gz_vnic' % vm_tmp_folder)
@@ -39,4 +39,3 @@ module Vagrant
     end
   end
 end
-

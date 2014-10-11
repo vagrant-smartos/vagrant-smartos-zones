@@ -3,7 +3,7 @@ require 'vagrant'
 module Vagrant
   module Smartos
     module Zones
-      class Guest < Vagrant.plugin("2", :guest)
+      class Guest < Vagrant.plugin('2', :guest)
         TEST_COMMAND = "grep 'SmartOS [0-9]\\{8\\}T[0-9]\\{6\\}Z' /etc/release"
 
         def detect?(machine)
