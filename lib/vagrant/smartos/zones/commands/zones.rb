@@ -35,15 +35,15 @@ module Vagrant
             when 'list'
               list
             when 'create'
-              create *argv
+              create argv.first
             when 'destroy'
-              destroy *argv
+              destroy argv.first
             when 'show'
-              show *argv
+              show argv.first
             when 'start'
-              start *argv
+              start argv.first
             when 'stop'
-              stop *argv
+              stop argv.first
             else
               @env.ui.warn opts.to_s, prefix: false
               exit 1

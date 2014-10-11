@@ -8,3 +8,5 @@ Style/SignalException:
   Enabled: false
 Style/FormatString:
   Enabled: false
+Style/MultilineBlockChain:
+  Enabled: false
