@@ -1,11 +1,14 @@
 require 'vagrant'
 require 'vagrant/smartos/zones/util/zone_info'
+require_relative 'multi_command'
 
 module Vagrant
   module Smartos
     module Zones
       module Command
         class Zones < Vagrant.plugin('2', :command)
+          include MultiCommand
+
           COMMANDS = %w(create destroy list show start stop).freeze
 
           OPTION_PARSER = OptionParser.new do |o|
@@ -28,18 +31,7 @@ module Vagrant
           end
 
           def execute
-            argv = parse_options(OPTION_PARSER)
-            return unless argv
-
-            command = argv.shift
-            command_method = COMMANDS.find { |c| c == command }
-
-            unless command_method
-              @env.ui.warn OPTION_PARSER.to_s, prefix: false
-              exit 1
-            end
-
-            send command_method, argv.first
+            process_subcommand
           end
 
           def create(name)

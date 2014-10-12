@@ -8,18 +8,16 @@ module Vagrant
     module Zones
       module Command
         class Zlogin < Vagrant.plugin('2', :command)
+          OPTION_PARSER = OptionParser.new do |o|
+            o.banner = 'Usage: vagrant zlogin [name]'
+          end
+
           def self.synopsis
             'Log into a SmartOS local zone'
           end
 
           def execute
-            options = {}
-
-            opts = OptionParser.new do |o|
-              o.banner = 'Usage: vagrant zlogin [name]'
-            end
-
-            argv = parse_options(opts)
+            argv = parse_options(OPTION_PARSER)
             return unless argv
 
             zone_alias = argv.shift
