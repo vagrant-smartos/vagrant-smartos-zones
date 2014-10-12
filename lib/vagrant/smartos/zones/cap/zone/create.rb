@@ -1,4 +1,5 @@
 require 'vagrant/smartos/zones/cap/zone/base'
+require 'vagrant/smartos/zones/util/zone_json'
 
 module Vagrant
   module Smartos
@@ -38,27 +39,7 @@ module Vagrant
             end
 
             def zone_json
-              {
-                'brand' => machine.config.zone.brand,
-                'alias' => machine.config.zone.name,
-                'dataset_uuid' => machine.config.zone.image,
-                'quota' => machine.config.zone.disk_size || 1,
-                'max_physical_memory' => machine.config.zone.memory || 64,
-                'fs_allowed' => 'vboxfs',
-                'resolvers' => [
-                  '8.8.8.8',
-                  '8.8.4.4'
-                ],
-                'nics' => [
-                  {
-                    'nic_tag' => 'stub0',
-                    'ip' => '10.0.0.2',
-                    'netmask' => '255.255.255.0',
-                    'gateway' => '10.0.0.1',
-                    'allow_ip_spoofing' => true
-                  }
-                ]
-              }.to_json
+              Util::ZoneJson.new(machine).to_json
             end
 
             def zone_uuid
