@@ -2,7 +2,7 @@
 # this plugin.
 Vagrant.configure('2') do |config|
   config.vm.provider 'virtualbox' do |v|
-    v.memory = 5120
+    v.memory = 2048
   end
 
   # See https://vagrantcloud.com/livinginthepast for SmartOS boxes
@@ -16,6 +16,6 @@ Vagrant.configure('2') do |config|
   config.zone.name = 'base64'
   config.zone.brand = 'joyent'
   config.zone.image = 'd34c301e-10c3-11e4-9b79-5f67ca448df0'
-  config.zone.memory = 4608
+  config.zone.memory = 1536
   config.zone.disk_size = 5
 end
