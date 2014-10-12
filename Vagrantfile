@@ -11,7 +11,7 @@ Vagrant.configure('2') do |config|
 
   # livinginthepast boxes include a default platform_image. Set
   # here to download/use a different image.
-  config.global_zone.platform_image = '20140919T024804Z'
+  config.global_zone.platform_image = '20141002T182809Z'
 
   config.zone.name = 'base64'
   config.zone.brand = 'joyent'
