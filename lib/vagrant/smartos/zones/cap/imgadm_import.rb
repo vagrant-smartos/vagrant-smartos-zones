@@ -1,24 +1,26 @@
+require 'vagrant/smartos/zones/cap/base'
+
 module Vagrant
   module Smartos
     module Zones
       module Cap
-        class ImgadmImport
-          def self.imgadm_import(machine)
-            ui = machine.ui
-            sudo = machine.config.smartos.suexec_cmd
-            image = machine.config.zone.image
+        class ImgadmImport < Base
+          cap_method :imgadm_import
 
-            if image
-              installed = machine.communicate.gz_test("#{sudo} imgadm get #{image}")
+          def execute
+            return ui.info 'No zone image set, skipping import' unless image
 
-              ui.info "Checking for zone image #{image}: #{installed ? 'installed' : 'not installed'}"
-              unless installed
-                ui.info '  Importing...'
-                machine.communicate.gz_execute("#{sudo} imgadm import #{image}")
-              end
-            else
-              ui.info 'No zone image set, skipping import'
-            end
+            installed = machine.communicate.gz_test("#{sudo} imgadm get #{image}")
+
+            ui.info "Checking for zone image #{image}: #{installed ? 'installed' : 'not installed'}"
+            return if installed
+
+            ui.info '  Importing...'
+            machine.communicate.gz_execute("#{sudo} imgadm import #{image}")
+          end
+
+          def image
+            machine.config.zone.image
           end
         end
       end

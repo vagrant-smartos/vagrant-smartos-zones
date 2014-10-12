@@ -1,42 +1,42 @@
+require 'vagrant/smartos/zones/cap/base'
+
 module Vagrant
   module Smartos
     module Zones
       module Cap
         module ZoneGate
-          class Install
-            def self.zone_gate_install(machine)
-              sudo = machine.config.smartos.suexec_cmd
-              machine.ui.info 'Installing ZoneGate'
+          class Install < Cap::Base
+            cap_method :zone_gate_install
 
-              smf_tmp_folder = '/usbkey/vagrant'
-              smf_folder = '/opt/custom/smf'
+            LOCAL_FILES_FOLDER = File.expand_path('../../../../../../../files', __FILE__)
+            LOCAL_ZONEGATE_FOLDER = File.join(LOCAL_FILES_FOLDER, 'zonegate')
+            LOCAL_SMF_MANIFEST = File.join(LOCAL_FILES_FOLDER, 'smf', 'zonegate.xml')
+            SMF_TMP_FOLDER = '/usbkey/vagrant'
+            SMF_FOLDER = '/opt/custom/smf'
+            ZONEGATE_FOLDER = '/opt/custom/method'
 
-              machine.communicate.execute("#{sudo} mkdir -p %s/zonegate" % zonegate_folder)
-              machine.communicate.execute("#{sudo} chown vagrant:other %s/zonegate" % zonegate_folder)
+            def execute
+              ui.info 'Installing ZoneGate'
 
-              machine.communicate.upload(local_zonegate_folder, zonegate_folder)
-              machine.communicate.upload(local_smf_manifest, '%s/zonegate.xml' % smf_tmp_folder)
-
-              machine.communicate.execute("#{sudo} mv %s/zonegate.xml %s/zonegate.xml" % [smf_tmp_folder, smf_folder])
-              machine.communicate.execute("#{sudo} chown root:root %s/zonegate.xml" % smf_folder)
-
-              machine.communicate.execute("#{sudo} svccfg import %s/zonegate.xml" % smf_folder)
+              create_zonegate_folder
+              upload_zonegate
+              install_zonegate
             end
 
-            def self.local_files_folder
-              File.expand_path('../../../../../../../files', __FILE__)
+            def create_zonegate_folder
+              machine.communicate.execute("#{sudo} mkdir -p %s/zonegate" % ZONEGATE_FOLDER)
+              machine.communicate.execute("#{sudo} chown vagrant:other %s/zonegate" % ZONEGATE_FOLDER)
             end
 
-            def self.local_zonegate_folder
-              File.join(local_files_folder, 'zonegate')
+            def upload_zonegate
+              machine.communicate.upload(LOCAL_ZONEGATE_FOLDER, ZONEGATE_FOLDER)
+              machine.communicate.upload(LOCAL_SMF_MANIFEST, '%s/zonegate.xml' % SMF_TMP_FOLDER)
             end
 
-            def self.local_smf_manifest
-              File.join(local_files_folder, 'smf', 'zonegate.xml')
-            end
-
-            def self.zonegate_folder
-              '/opt/custom/method'
+            def install_zonegate
+              machine.communicate.execute("#{sudo} mv %s/zonegate.xml %s/zonegate.xml" % [SMF_TMP_FOLDER, SMF_FOLDER])
+              machine.communicate.execute("#{sudo} chown root:root %s/zonegate.xml" % SMF_FOLDER)
+              machine.communicate.execute("#{sudo} svccfg import %s/zonegate.xml" % SMF_FOLDER)
             end
           end
         end

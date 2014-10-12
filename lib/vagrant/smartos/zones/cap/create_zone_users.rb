@@ -1,13 +1,15 @@
+require 'vagrant/smartos/zones/cap/base'
 require 'vagrant/smartos/zones/util/zone_info'
 
 module Vagrant
   module Smartos
     module Zones
       module Cap
-        class CreateZoneUsers
+        class CreateZoneUsers < Base
+          cap_method :create_zone_users
+
           # rubocop:disable Metrics/LineLength, Metrics/MethodLength
-          def self.create_zone_users(machine)
-            ui = machine.ui
+          def execute
             sudo = machine.config.smartos.suexec_cmd
             zone = Util::ZoneInfo.new(machine).show(machine.config.zone.name)
             ui.info "Creating users in zone #{zone.name} #{zone.uuid}"

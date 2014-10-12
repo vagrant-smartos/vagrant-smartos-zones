@@ -1,3 +1,4 @@
+require 'vagrant/smartos/zones/cap/base'
 require 'vagrant/smartos/zones/util/zone_info'
 
 module Vagrant
@@ -5,24 +6,22 @@ module Vagrant
     module Zones
       module Cap
         module Zone
-          class Base
-            def self.zone_exists?(machine)
+          class Base < Vagrant::Smartos::Zones::Cap::Base
+            def zone_exists?
               name = machine.config.zone.name
-              sudo = machine.config.smartos.suexec_cmd
-
               machine.communicate.gz_test("#{sudo} vmadm list -H | awk '{print $5}' | grep #{name}")
             end
 
-            def self.zone_valid?(machine)
+            def zone_valid?
               machine.config.zone && machine.config.zone.image && machine.config.zone.name
             end
 
-            def self.zone_info(machine)
+            def zone_info
               @zone_info ||= Util::ZoneInfo.new(machine)
             end
 
-            def self.zone(machine)
-              @zone ||= zone_info(machine).show(machine.config.zone.name)
+            def zone
+              @zone ||= zone_info.show(machine.config.zone.name)
             end
           end
         end

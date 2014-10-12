@@ -6,19 +6,20 @@ module Vagrant
       module Cap
         module Zone
           class Start < Base
-            def self.zone__start(machine)
-              if zone_valid?(machine)
-                return unless zone_exists?(machine)
+            cap_method :zone__start
 
-                start_zone(machine)
-              end
+            def execute
+              return unless zone_valid?
+              return unless zone_exists?
+
+              start_zone
             end
 
-            def self.start_zone(machine)
-              return if zone(machine).running?
+            def start_zone
+              return if zone.running?
               name = machine.config.zone.name
-              machine.ui.info "Starting zone #{name}"
-              zone_info(machine).start(name)
+              ui.info "Starting zone #{name}"
+              zone_info.start(name)
             end
           end
         end

@@ -6,43 +6,38 @@ module Vagrant
       module Cap
         module Zone
           class Create < Base
-            def self.zone__create(machine)
-              ui = machine.ui
+            cap_method :zone__create
 
-              if zone_valid?(machine)
-                name = machine.config.zone.name
-                if zone_exists?(machine)
-                  ui.info "Zone #{name} exists"
-                  ui.info 'Updating...'
-                  update_zone(machine)
-                else
-                  ui.info "Creating zone #{name} with image #{machine.config.zone.image}"
-                  create_zone(machine)
-                  ui.info "Zone created with uuid #{zone_uuid(machine)}"
-                end
-              else
-                ui.info 'No zone configured, skipping'
-                ui.info '   add the following to your Vagrantfile to configure a local zone:'
-                ui.info "      config.zone.name      = 'my-zone'"
-                ui.info "      config.zone.image     = 'uuid'"
-                ui.info "      config.zone.brand     = 'joyent'"
-                ui.info '      config.zone.memory    = 2048'
-                ui.info '      config.zone.disk_size = 5'
-              end
+            def execute
+              return warn_zone_config unless zone_valid?
+              return update_zone if zone_exists?
+              create_zone
             end
 
-            def self.create_zone(machine)
-              sudo = machine.config.smartos.suexec_cmd
-              machine.communicate.gz_execute("echo '#{zone_json(machine)}' | #{sudo} vmadm create")
+            def create_zone
+              ui.info "Creating zone #{machine.config.zone.name} with image #{machine.config.zone.image}"
+              machine.communicate.gz_execute("echo '#{zone_json}' | #{sudo} vmadm create")
               machine.guest.capability(:create_zone_users)
+              ui.info "Zone created with uuid #{zone_uuid}"
             end
 
-            def self.update_zone(machine)
-              sudo = machine.config.smartos.suexec_cmd
-              machine.communicate.gz_execute("echo '#{zone_json(machine)}' | #{sudo} vmadm update #{zone_uuid(machine)}")
+            def update_zone
+              ui.info "Zone #{machine.config.zone.name} exists"
+              ui.info 'Updating...'
+              machine.communicate.gz_execute("echo '#{zone_json}' | #{sudo} vmadm update #{zone_uuid}")
             end
 
-            def self.zone_json(machine)
+            def warn_zone_config
+              ui.info 'No zone configured, skipping'
+              ui.info '   add the following to your Vagrantfile to configure a local zone:'
+              ui.info "      config.zone.name      = 'my-zone'"
+              ui.info "      config.zone.image     = 'uuid'"
+              ui.info "      config.zone.brand     = 'joyent'"
+              ui.info '      config.zone.memory    = 2048'
+              ui.info '      config.zone.disk_size = 5'
+            end
+
+            def zone_json
               {
                 'brand' => machine.config.zone.brand,
                 'alias' => machine.config.zone.name,
@@ -66,10 +61,10 @@ module Vagrant
               }.to_json
             end
 
-            def self.zone_uuid(machine)
-              sudo = machine.config.smartos.suexec_cmd
+            def zone_uuid
               uuid = ''
-              machine.communicate.gz_execute("#{sudo} vmadm lookup alias=#{machine.config.zone.name}") do |_type, output|
+              command = "#{sudo} vmadm lookup alias=#{machine.config.zone.name}"
+              machine.communicate.gz_execute(command) do |_type, output|
                 uuid << output
               end
               uuid

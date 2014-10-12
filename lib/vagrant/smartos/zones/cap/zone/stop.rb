@@ -6,19 +6,20 @@ module Vagrant
       module Cap
         module Zone
           class Stop < Base
-            def self.zone__stop(machine)
-              if zone_valid?(machine)
-                return unless zone_exists?(machine)
+            cap_method :zone__stop
 
-                stop_zone(machine)
-              end
+            def execute
+              return unless zone_valid?
+              return unless zone_exists?
+
+              stop_zone
             end
 
-            def self.stop_zone(machine)
-              return unless zone(machine).running?
+            def stop_zone
+              return unless zone.running?
               name = machine.config.zone.name
-              machine.ui.info "Stopping zone #{name}"
-              zone_info(machine).stop(name)
+              ui.info "Stopping zone #{name}"
+              zone_info.stop(name)
             end
           end
         end
