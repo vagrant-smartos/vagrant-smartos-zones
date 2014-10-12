@@ -29,43 +29,36 @@ module Vagrant
             ]
 
             class ErrorHandler < Struct.new(:error)
-              # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+              ERROR_MAPPING = {
+                # This happens on connect() for unknown reasons yet...
+                Errno::EACCESS => Vagrant::Errors::SSHConnectEACCES,
+                # This happens if we continued to timeout when attempting to connect.
+                Errno::ETIMEDOUT => Vagrant::Errors::SSHConnectionTimeout,
+                Timeout::Error => Vagrant::Errors::SSHConnectionTimeout,
+                # This happens if authentication failed. We wrap the error in our own exception.
+                Net::SSH::AuthenticationFailed => Vagrant::Errors::SSHAuthenticationFailed,
+                # This happens if the remote server unexpectedly closes the
+                # connection. This is usually raised when SSH is running on the
+                # other side but can't properly setup a connection. This is
+                # usually a server-side issue.
+                Net::SSH::Disconnect => Vagrant::Errors::SSHDisconnected,
+                # This is raised if we failed to connect the max amount of times
+                Errno::ECONNREFUSED => Vagrant::Errors::SSHConnectionRefused,
+                # This is raised if we failed to connect the max number of times
+                # due to an ECONNRESET.
+                Errno::ECONNRESET => Vagrant::Errors::SSHConnectionReset,
+                # This is raised if we get an ICMP DestinationUnknown error.
+                Errno::EHOSTDOWN => Vagrant::Errors::SSHHostDown,
+                # This is raised if we can't work out how to route traffic.
+                Errno::EHOSTUNREACH => Vagrant::Errors::SSHNoRoute,
+                # This is raised if a private key type that Net-SSH doesn't support
+                # is used. Show a nicer error.
+                NotImplementedError => Vagrant::Errors::SSHKeyTypeNotSupported
+              }.freeze
+
               def handle!
-                case error.class
-                when Errno::EACCES
-                  # This happens on connect() for unknown reasons yet...
-                  raise Vagrant::Errors::SSHConnectEACCES
-                when Errno::ETIMEDOUT, Timeout::Error
-                  # This happens if we continued to timeout when attempting to connect.
-                  raise Vagrant::Errors::SSHConnectionTimeout
-                when Net::SSH::AuthenticationFailed
-                  # This happens if authentication failed. We wrap the error in our
-                  # own exception.
-                  raise Vagrant::Errors::SSHAuthenticationFailed
-                when Net::SSH::Disconnect
-                  # This happens if the remote server unexpectedly closes the
-                  # connection. This is usually raised when SSH is running on the
-                  # other side but can't properly setup a connection. This is
-                  # usually a server-side issue.
-                  raise Vagrant::Errors::SSHDisconnected
-                when Errno::ECONNREFUSED
-                  # This is raised if we failed to connect the max amount of times
-                  raise Vagrant::Errors::SSHConnectionRefused
-                when Errno::ECONNRESET
-                  # This is raised if we failed to connect the max number of times
-                  # due to an ECONNRESET.
-                  raise Vagrant::Errors::SSHConnectionReset
-                when Errno::EHOSTDOWN
-                  # This is raised if we get an ICMP DestinationUnknown error.
-                  raise Vagrant::Errors::SSHHostDown
-                when Errno::EHOSTUNREACH
-                  # This is raised if we can't work out how to route traffic.
-                  raise Vagrant::Errors::SSHNoRoute
-                when NotImplementedError
-                  # This is raised if a private key type that Net-SSH doesn't support
-                  # is used. Show a nicer error.
-                  raise Vagrant::Errors::SSHKeyTypeNotSupported
-                end
+                error_class = ERROR_MAPPING[error.class]
+                raise error_class if error_class
               end
             end
 

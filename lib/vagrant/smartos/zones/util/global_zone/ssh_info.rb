@@ -48,6 +48,7 @@ module Vagrant
               config.ssh.default.username
             end
 
+            # rubocop:disable Metrics/MethodLength
             def to_hash
               # From machine#ssh_info, if provider ssh_info is nil,
               # machine is not ready for SSH.
