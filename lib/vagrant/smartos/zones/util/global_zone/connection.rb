@@ -31,7 +31,7 @@ module Vagrant
             class ErrorHandler < Struct.new(:error)
               ERROR_MAPPING = {
                 # This happens on connect() for unknown reasons yet...
-                Errno::EACCESS => Vagrant::Errors::SSHConnectEACCES,
+                Errno::EACCES => Vagrant::Errors::SSHConnectEACCES,
                 # This happens if we continued to timeout when attempting to connect.
                 Errno::ETIMEDOUT => Vagrant::Errors::SSHConnectionTimeout,
                 Timeout::Error => Vagrant::Errors::SSHConnectionTimeout,
