@@ -1,0 +1,30 @@
+Vagrant.configure('2') do |config|
+  config.vm.provider 'virtualbox' do |v|
+    v.memory = 2048
+  end
+
+  # See https://vagrantcloud.com/livinginthepast for SmartOS boxes
+  config.vm.box = 'livinginthepast/smartos-base64'
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.communicator = 'smartos'
+
+  config.global_zone.platform_image = '20141002T182809Z'
+
+  config.zone.name = 'base64'
+  config.zone.brand = 'joyent'
+  config.zone.image = 'd34c301e-10c3-11e4-9b79-5f67ca448df0'
+  config.zone.memory = 1536
+  config.zone.disk_size = 5
+
+  config.vm.provision "shell",
+    inline: "sudo pkgin -y install ruby212 build-essential && gem install chef --no-ri --no-rdoc"
+
+  config.vm.provision :chef_client do |chef|
+    chef.chef_server_url = "#{ENV['CHEF_SERVER_URL']}"
+    chef.validation_key_path = "#{ENV['HOME']}/.ssh/#{ENV['VALIDATION_CLIENT_NAME']}.pem"
+    chef.validation_client_name = "#{ENV['VALIDATION_CLIENT_NAME']}"
+    chef.node_name = "#{ENV['CHEF_USERNAME']}"
+    chef.provisioning_path = "/etc/chef"
+    chef.add_role("base")
+  end
+end
