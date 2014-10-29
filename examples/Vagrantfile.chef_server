@@ -21,8 +21,8 @@ Vagrant.configure('2') do |config|
 
   config.vm.provision :chef_client do |chef|
     chef.chef_server_url = "#{ENV['CHEF_SERVER_URL']}"
-    chef.validation_key_path = "#{ENV['HOME']}/.ssh/#{ENV['VALIDATION_CLIENT_NAME']}.pem"
-    chef.validation_client_name = "#{ENV['VALIDATION_CLIENT_NAME']}"
+    chef.validation_key_path = "#{ENV['HOME']}/.ssh/#{ENV['VALIDATION_CLIENT_NAME']}-validator.pem"
+    chef.validation_client_name = "#{ENV['VALIDATION_CLIENT_NAME']}-validator"
     chef.node_name = "#{ENV['CHEF_USERNAME']}"
     chef.provisioning_path = "/etc/chef"
     chef.add_role("base")
