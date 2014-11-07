@@ -94,6 +94,11 @@ module Vagrant
           Cap::PlatformImage::Install
         end
 
+        host_capability 'bsd', 'platform_image_latest' do
+          require_relative 'cap/platform_image/latest'
+          Cap::PlatformImage::Latest
+        end
+
         host_capability 'bsd', 'platform_image_list' do
           require_relative 'cap/platform_image/list'
           Cap::PlatformImage::List

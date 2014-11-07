@@ -3,12 +3,33 @@ module Vagrant
     module Zones
       module Util
         class Downloader
-          def self.get(url, path)
-            new.get(url, path)
+          attr_reader :url, :utility
+
+          GET_PARAMS = {
+            'wget' => '-qO',
+            'curl' => '--silent -o'
+          }
+
+          READ_PARAMS = {
+            'wget' => '-qO-',
+            'curl' => '--silent'
+          }
+
+          def initialize(url)
+            @url = url
+            @utility = download_utility
           end
 
-          def get(url, path)
-            send(download_utility, url, path)
+          def self.get(url, path)
+            new(url).get(path)
+          end
+
+          def get(path)
+            `#{utility} #{url} #{get_params} #{path}`
+          end
+
+          def read
+            `#{utility} #{url} #{read_params}`
           end
 
           private
@@ -21,12 +42,12 @@ module Vagrant
             end
           end
 
-          def wget(url, path)
-            `wget #{url} -O #{path} --quiet`
+          def get_params
+            GET_PARAMS[utility]
           end
 
-          def curl(url, path)
-            `curl #{url} -o #{path} --silent`
+          def read_params
+            READ_PARAMS[utility]
           end
         end
       end

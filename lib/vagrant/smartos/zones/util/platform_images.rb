@@ -37,6 +37,14 @@ module Vagrant
             ui.info(images.join("\n"), prefix: false)
           end
 
+          def show_latest
+            latest_html = Downloader.new(platform_image_latest_url).read
+            return ui.info "Unable to download latest iso info" unless latest_html
+            latest = latest_html.match(/(\d{8}T\d{6}Z)/)
+            return ui.info "Unable to find iso info" unless latest
+            ui.info latest[1]
+          end
+
           private
 
           def ui
@@ -77,6 +85,10 @@ module Vagrant
 
           def platform_image_url(image)
             "#{platform_image_root}/Joyent_Dev/public/SmartOS/#{image}/smartos-#{image}.iso"
+          end
+
+          def platform_image_latest_url
+            "#{platform_image_root}/Joyent_Dev/public/SmartOS/latest.html"
           end
 
           def platform_image_checksum_path(image)

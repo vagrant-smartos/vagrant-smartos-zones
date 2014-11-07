@@ -10,12 +10,13 @@ module Vagrant
 
           attr_accessor :host, :ui
 
-          COMMANDS = %w(list install).freeze
+          COMMANDS = %w(latest list install).freeze
 
           OPTION_PARSER = OptionParser.new do |o|
             o.banner = 'Usage: vagrant smartos [name]'
             o.separator ''
             o.separator 'Commands:'
+            o.separator '  latest             show the latest remote SmartOS platform image'
             o.separator '  list               show installed SmartOS platform images'
             o.separator '  install [image]    install SmartOS platform image'
             o.separator ''
@@ -49,8 +50,13 @@ module Vagrant
             host.capability(:platform_image_install, image)
           end
 
+          def latest(*_args)
+            return ui.warn('Unable to show latest platform image') unless host.capability?(:platform_image_latest)
+            host.capability(:platform_image_latest)
+          end
+
           def list(*_args)
-            return ui.warn('Unable to list platform image') unless host.capability?(:platform_image_install)
+            return ui.warn('Unable to list platform image') unless host.capability?(:platform_image_list)
             host.capability(:platform_image_list)
           end
 

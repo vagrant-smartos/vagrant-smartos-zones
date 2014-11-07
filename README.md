@@ -96,6 +96,7 @@ end
 Download or interact with SmartOS platform images:
 
 ```bash
+vagrant smartos latest
 vagrant smartos list
 vagrant smartos install [platform_image]
 ```
@@ -147,6 +148,37 @@ This can by handy when, for instance, SSH becomes broken in the zone.
 ```bash
 vagrant zlogin [name]
 ```
+
+## Platform images
+
+This plugin expects the Vagrant box to boot SmartOS from a mounted ISO
+file, known as a platform image. To facilitate updates to the platform
+image without having to continually create new boxes, the plugin
+downloads platform image into a user's `.vagrant.d` directory, and then
+swaps out the ISO mounted in the Vagrant box with the one configured in
+the Vagrantfile.
+
+To help with this, `vagrant-smartos-zones` provides the `vagrant
+smartos` subcommand.
+
+Show the name of the most up-to-date platform version hosted by Joyent:
+
+```bash
+vagrant smartos latest
+```
+
+List all locally-installed platform images:
+
+```bash
+vagrant smartos list
+```
+
+Download a new platform image:
+
+```bash
+vagrant smartos install [platform-image]
+```
+
 
 ## Synced Folders
 
