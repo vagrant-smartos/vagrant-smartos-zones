@@ -16,16 +16,12 @@ module Vagrant
             end
 
             def create_zone
-              ui.info "Creating zone #{machine.config.zone.name} with image #{machine.config.zone.image}"
-              machine.communicate.gz_execute("echo '#{zone_json}' | #{sudo} vmadm create")
-              machine.guest.capability(:create_zone_users)
-              ui.info "Zone created with uuid #{zone_uuid}"
+              zone_info.create(machine.config.zone.name)
             end
 
             def update_zone
               ui.info "Zone #{machine.config.zone.name} exists"
-              ui.info 'Updating...'
-              machine.communicate.gz_execute("echo '#{zone_json}' | #{sudo} vmadm update #{zone_uuid}")
+              zone_info.update(machine.config.zone.name)
             end
 
             def warn_zone_config
@@ -40,15 +36,6 @@ module Vagrant
 
             def zone_json
               Util::ZoneJson.new(machine).to_json
-            end
-
-            def zone_uuid
-              uuid = ''
-              command = "#{sudo} vmadm lookup alias=#{machine.config.zone.name}"
-              machine.communicate.gz_execute(command) do |_type, output|
-                uuid << output
-              end
-              uuid
             end
           end
         end
