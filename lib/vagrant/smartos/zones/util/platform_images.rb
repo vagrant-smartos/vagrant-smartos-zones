@@ -30,10 +30,6 @@ module Vagrant
           end
 
           def list
-            images = Dir[images_dir.join('*')].map do |f|
-              File.basename(f, '.iso')
-            end
-
             ui.info(images.join("\n"), prefix: false)
           end
 
@@ -59,6 +55,12 @@ module Vagrant
             checksums = ::File.read(platform_image_checksum_path(image)).split("\n")
             iso_checksum = checksums.grep(/\.iso/).first.match(/^[^\s]+/).to_s
             Checksum.new(platform_image_path(image), iso_checksum).valid?
+          end
+
+          def images
+            Dir[images_dir.join('*')].map do |f|
+              File.basename(f, '.iso')
+            end.sort
           end
 
           def images_dir
