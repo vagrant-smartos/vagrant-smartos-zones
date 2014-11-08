@@ -1,12 +1,19 @@
 require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/smartos/zones/util/zone_json'
+require 'vagrant/smartos/zones/util/public_key'
+require 'vagrant/smartos/zones/util/global_zone/helper'
 
 module Vagrant
   module Smartos
     module Zones
       module Util
         class ZoneInfo
+          include GlobalZone::Helper
+
           attr_reader :machine
+
+          ROOT_PASSWORD = '\$5\$90x8mAeX\$SKKNEjeztV.ruPBNf/E5y3xqGkwDv9A5KNP2S89GuB.'
+          VAGRANT_PASSWORD = '\$5\$UzQ1rHU/\$o67DYOyHOOabzJt.6DwgZP2qCGoAO7aVel2bgkuIwL7'
 
           def initialize(machine)
             @machine = machine
@@ -32,28 +39,6 @@ module Vagrant
             zone = show(name)
             create_zone_users(zone)
             zone
-          end
-
-          def create_zone_users(zone)
-            # add vagrant user/group
-            with_gz("#{sudo} zlogin #{zone.uuid} groupadd vagrant")
-            with_gz("#{sudo} zlogin #{zone.uuid} useradd -m -s /bin/bash -G vagrant vagrant")
-            with_gz("#{sudo} zlogin #{zone.uuid} usermod -P\\'Primary Administrator\\' vagrant")
-
-            # set vagrant/root password to 'vagrant'
-            with_gz("#{sudo} zlogin #{zone.uuid} sed -i -e \\'s@root:.*@root:\\$5\\$90x8mAeX\\$SKKNEjeztV.ruPBNf/E5y3xqGkwDv9A5KNP2S89GuB.:16151::::::@\\' /etc/shadow")
-            with_gz("#{sudo} zlogin #{zone.uuid} sed -i -e \\'s@vagrant:.*@vagrant:\\$5\\$UzQ1rHU/\\$o67DYOyHOOabzJt.6DwgZP2qCGoAO7aVel2bgkuIwL7:16158::::::@\\' /etc/shadow")
-
-            # configure sudoers
-            with_gz("#{sudo} zlogin #{zone.uuid} cp /opt/local/etc/sudoers.d/admin /opt/local/etc/sudoers.d/vagrant")
-            with_gz("#{sudo} zlogin #{zone.uuid} sed -i -e \\'s@admin@vagrant@\\' /opt/local/etc/sudoers.d/vagrant")
-
-            # add vagrant public key to authorized_keys
-            with_gz("#{sudo} zlogin #{zone.uuid} mkdir -p /home/vagrant/.ssh")
-            with_gz("#{sudo} zlogin #{zone.uuid} touch /home/vagrant/.ssh/authorized_keys")
-            with_gz(%(#{sudo} zlogin #{zone.uuid} 'echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key" > /home/vagrant/.ssh/authorized_keys'))
-            with_gz("#{sudo} zlogin #{zone.uuid} chown -R vagrant:other /home/vagrant/.ssh")
-            with_gz("#{sudo} zlogin #{zone.uuid} chmod 600 /home/vagrant/.ssh/authorized_keys")
           end
 
           def destroy(name)
@@ -94,14 +79,43 @@ module Vagrant
 
           private
 
-          def sudo
-            machine.config.smartos.suexec_cmd
+          def create_zone_users(zone)
+            create_zone_vagrant_user(zone)
+            configure_zone_passwords(zone)
+            configure_zone_sudoers(zone)
+            add_zone_public_keys(zone)
           end
 
-          def with_gz(command)
-            machine.communicate.gz_execute(command) do |_type, output|
-              yield output if block_given?
-            end
+          def create_zone_vagrant_user(zone)
+            zlogin(zone, 'groupadd vagrant')
+            zlogin(zone, 'useradd -m -s /bin/bash -G vagrant vagrant')
+            zlogin(zone, 'usermod -P\\\'Primary Administrator\\\' vagrant')
+          end
+
+          def configure_zone_passwords(zone)
+            overwrite_password(zone, 'root', ROOT_PASSWORD, '16151')
+            overwrite_password(zone, 'vagrant', VAGRANT_PASSWORD, '16158')
+          end
+
+          def overwrite_password(zone, user, pw, ts)
+            zlogin(zone, "sed -i -e \\'s@#{user}:.*@#{user}:#{pw}:#{ts}::::::@\\' /etc/shadow")
+          end
+
+          def configure_zone_sudoers(zone)
+            zlogin(zone, 'cp /opt/local/etc/sudoers.d/admin /opt/local/etc/sudoers.d/vagrant')
+            zlogin(zone, 'sed -i -e \\\'s@admin@vagrant@\\\' /opt/local/etc/sudoers.d/vagrant')
+          end
+
+          def add_zone_public_keys(zone)
+            zlogin(zone, 'mkdir -p /home/vagrant/.ssh')
+            zlogin(zone, 'touch /home/vagrant/.ssh/authorized_keys')
+            zlogin(zone, %('echo "#{public_key}" > /home/vagrant/.ssh/authorized_keys'))
+            zlogin(zone, 'chown -R vagrant:other /home/vagrant/.ssh')
+            zlogin(zone, 'chmod 600 /home/vagrant/.ssh/authorized_keys')
+          end
+
+          def public_key
+            PublicKey.new.to_s
           end
 
           def zone_json

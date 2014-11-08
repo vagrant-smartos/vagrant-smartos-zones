@@ -71,9 +71,9 @@ module Vagrant
 
           def latest_platform_image
             latest_html = Downloader.new(platform_image_latest_url).read
-            return ui.info "Unable to download latest iso info" unless latest_html
+            return ui.info 'Unable to download latest iso info' unless latest_html
             latest = latest_html.match(/(\d{8}T\d{6}Z)/)
-            return ui.info "Unable to find iso info" unless latest
+            return ui.info 'Unable to find iso info' unless latest
             latest[1]
           end
 
