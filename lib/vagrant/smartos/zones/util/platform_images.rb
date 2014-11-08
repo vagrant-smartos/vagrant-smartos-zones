@@ -35,8 +35,11 @@ module Vagrant
             ui.info(images.join("\n"), prefix: false)
           end
 
-          def show_latest
-            latest_platform_image
+          def latest
+            latest_html = Downloader.new(platform_image_latest_url).read
+            latest = latest_html.match(/(\d{8}T\d{6}Z)/)
+            return unless latest
+            latest[1]
           end
 
           private
@@ -69,16 +72,10 @@ module Vagrant
             home_path.join('smartos', 'checksums')
           end
 
-          def latest_platform_image
-            latest_html = Downloader.new(platform_image_latest_url).read
-            latest = latest_html.match(/(\d{8}T\d{6}Z)/)
-            return unless latest
-            latest[1]
-          end
-
           def latest_remote_or_current_image
-            latest_platform_image ||
-              images.last
+            return latest if latest
+            ui.info 'Unable to read remote latest platform image, using local'
+            images.last
           end
 
           def setup_smartos_directories
