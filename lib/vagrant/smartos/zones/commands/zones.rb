@@ -109,6 +109,10 @@ module Vagrant
             with_target_vms('default') { |machine| zones = Util::ZoneInfo.new(machine) }
             zones
           end
+
+          def ui
+            @env.ui
+          end
         end
       end
     end
