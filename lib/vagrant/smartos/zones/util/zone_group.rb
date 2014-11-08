@@ -1,10 +1,13 @@
 require 'vagrant/smartos/zones/models/zone_group'
+require 'vagrant/smartos/zones/util/global_zone/helper'
 
 module Vagrant
   module Smartos
     module Zones
       module Util
         class ZoneGroup
+          include GlobalZone::Helper
+
           attr_reader :machine, :zone
 
           def initialize(machine, zone)
@@ -15,16 +18,14 @@ module Vagrant
           def find(group)
             Models::ZoneGroup.new.tap do |g|
               g.name = group
-              machine.communicate.gz_execute("#{sudo} zlogin #{zone.uuid} gid -g #{group}") do |_type, output|
+              with_gz("#{sudo} zlogin #{zone.uuid} gid -g #{group}") do |_type, output|
                 g.gid = output.chomp
               end
             end
           end
 
-          private
-
-          def sudo
-            machine.config.smartos.suexec_cmd
+          def create(group)
+            zlogin(zone, "groupadd #{group}")
           end
         end
       end

@@ -1,7 +1,8 @@
 require 'vagrant/smartos/zones/models/zone'
-require 'vagrant/smartos/zones/util/zone_json'
-require 'vagrant/smartos/zones/util/public_key'
 require 'vagrant/smartos/zones/util/global_zone/helper'
+require 'vagrant/smartos/zones/util/zone_group'
+require 'vagrant/smartos/zones/util/zone_json'
+require 'vagrant/smartos/zones/util/zone_user'
 
 module Vagrant
   module Smartos
@@ -83,13 +84,11 @@ module Vagrant
             create_zone_vagrant_user(zone)
             configure_zone_passwords(zone)
             configure_zone_sudoers(zone)
-            add_zone_public_keys(zone)
           end
 
           def create_zone_vagrant_user(zone)
-            zlogin(zone, 'groupadd vagrant')
-            zlogin(zone, 'useradd -m -s /bin/bash -G vagrant vagrant')
-            zlogin(zone, 'usermod -P\\\'Primary Administrator\\\' vagrant')
+            Util::ZoneGroup.new(machine, zone).create('vagrant')
+            Util::ZoneUser.new(machine, zone).create('vagrant', 'vagrant', 'Primary Administrator')
           end
 
           def configure_zone_passwords(zone)
@@ -104,18 +103,6 @@ module Vagrant
           def configure_zone_sudoers(zone)
             zlogin(zone, 'cp /opt/local/etc/sudoers.d/admin /opt/local/etc/sudoers.d/vagrant')
             zlogin(zone, 'sed -i -e \\\'s@admin@vagrant@\\\' /opt/local/etc/sudoers.d/vagrant')
-          end
-
-          def add_zone_public_keys(zone)
-            zlogin(zone, 'mkdir -p /home/vagrant/.ssh')
-            zlogin(zone, 'touch /home/vagrant/.ssh/authorized_keys')
-            zlogin(zone, %('echo "#{public_key}" > /home/vagrant/.ssh/authorized_keys'))
-            zlogin(zone, 'chown -R vagrant:other /home/vagrant/.ssh')
-            zlogin(zone, 'chmod 600 /home/vagrant/.ssh/authorized_keys')
-          end
-
-          def public_key
-            PublicKey.new.to_s
           end
 
           def zone_json
