@@ -25,11 +25,11 @@ module Vagrant
           end
 
           def get(path)
-            `#{utility} #{url} #{get_params} #{path}`
+            `#{utility} #{url} #{GET_PARAMS[utility]} #{path}`
           end
 
           def read
-            `#{utility} #{url} #{read_params}`
+            `#{utility} #{url} #{READ_PARAMS[utility]}`
           end
 
           private
@@ -40,14 +40,6 @@ module Vagrant
             else
               'curl'
             end
-          end
-
-          def get_params
-            GET_PARAMS[utility]
-          end
-
-          def read_params
-            READ_PARAMS[utility]
           end
         end
       end
