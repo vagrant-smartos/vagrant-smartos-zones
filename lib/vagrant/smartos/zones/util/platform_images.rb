@@ -14,13 +14,13 @@ module Vagrant
           end
 
           def get_platform_image(image)
-            image = latest_platform_image if image == 'latest'
+            image = latest_remote_or_current_image if image == 'latest'
             install(image)
             platform_image_path(image)
           end
 
           def install(image)
-            image = latest_platform_image if image == 'latest'
+            image = latest_remote_or_current_image if image == 'latest'
             if ::File.exist?(platform_image_path(image)) && valid?(image)
               ui.info "SmartOS platform image #{image} exists"
             else
@@ -36,7 +36,7 @@ module Vagrant
           end
 
           def show_latest
-            ui.info latest_platform_image
+            latest_platform_image
           end
 
           private
@@ -71,10 +71,14 @@ module Vagrant
 
           def latest_platform_image
             latest_html = Downloader.new(platform_image_latest_url).read
-            return ui.info 'Unable to download latest iso info' unless latest_html
             latest = latest_html.match(/(\d{8}T\d{6}Z)/)
-            return ui.info 'Unable to find iso info' unless latest
+            return unless latest
             latest[1]
+          end
+
+          def latest_remote_or_current_image
+            latest_platform_image ||
+              images.last
           end
 
           def setup_smartos_directories

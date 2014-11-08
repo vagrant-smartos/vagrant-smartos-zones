@@ -7,7 +7,9 @@ module Vagrant
         module PlatformImage
           class Latest
             def self.platform_image_latest(env)
-              Zones::Util::PlatformImages.new(env).show_latest
+              platform_image = Zones::Util::PlatformImages.new(env).show_latest
+              env.ui.info 'Unable to find platform image' unless platform_image
+              env.ui.info platform_image
             end
           end
         end
