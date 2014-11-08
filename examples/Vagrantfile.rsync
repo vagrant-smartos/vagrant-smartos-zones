@@ -10,7 +10,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.synced_folder ".", "/vagrant", type: "rsync"
 
-  config.global_zone.platform_image = '20141002T182809Z'
+  config.global_zone.platform_image = 'latest'
 
   config.zone.name = 'base64'
   config.zone.brand = 'joyent'
