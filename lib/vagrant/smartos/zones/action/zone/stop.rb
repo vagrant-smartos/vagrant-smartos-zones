@@ -15,7 +15,6 @@ module Vagrant
 
             def call(env)
               guest.capability(:zone__stop) if zones_supported?
-
               app.call(env)
             end
           end

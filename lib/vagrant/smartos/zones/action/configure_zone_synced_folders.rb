@@ -17,6 +17,8 @@ module Vagrant
           end
 
           def call(env)
+            app.call(env)
+
             if zones_supported?
               zone = Vagrant::Smartos::Zones::Util::ZoneInfo.new(machine).show(machine.config.zone.name)
 
@@ -24,8 +26,6 @@ module Vagrant
                 configure_synced_folder(zone, folder)
               end
             end
-
-            app.call(env)
           end
 
           def configure_synced_folder(zone, folder)

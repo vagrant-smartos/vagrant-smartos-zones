@@ -13,11 +13,9 @@ module Vagrant
           end
 
           def call(env)
-            env[:ui].info "Checking if machine supports zones: #{zones_supported? ? 'yes' : 'no'}"
-
-            guest.capability(:imgadm_import) if zones_supported?
-
             app.call(env)
+            env[:ui].info "Checking if machine supports zones: #{zones_supported? ? 'yes' : 'no'}"
+            guest.capability(:imgadm_import) if zones_supported?
           end
         end
       end
