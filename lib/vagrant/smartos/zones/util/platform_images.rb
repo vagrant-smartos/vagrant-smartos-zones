@@ -93,11 +93,13 @@ module Vagrant
           end
 
           def platform_image_url(image)
-            "#{platform_image_root}/Joyent_Dev/public/SmartOS/#{image}/smartos-#{image}.iso"
+            #"#{platform_image_root}/Joyent_Dev/public/SmartOS/#{image}/smartos-#{image}.iso"
+            "#{platform_image_root}/bixu/public/smartos/platform.iso"
           end
 
           def platform_image_latest_url
-            "#{platform_image_root}/Joyent_Dev/public/SmartOS/latest.html"
+            #"#{platform_image_root}/Joyent_Dev/public/SmartOS/latest.html"
+            "#{platform}_image_root]/bixu/public/smartos/latest.html"
           end
 
           def platform_image_checksum_path(image)
@@ -105,7 +107,8 @@ module Vagrant
           end
 
           def platform_image_checksum_url(image)
-            "#{platform_image_root}/Joyent_Dev/public/SmartOS/#{image}/md5sums.txt"
+            #"#{platform_image_root}/Joyent_Dev/public/SmartOS/#{image}/md5sums.txt"
+            "#{platform_image_root}/bixu/public/smartos/md5sums.txt"
           end
         end
       end

@@ -19,6 +19,7 @@ module Vagrant
           def zone_info
             {
               'brand' => machine.config.zone.brand,
+              'kernel_version' => machine.config.zone.kernel_version,
               'alias' => machine.config.zone.name,
               'dataset_uuid' => machine.config.zone.image,
               'quota' => machine.config.zone.disk_size || 1,

@@ -27,11 +27,12 @@ module Vagrant
             def warn_zone_config
               ui.info 'No zone configured, skipping'
               ui.info '   add the following to your Vagrantfile to configure a local zone:'
-              ui.info "      config.zone.name      = 'my-zone'"
-              ui.info "      config.zone.image     = 'uuid'"
-              ui.info "      config.zone.brand     = 'joyent'"
-              ui.info '      config.zone.memory    = 2048'
-              ui.info '      config.zone.disk_size = 5'
+              ui.info "      config.zone.name            = 'my-zone'"
+              ui.info "      config.zone.image           = 'uuid'"
+              ui.info "      config.zone.brand           = 'joyent'"
+              ui.info "      config.zone.kernel_version  = '3.16'"
+              ui.info '      config.zone.memory          = 2048'
+              ui.info '      config.zone.disk_size       = 5'
             end
 
             def zone_json

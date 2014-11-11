@@ -42,6 +42,7 @@ module Vagrant
                                   state: zone.state,
                                   uuid: zone.uuid,
                                   brand: zone.brand,
+                                  kernel_version: zone.kernel_version,
                                   image: zone.image),
                            prefix: false)
             end
@@ -56,6 +57,7 @@ module Vagrant
                                   state: zone.state,
                                   uuid: zone.uuid,
                                   brand: zone.brand,
+                                  kernel_version: zone.kernel_version,
                                   image: zone.image))
             end
           end
@@ -87,6 +89,7 @@ module Vagrant
                                   state: zone.state,
                                   uuid: zone.uuid,
                                   brand: zone.brand,
+                                  kernel_version: zone.kernel_version,
                                   image: zone.image))
             end
           end
@@ -98,6 +101,7 @@ module Vagrant
                                   state: zone.state,
                                   uuid: zone.uuid,
                                   brand: zone.brand,
+                                  kernel_version: zone.kernel_version,
                                   image: zone.image))
             end
           end

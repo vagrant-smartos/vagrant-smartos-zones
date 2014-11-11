@@ -13,6 +13,7 @@ en:
                 state: %{state}
                 brand: %{brand}
                 image: %{image}
+                kernel_version(for lx branded zones): %{kernel_version}
             destroy: |-
               Destroying zone with name %{name}
             destroyed: |-
@@ -23,6 +24,7 @@ en:
               uuid:      %{uuid}
               brand:     %{brand}
               image:     %{image}
+              kernel_version: %{kernel_version}
             start: |-
               Started zone %{name} %{uuid}
             stop: |-
