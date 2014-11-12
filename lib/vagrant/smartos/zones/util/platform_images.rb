@@ -1,5 +1,6 @@
 require 'vagrant/smartos/zones/util/checksum'
 require 'vagrant/smartos/zones/util/downloader'
+require 'vagrant/util/downloader'
 
 module Vagrant
   module Smartos
@@ -25,9 +26,9 @@ module Vagrant
               ui.info "SmartOS platform image #{image} exists"
             else
               ui.info "Downloading checksums for SmartOS platform image #{image}"
-              Downloader.get(platform_image_checksum_url(image), platform_image_checksum_path(image))
+              Zones::Util::Downloader.get(platform_image_checksum_url(image), platform_image_checksum_path(image))
               ui.info "Downloading SmartOS platform image #{image}"
-              Downloader.get(platform_image_url(image), platform_image_path(image))
+              Vagrant::Util::Downloader.new(platform_image_url(image), platform_image_path(image), ui: ui).download!
             end
           end
 
@@ -36,7 +37,7 @@ module Vagrant
           end
 
           def latest
-            latest_html = Downloader.new(platform_image_latest_url).read
+            latest_html = Zones::Util::Downloader.new(platform_image_latest_url).read
             latest = latest_html.match(/(\d{8}T\d{6}Z)/)
             return unless latest
             latest[1]
