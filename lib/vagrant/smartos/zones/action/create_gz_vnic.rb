@@ -4,7 +4,7 @@ require 'vagrant/smartos/zones/action/helper'
 # local zones. The executed code needs to happen after
 # networks have been configured in the global zone.
 #
-# Zone creation is hooked onto this 
+# Zone creation is hooked onto this.
 module Vagrant
   module Smartos
     module Zones
