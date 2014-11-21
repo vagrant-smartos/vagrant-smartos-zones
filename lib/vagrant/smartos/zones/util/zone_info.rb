@@ -83,7 +83,6 @@ module Vagrant
           def create_zone_users(zone)
             create_zone_vagrant_user(zone)
             configure_zone_passwords(zone)
-            configure_zone_sudoers(zone)
           end
 
           def create_zone_vagrant_user(zone)
@@ -98,11 +97,6 @@ module Vagrant
 
           def overwrite_password(zone, user, pw, ts)
             zlogin(zone, "sed -i -e \\'s@#{user}:.*@#{user}:#{pw}:#{ts}::::::@\\' /etc/shadow")
-          end
-
-          def configure_zone_sudoers(zone)
-            zlogin(zone, 'cp /opt/local/etc/sudoers.d/admin /opt/local/etc/sudoers.d/vagrant')
-            zlogin(zone, 'sed -i -e \\\'s@admin@vagrant@\\\' /opt/local/etc/sudoers.d/vagrant')
           end
 
           def zone_json

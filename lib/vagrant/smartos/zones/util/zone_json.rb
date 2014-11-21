@@ -12,6 +12,7 @@ module Vagrant
           def to_json
             zone_info
               .merge(generics)
+              .merge(kernel_version)
               .merge(resolvers)
               .merge(nics).to_json
           end
@@ -29,6 +30,13 @@ module Vagrant
           def generics
             {
               'fs_allowed' => 'vboxfs'
+            }
+          end
+
+          def kernel_version
+            return {} unless lx_brand?
+            {
+              'kernel_version' => machine.config.zone.kernel_version
             }
           end
 
@@ -55,6 +63,12 @@ module Vagrant
               'gateway' => '10.0.0.1',
               'allow_ip_spoofing' => true
             }
+          end
+
+          private
+
+          def lx_brand?
+            machine.config.zone.brand == 'lx'
           end
         end
       end

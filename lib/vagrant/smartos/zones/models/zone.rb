@@ -18,6 +18,10 @@ module Vagrant
           def running?
             state == 'running'
           end
+
+          def lx_brand?
+            brand == 'lx'
+          end
         end
       end
     end
