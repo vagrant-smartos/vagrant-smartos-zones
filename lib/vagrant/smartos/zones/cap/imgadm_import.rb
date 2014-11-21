@@ -16,6 +16,7 @@ module Vagrant
             return if installed
 
             ui.info '  Importing...'
+            machine.communicate.gz_execute("#{sudo} imgadm sources -a https://updates.joyent.com")
             machine.communicate.gz_execute("#{sudo} imgadm import #{image}")
           end
 
