@@ -180,6 +180,22 @@ Download a new platform image:
 vagrant smartos install [platform-image]
 ```
 
+#### Using an arbitrary platform image url
+
+An arbitrary URL can be used to download SmartOS platform images.
+When doing so, no checksum validation is performed (so if the image
+is interrupted when downloading, you may end up with a corrupt ISO
+file).
+
+When using an arbitrary URL for the platform image, make sure you set
+both `platform_image` and `platform_image_url` and include the full
+URL to the ISO file. In this case, `platform_image` will be used to name
+(and find) the file in the local file system.
+
+```ruby
+config.global_zone.platform_image = 'omglol-2131234'
+config.global_zone.platform_image_url = 'http://example.com/path/to/smartos-2131234.iso'
+```
 
 ## Synced Folders
 

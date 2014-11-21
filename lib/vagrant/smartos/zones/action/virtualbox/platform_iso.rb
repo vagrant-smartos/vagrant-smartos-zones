@@ -46,7 +46,7 @@ module Vagrant
             end
 
             def platform_image
-              Util::PlatformImages.new(env).get_platform_image(machine.config.global_zone.platform_image)
+              Util::PlatformImages.new(env, machine).get_platform_image(machine.config.global_zone.platform_image)
             end
           end
         end
