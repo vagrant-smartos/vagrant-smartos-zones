@@ -14,6 +14,7 @@ module Vagrant
           end
 
           def finalize!
+            @platform_image = 'latest' if @platform_image == UNSET_VALUE
             @ssh_port = 2222 if @ssh_port == UNSET_VALUE
             @forwarded_ssh_port = 22_022 if @forwarded_ssh_port == UNSET_VALUE
           end
