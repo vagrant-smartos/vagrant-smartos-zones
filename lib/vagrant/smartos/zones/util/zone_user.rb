@@ -41,7 +41,7 @@ module Vagrant
           def grant_role(username, role)
             if zone.lx_brand?
               return if zlogin_test(zone, %('test -f /etc/sudoers.d/vagrant'))
-              zlogin(zone, %('echo "#{username} ALL=(ALL:ALL) ALL" >> /etc/sudoers.d/vagrant'))
+              zlogin(zone, %('echo "#{username} ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers.d/vagrant'))
             else
               zlogin(zone, "usermod -P\\'#{role}\\' #{username}") if role
               zlogin(zone, 'cp /opt/local/etc/sudoers.d/admin /opt/local/etc/sudoers.d/vagrant')
