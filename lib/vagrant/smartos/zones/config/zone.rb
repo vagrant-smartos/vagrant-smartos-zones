@@ -20,6 +20,10 @@ module Vagrant
           def synced_folder(*args)
             @synced_folders << args
           end
+
+          def finalize!
+            @brand = 'joyent' if @brand == UNSET_VALUE
+          end
         end
       end
     end
