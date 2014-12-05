@@ -18,4 +18,10 @@ Vagrant.configure('2') do |config|
   config.zone.image = 'd34c301e-10c3-11e4-9b79-5f67ca448df0'
   config.zone.memory = 1536
   config.zone.disk_size = 5
+
+  # config.zone.name = 'lx'
+  # config.zone.brand = 'lx'
+  # config.zone.image = 'b7493690-f019-4612-958b-bab5f844283e'
+  # config.zone.memory = 1536
+  # config.zone.disk_size = 5
 end
