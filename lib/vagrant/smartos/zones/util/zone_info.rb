@@ -2,6 +2,7 @@ require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/smartos/zones/util/global_zone/helper'
 require 'vagrant/smartos/zones/util/zone_group'
 require 'vagrant/smartos/zones/util/zone_json'
+require 'vagrant/smartos/zones/util/zone_project'
 require 'vagrant/smartos/zones/util/zone_user'
 
 module Vagrant
@@ -88,6 +89,7 @@ module Vagrant
           def create_zone_vagrant_user(zone)
             Util::ZoneGroup.new(machine, zone).create('vagrant')
             Util::ZoneUser.new(machine, zone).create('vagrant', 'vagrant', 'Primary Administrator')
+            Util::ZoneProject.new(machine, zone).create('vagrant', %w(vagrant), 'Vagrant')
           end
 
           def configure_zone_passwords(zone)
