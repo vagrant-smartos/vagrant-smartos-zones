@@ -5,6 +5,8 @@ Vagrant.configure('2') do |config|
     v.memory = 2048
   end
 
+  config.ssh.insert_key = false
+
   # See https://vagrantcloud.com/livinginthepast for SmartOS boxes
   config.vm.box = 'livinginthepast/smartos-base64'
   config.vm.communicator = 'smartos'
