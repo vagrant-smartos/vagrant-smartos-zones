@@ -35,7 +35,7 @@ module Vagrant
 
           def flags(group)
             return "-m -s /bin/bash -g #{group}" if zone.lx_brand?
-            "-m -s /bin/bash -G #{group}"
+            "-m -s /bin/bash -g #{group} -G other"
           end
 
           def grant_role(username, role)
