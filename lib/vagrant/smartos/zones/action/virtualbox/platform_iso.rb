@@ -30,7 +30,8 @@ module Vagrant
             private
 
             def requires_platform_iso?
-              machine.config.global_zone.platform_image
+              machine.config.global_zone.platform_image &&
+                machine.config.vm.communicator == :smartos
             end
 
             def remove_dvddrive
