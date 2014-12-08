@@ -57,7 +57,7 @@ module Vagrant
               zone.merge!(JSON.parse(output).first)
             end
 
-            Models::Zone.from_hash(zone)
+            Models::Zone.from_hash(zone, machine)
           end
 
           def start(name)
@@ -98,7 +98,7 @@ module Vagrant
           end
 
           def overwrite_password(zone, user, pw, ts)
-            zlogin(zone, "sed -i -e \\'s@#{user}:.*@#{user}:#{pw}:#{ts}::::::@\\' /etc/shadow")
+            zone.zlogin("sed -i -e \\'s@#{user}:.*@#{user}:#{pw}:#{ts}::::::@\\' /etc/shadow")
           end
 
           def zone_json

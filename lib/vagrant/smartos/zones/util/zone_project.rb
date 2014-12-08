@@ -16,7 +16,7 @@ module Vagrant
           end
 
           def create(project, users, comment)
-            zlogin(zone, "projadd -c \"#{comment}\" -U #{users.join(',')} #{project}")
+            zone.zlogin("projadd -c \"#{comment}\" -U #{users.join(',')} #{project}")
           end
         end
       end

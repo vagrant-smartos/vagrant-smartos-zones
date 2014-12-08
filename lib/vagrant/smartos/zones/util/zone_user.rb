@@ -26,7 +26,7 @@ module Vagrant
           end
 
           def create(username, group, role = nil)
-            zlogin(zone, "useradd #{flags(group)} #{username}")
+            zone.zlogin("useradd #{flags(group)} #{username}")
             grant_role(username, role)
             install_public_key(group)
           end
@@ -40,21 +40,21 @@ module Vagrant
 
           def grant_role(username, role)
             if zone.lx_brand?
-              return if zlogin_test(zone, %('test -f /etc/sudoers.d/vagrant'))
-              zlogin(zone, %('echo "#{username} ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers.d/vagrant'))
+              return if zone.test(%('test -f /etc/sudoers.d/vagrant'))
+              zone.zlogin(%('echo "#{username} ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers.d/vagrant'))
             else
-              zlogin(zone, "usermod -P\\'#{role}\\' #{username}") if role
-              zlogin(zone, 'cp /opt/local/etc/sudoers.d/admin /opt/local/etc/sudoers.d/vagrant')
-              zlogin(zone, 'sed -i -e \\\'s@admin@vagrant@\\\' /opt/local/etc/sudoers.d/vagrant')
+              zone.zlogin("usermod -P\\'#{role}\\' #{username}") if role
+              zone.zlogin('cp /opt/local/etc/sudoers.d/admin /opt/local/etc/sudoers.d/vagrant')
+              zone.zlogin('sed -i -e \\\'s@admin@vagrant@\\\' /opt/local/etc/sudoers.d/vagrant')
             end
           end
 
           def install_public_key(group)
-            zlogin(zone, 'mkdir -p /home/vagrant/.ssh')
-            zlogin(zone, 'touch /home/vagrant/.ssh/authorized_keys')
-            zlogin(zone, %('echo "#{PublicKey.new}" > /home/vagrant/.ssh/authorized_keys'))
-            zlogin(zone, "chown -R vagrant:#{group} /home/vagrant/.ssh")
-            zlogin(zone, 'chmod 600 /home/vagrant/.ssh/authorized_keys')
+            zone.zlogin('mkdir -p /home/vagrant/.ssh')
+            zone.zlogin('touch /home/vagrant/.ssh/authorized_keys')
+            zone.zlogin(%('echo "#{PublicKey.new}" > /home/vagrant/.ssh/authorized_keys'))
+            zone.zlogin("chown -R vagrant:#{group} /home/vagrant/.ssh")
+            zone.zlogin('chmod 600 /home/vagrant/.ssh/authorized_keys')
           end
         end
       end

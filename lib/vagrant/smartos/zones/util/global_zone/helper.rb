@@ -4,6 +4,10 @@ module Vagrant
       module Util
         module GlobalZone
           module Helper
+            def self.included(klass)
+              klass.send(:extend, ClassHelpers)
+            end
+
             def sudo
               machine.config.smartos.suexec_cmd
             end
@@ -14,15 +18,13 @@ module Vagrant
               end
             end
 
-            def zlogin(zone, cmd, options = {})
-              with_gz("#{sudo} zlogin #{zone.uuid} #{cmd}", options) do |output|
+          end
+
+          module ClassHelpers
+            def with_gz(machine, command, options = {})
+              machine.communicate.gz_execute(command, options) do |_type, output|
                 yield output if block_given?
               end
-            end
-
-            def zlogin_test(zone, cmd)
-              command = "#{sudo} zlogin #{zone.uuid} #{cmd}"
-              machine.communicate.gz_test(command)
             end
           end
         end

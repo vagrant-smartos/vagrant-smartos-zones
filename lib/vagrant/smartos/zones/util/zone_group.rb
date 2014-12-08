@@ -25,7 +25,7 @@ module Vagrant
           end
 
           def create(group)
-            zlogin(zone, "groupadd #{group}")
+            zone.zlogin("groupadd #{group}")
           end
         end
       end
