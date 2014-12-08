@@ -54,11 +54,6 @@ module Vagrant
           Cap::CreateGZVnic
         end
 
-        guest_capability 'global_zone', 'create_zone_users' do
-          require_relative 'cap/create_zone_users'
-          Cap::CreateZoneUsers
-        end
-
         guest_capability 'global_zone', 'imgadm_import' do
           require_relative 'cap/imgadm_import'
           Cap::ImgadmImport
