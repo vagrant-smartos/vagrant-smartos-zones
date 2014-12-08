@@ -109,7 +109,8 @@ module Vagrant
           end
 
           def platform_image_url
-            return machine.config.global_zone.platform_image_url if machine && machine.config.global_zone.platform_image_url
+            return machine.config.global_zone.platform_image_url if machine &&
+              machine.config.global_zone.platform_image_url
             "#{platform_image_root}/Joyent_Dev/public/SmartOS/#{image}/smartos-#{image}.iso"
           end
 

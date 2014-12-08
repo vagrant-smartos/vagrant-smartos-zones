@@ -17,7 +17,6 @@ module Vagrant
                 yield output if block_given?
               end
             end
-
           end
 
           module ClassHelpers
