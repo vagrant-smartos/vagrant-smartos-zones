@@ -9,13 +9,22 @@ module Vagrant
 
           attr_accessor :machine, :name, :state, :uuid, :brand, :image
 
+          def self.all(machine)
+            zones = []
+            with_gz(machine, 'pfexec vmadm lookup -j') do |output|
+              hashes = JSON.parse(output)
+              zones += hashes.map { |h| from_hash(h, machine) }
+            end
+            zones
+          end
+
           def self.find(machine, name)
             zone_hash = {}
             finder = "pfexec vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{name}"
             with_gz(machine, finder) do |output|
               zone_hash.merge!(JSON.parse(output).first)
             end
-            from_hash(zone_hash)
+            from_hash(zone_hash, machine)
           end
 
           def self.from_hash(zone, machine = nil)

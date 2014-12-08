@@ -1,4 +1,5 @@
 require 'vagrant'
+require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/smartos/zones/util/zone_info'
 require_relative 'multi_command'
 
@@ -61,10 +62,12 @@ module Vagrant
           end
 
           def list(*_args)
-            zones.list.tap do |zone_list|
+            with_target_vms('default') do |machine|
+              zones = Models::Zone.all(machine).map do |zone|
+                [zone.name.to_s.ljust(25), zone.state.to_s.ljust(10), zone.uuid].join(' ')
+              end
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.list',
-                                  zones: zone_list.join("\n")),
-                           prefix: false)
+                                  zones: zones.join("\n")), prefix: false)
             end
           end
 

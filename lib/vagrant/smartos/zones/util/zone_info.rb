@@ -21,62 +21,43 @@ module Vagrant
             @machine = machine
           end
 
-          def list
-            zones = []
-            with_gz("#{sudo} vmadm lookup -j") do |output|
-              zone_data = JSON.parse(output)
-              zone_data.each do |zone|
-                zones << [zone['alias'].to_s.ljust(25),
-                          zone['zone_state'].to_s.ljust(10),
-                          zone['zonename']].join(' ')
-              end
-            end
-
-            zones
-          end
-
           def create(name)
             machine.ui.info "Creating zone #{machine.config.zone.name} with image #{machine.config.zone.image}"
             with_gz("echo '#{zone_json}' | #{sudo} vmadm create")
-            zone = show(name)
-            create_zone_users(zone)
-            zone
+            show(name).tap do |zone|
+              create_zone_users(zone)
+            end
           end
 
           def destroy(name)
-            zone = show(name)
-            with_gz("#{sudo} vmadm delete #{zone.uuid}")
-            zone.state = 'deleted'
-            zone
+            show(name).tap do |zone|
+              with_gz("#{sudo} vmadm delete #{zone.uuid}")
+              zone.state = 'deleted'
+            end
           end
 
           def show(name)
             zone_name = name || machine.config.zone.name
-            zone = {}
-            with_gz("#{sudo} vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{zone_name}") do |output|
-              zone.merge!(JSON.parse(output).first)
-            end
-
-            Models::Zone.from_hash(zone, machine)
+            Models::Zone.find(machine, zone_name)
           end
 
           def start(name)
-            zone = show(name)
-            with_gz("#{sudo} vmadm start #{zone.uuid}")
-            zone
+            show(name).tap do |zone|
+              with_gz("#{sudo} vmadm start #{zone.uuid}")
+            end
           end
 
           def stop(name)
-            zone = show(name)
-            with_gz("#{sudo} vmadm stop #{zone.uuid}")
-            zone
+            show(name).tap do |zone|
+              with_gz("#{sudo} vmadm stop #{zone.uuid}")
+            end
           end
 
           def update(name)
-            machine.ui.info "Updating zone #{name}..."
-            zone = show(name)
-            with_gz("echo '#{zone_json}' | #{sudo} vmadm update #{zone.uuid}")
-            zone
+            show(name).tap do |zone|
+              machine.ui.info "Updating zone #{name}..."
+              with_gz("echo '#{zone_json}' | #{sudo} vmadm update #{zone.uuid}")
+            end
           end
 
           private

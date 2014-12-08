@@ -1,4 +1,4 @@
-require 'vagrant/smartos/zones/util/zone_info'
+require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/smartos/zones/util/zone_user'
 require 'vagrant/smartos/zones/util/zone_group'
 require 'vagrant/smartos/zones/action/helper'
@@ -20,8 +20,7 @@ module Vagrant
             app.call(env)
 
             if zones_supported?
-              zone = Vagrant::Smartos::Zones::Util::ZoneInfo.new(machine).show(machine.config.zone.name)
-
+              zone = Vagrant::Smartos::Zones::Models::Zone.find(machine, machine.config.zone.name)
               machine.config.zone.synced_folders.each do |folder|
                 configure_synced_folder(zone, folder)
               end
