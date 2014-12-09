@@ -24,7 +24,12 @@ module Vagrant
               exit 1
             end
 
-            send command, args.first
+            send command, *args
+          end
+
+          def fail_options!
+            ui.warn option_parser.to_s, prefix: false
+            exit 1
           end
 
           def option_parser

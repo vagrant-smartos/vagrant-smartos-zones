@@ -23,6 +23,16 @@ en:
               uuid:      %{uuid}
               brand:     %{brand}
               image:     %{image}
+            snapshot:
+              list: |-
+                name         created at              used zone
+                %{snapshots}
+              create: |-
+                Creating snapshot with name %{name}
+              destroy: |-
+                Destroying snapshot with name %{name}
+              rollback: |-
+                Rolling back zone %{zonename} to snapshot %{name}
             start: |-
               Started zone %{name} %{uuid}
             stop: |-
