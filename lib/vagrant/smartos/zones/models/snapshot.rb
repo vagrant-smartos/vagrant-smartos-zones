@@ -1,3 +1,4 @@
+require 'vagrant/smartos/zones/errors'
 require 'vagrant/smartos/zones/util/global_zone/helper'
 
 module Vagrant
@@ -26,7 +27,7 @@ module Vagrant
           end
 
           def self.find(name, zone)
-            all(zone).find { |snapshot| snapshot.name == name }
+            all(zone).find { |snapshot| snapshot.name == name } || raise(SnapshotNotFound)
           end
 
           def self.from_line(l, zone)
@@ -40,12 +41,16 @@ module Vagrant
             end
           end
 
+          def path
+            "zones/#{zone.uuid}@#{name}"
+          end
+
           def destroy
-            with_gz("pfexec zfs destroy zones/#{zone.uuid}@#{name}")
+            with_gz("pfexec zfs destroy #{path}")
           end
 
           def rollback
-            with_gz("pfexec zfs rollback zones/#{zone.uuid}@#{name}")
+            with_gz("pfexec zfs rollback -r #{path}")
           end
         end
       end
