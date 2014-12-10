@@ -10,6 +10,18 @@ module Vagrant
 
           attr_accessor :machine, :zone, :name, :created_at, :space_used
 
+          def self.around(zone, &block)
+            snapshot_name = "before_#{Time.now.to_i}"
+            snapshot = create(snapshot_name, zone)
+            if block.arity.eql?(1)
+              block.call snapshot
+            else
+              block.call
+            end
+            snapshot.rollback
+            snapshot.destroy
+          end
+
           def self.all(zone)
             snapshots = []
             cmd = "pfexec zfs list -t snapshot -H -r -o name,creation,used zones/#{zone.uuid}"

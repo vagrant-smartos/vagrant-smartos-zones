@@ -24,6 +24,11 @@ module Vagrant
           Config::Zone
         end
 
+        command 'dataset' do
+          require_relative 'commands/dataset'
+          Command::Dataset
+        end
+
         command 'global-zone' do
           require_relative 'commands/global_zone'
           Command::GlobalZone
