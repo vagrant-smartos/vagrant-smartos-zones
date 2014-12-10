@@ -1,3 +1,4 @@
+require 'vagrant/smartos/zones/errors'
 require 'vagrant/smartos/zones/util/global_zone/helper'
 
 module Vagrant
@@ -22,7 +23,9 @@ module Vagrant
             zone_hash = {}
             finder = "pfexec vmadm lookup -j -o uuid,alias,state,image_uuid,brand alias=#{name}"
             with_gz(machine, finder) do |output|
-              zone_hash.merge!(JSON.parse(output).first)
+              hash = JSON.parse(output).first
+              raise ZoneNotFound unless hash
+              zone_hash.merge!(hash)
             end
             from_hash(zone_hash, machine)
           end
@@ -56,6 +59,19 @@ module Vagrant
             with_gz(command, options) do |output|
               yield output if block_given?
             end
+          end
+
+          def destroy
+            with_gz("pfexec vmadm delete #{uuid}")
+            self.state = 'deleted'
+          end
+
+          def start
+            with_gz("pfexec vmadm start #{uuid}")
+          end
+
+          def stop
+            with_gz("pfexec vmadm stop #{uuid}")
           end
         end
       end

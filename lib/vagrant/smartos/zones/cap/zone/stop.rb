@@ -19,7 +19,7 @@ module Vagrant
               return unless zone.running?
               name = machine.config.zone.name
               ui.info "Stopping zone #{name}"
-              zone_info.stop(name)
+              zone.stop
             end
           end
         end

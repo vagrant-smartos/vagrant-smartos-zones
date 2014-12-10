@@ -22,6 +22,7 @@ module Vagrant
           def self.create(name, zone)
             cmd = "pfexec zfs snapshot zones/#{zone.uuid}@#{name}"
             with_gz(zone.machine, cmd)
+            find(name, zone)
           end
 
           def self.find(name, zone)

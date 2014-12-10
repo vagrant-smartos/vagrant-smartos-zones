@@ -24,37 +24,13 @@ module Vagrant
           def create(name)
             machine.ui.info "Creating zone #{machine.config.zone.name} with image #{machine.config.zone.image}"
             with_gz("echo '#{zone_json}' | #{sudo} vmadm create")
-            show(name).tap do |zone|
+            with_zone(name) do |zone|
               create_zone_users(zone)
             end
           end
 
-          def destroy(name)
-            show(name).tap do |zone|
-              with_gz("#{sudo} vmadm delete #{zone.uuid}")
-              zone.state = 'deleted'
-            end
-          end
-
-          def show(name)
-            zone_name = name || machine.config.zone.name
-            Models::Zone.find(machine, zone_name)
-          end
-
-          def start(name)
-            show(name).tap do |zone|
-              with_gz("#{sudo} vmadm start #{zone.uuid}")
-            end
-          end
-
-          def stop(name)
-            show(name).tap do |zone|
-              with_gz("#{sudo} vmadm stop #{zone.uuid}")
-            end
-          end
-
           def update(name)
-            show(name).tap do |zone|
+            with_zone(name) do |zone|
               machine.ui.info "Updating zone #{name}..."
               with_gz("echo '#{zone_json}' | #{sudo} vmadm update #{zone.uuid}")
             end
@@ -84,6 +60,10 @@ module Vagrant
 
           def zone_json
             Util::ZoneJson.new(machine).to_json
+          end
+
+          def with_zone(name)
+            Models::Zone.find(machine, name).tap { |zone| yield zone }
           end
         end
       end

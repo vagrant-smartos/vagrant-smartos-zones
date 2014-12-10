@@ -1,4 +1,5 @@
 require 'vagrant'
+require 'vagrant/smartos/zones/errors'
 require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/smartos/zones/util/snapshots'
 require 'vagrant/smartos/zones/util/zone_info'
@@ -42,24 +43,19 @@ module Vagrant
             zones.create(name).tap do |zone|
               return unless zone
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.create',
-                                  name: zone.name,
-                                  state: zone.state,
-                                  uuid: zone.uuid,
-                                  brand: zone.brand,
+                                  name: zone.name, state: zone.state,
+                                  uuid: zone.uuid, brand: zone.brand,
                                   image: zone.image),
                            prefix: false)
             end
           end
 
           def destroy(name)
-            @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.destroy', name: name))
-
-            zones.destroy(name).tap do |zone|
+            with_zone(name) do |zone|
+              zone.destroy
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.destroyed',
-                                  name: zone.name,
-                                  state: zone.state,
-                                  uuid: zone.uuid,
-                                  brand: zone.brand,
+                                  name: zone.name, state: zone.state,
+                                  uuid: zone.uuid, brand: zone.brand,
                                   image: zone.image))
             end
           end
@@ -75,12 +71,10 @@ module Vagrant
           end
 
           def show(name)
-            zones.show(name).tap do |zone|
+            with_zone(name) do |zone|
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.show',
-                                  name: zone.name,
-                                  state: zone.state,
-                                  uuid: zone.uuid,
-                                  brand: zone.brand,
+                                  name: zone.name, state: zone.state,
+                                  uuid: zone.uuid, brand: zone.brand,
                                   image: zone.image),
                            prefix: false)
             end
@@ -94,23 +88,21 @@ module Vagrant
           end
 
           def start(name)
-            zones.start(name).tap do |zone|
+            with_zone(name) do |zone|
+              zone.start
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.start',
-                                  name: zone.name,
-                                  state: zone.state,
-                                  uuid: zone.uuid,
-                                  brand: zone.brand,
+                                  name: zone.name, state: zone.state,
+                                  uuid: zone.uuid, brand: zone.brand,
                                   image: zone.image))
             end
           end
 
           def stop(name)
-            zones.stop(name).tap do |zone|
+            with_zone(name) do |zone|
+              zone.stop
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.stop',
-                                  name: zone.name,
-                                  state: zone.state,
-                                  uuid: zone.uuid,
-                                  brand: zone.brand,
+                                  name: zone.name, state: zone.state,
+                                  uuid: zone.uuid, brand: zone.brand,
                                   image: zone.image))
             end
           end
@@ -125,6 +117,17 @@ module Vagrant
 
           def ui
             @env.ui
+          end
+
+          def with_zone(name)
+            with_target_vms('default', single_target: true) do |machine|
+              Models::Zone.find(machine, name).tap do |zone|
+                yield zone
+              end
+            end
+          rescue ZoneNotFound
+            ui.warn(I18n.t('vagrant.smartos.zones.warning.zone_not_found',
+                           name: name), prefix: false)
           end
         end
       end

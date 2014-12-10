@@ -19,7 +19,7 @@ module Vagrant
               return if zone.running?
               name = machine.config.zone.name
               ui.info "Starting zone #{name}"
-              zone_info.start(name)
+              zone.start
             end
           end
         end

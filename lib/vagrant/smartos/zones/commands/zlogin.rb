@@ -1,6 +1,6 @@
 require 'vagrant'
 require 'vagrant/smartos/zones/util/global_zone/ssh_info'
-require 'vagrant/smartos/zones/util/zone_info'
+require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/util/ssh'
 
 module Vagrant
@@ -24,7 +24,7 @@ module Vagrant
 
             with_target_vms('default', single_target: true) do |machine|
               ssh_info = Util::GlobalZone::SSHInfo.new(machine.provider, machine.config, machine.env).to_hash
-              zone = Util::ZoneInfo.new(machine).show(zone_alias)
+              zone = Models::Zone.find(machine, zone_alias)
               Vagrant::Util::SSH.exec(ssh_info, extra_args: ['-t', "pfexec zlogin -l vagrant #{zone.uuid}"])
             end
           end

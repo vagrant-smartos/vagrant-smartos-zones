@@ -13,8 +13,6 @@ en:
                 state: %{state}
                 brand: %{brand}
                 image: %{image}
-            destroy: |-
-              Destroying zone with name %{name}
             destroyed: |-
               Zone destroyed %{name} %{uuid}
             show: |-
@@ -37,4 +35,7 @@ en:
               Started zone %{name} %{uuid}
             stop: |-
               Stopped zone %{name} %{uuid}
+        warning:
+          zone_not_found: |-
+            Unable to find zone with name %{name}
 
