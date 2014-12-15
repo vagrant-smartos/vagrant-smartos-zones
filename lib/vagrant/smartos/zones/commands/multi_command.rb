@@ -12,6 +12,10 @@ module Vagrant
         # OptionParser
         #
         module MultiCommand
+          def execute
+            process_subcommand
+          end
+
           def process_subcommand
             args = parse_options(option_parser)
             exit unless args

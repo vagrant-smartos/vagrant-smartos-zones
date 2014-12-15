@@ -35,10 +35,6 @@ module Vagrant
             'View and interact with SmartOS zones'
           end
 
-          def execute
-            process_subcommand
-          end
-
           def create(name)
             zones.create(name).tap do |zone|
               return unless zone

@@ -32,10 +32,6 @@ module Vagrant
             'Manage local SmartOS datasets'
           end
 
-          def execute
-            process_subcommand
-          end
-
           private
 
           def host

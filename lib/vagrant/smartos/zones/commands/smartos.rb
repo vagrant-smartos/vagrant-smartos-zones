@@ -28,10 +28,6 @@ module Vagrant
             'Manage SmartOS platform images'
           end
 
-          def execute
-            process_subcommand
-          end
-
           private
 
           def host

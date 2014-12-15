@@ -26,10 +26,6 @@ module Vagrant
             'View and interact with the SmartOS global zone'
           end
 
-          def execute
-            process_subcommand
-          end
-
           def ssh(*_args)
             with_target_vms('default', single_target: true) do |machine|
               ssh_info = Util::GlobalZone::SSHInfo.new(machine.provider, machine.config, machine.env).to_hash
