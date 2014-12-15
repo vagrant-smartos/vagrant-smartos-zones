@@ -12,11 +12,16 @@ module Vagrant
         # OptionParser
         #
         module MultiCommand
+          # Automatically called by Vagrant when running a command
           def execute
             process_subcommand
           end
 
+          # Sends parsed argv to an instance method that maps to the
+          # subcommand name. If flags are passed to the option parser,
+          # they will be included in argv as a trailing hash.
           def process_subcommand
+            @options = {}
             args = parse_options(option_parser)
             exit unless args
 
@@ -28,6 +33,7 @@ module Vagrant
               exit 1
             end
 
+            args << @options unless @options.empty?
             send command, *args
           end
 
@@ -37,7 +43,7 @@ module Vagrant
           end
 
           def option_parser
-            self.class.const_get('OPTION_PARSER')
+            @option_parser ||= self.class.const_get('OPTION_PARSER')
           end
 
           def subcommands

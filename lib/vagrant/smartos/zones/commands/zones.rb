@@ -1,5 +1,6 @@
 require 'vagrant'
 require 'vagrant/smartos/zones/errors'
+require 'vagrant/smartos/zones/models/config'
 require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/smartos/zones/util/snapshots'
 require 'vagrant/smartos/zones/util/zones'
@@ -12,36 +13,47 @@ module Vagrant
         class Zones < Vagrant.plugin('2', :command)
           include MultiCommand
 
-          COMMANDS = %w(create destroy list show snapshot start stop).freeze
+          COMMANDS = %w(config create destroy list show snapshot start stop).freeze
 
-          OPTION_PARSER = OptionParser.new do |o|
-            o.banner = 'Usage: vagrant zones [command] [name]'
-            o.separator ''
-            o.separator 'Commands:'
-            o.separator '  list                                 show status of zones'
-            o.separator '  create [name]                        create or update zone with alias [name]'
-            o.separator '  destroy [name]                       delete zone with alias [name]'
-            o.separator '  show [name]                          show info on zone with alias [name]'
-            o.separator '  snapshot [action] [name] [snapshot]  snapshot the ZFS filesystem for [name]'
-            o.separator '                                       actions: list, create, delete, rollback'
-            o.separator '  start [name]                         start zone with alias [name]'
-            o.separator '  stop [name]                          stop zone with alias [name]'
-            o.separator ''
-            o.separator 'Options:'
-            o.separator ''
+          # rubocop:disable Metrics/MethodLength
+          def option_parser
+            OptionParser.new do |o|
+              o.banner = 'Usage: vagrant zones [command] [name]'
+              o.separator ''
+              o.separator 'Commands:'
+              o.separator '  list                                 show status of zones'
+              o.separator '  config [action] [options]            interact with global plugin configuration'
+              o.separator '  create [name]                        create or update zone with alias [name]'
+              o.separator '  destroy [name]                       delete zone with alias [name]'
+              o.separator '  show [name]                          show info on zone with alias [name]'
+              o.separator '  snapshot [action] [name] [snapshot]  snapshot the ZFS filesystem for [name]'
+              o.separator '                                         actions: list, create, delete, rollback'
+              o.separator '  start [name]                         start zone with alias [name]'
+              o.separator '  stop [name]                          stop zone with alias [name]'
+              o.separator ''
+              o.separator 'Options:'
+              o.separator ''
+              o.on('--delete', 'delete configuration key') do |d|
+                @options[:delete] = d
+              end
+            end
           end
+          # rubocop:enable Metrics/MethodLength
 
           def self.synopsis
             'View and interact with SmartOS zones'
+          end
+
+          def config(*args)
+            Models::Config.parse_cli(@env, *args)
           end
 
           def create(name)
             with_target_vms('default') do |machine|
               Models::Zone.create(name, machine).tap do |zone|
                 @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.create',
-                                    name: zone.name, state: zone.state,
-                                    uuid: zone.uuid, brand: zone.brand,
-                                    image: zone.image),
+                                    name: zone.name, state: zone.state, uuid: zone.uuid,
+                                    brand: zone.brand, image: zone.image),
                              prefix: false)
               end
             end
@@ -51,9 +63,8 @@ module Vagrant
             with_zone(name) do |zone|
               zone.destroy
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.destroyed',
-                                  name: zone.name, state: zone.state,
-                                  uuid: zone.uuid, brand: zone.brand,
-                                  image: zone.image))
+                                  name: zone.name, state: zone.state, uuid: zone.uuid,
+                                  brand: zone.brand, image: zone.image))
             end
           end
 
@@ -70,9 +81,8 @@ module Vagrant
           def show(name)
             with_zone(name) do |zone|
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.show',
-                                  name: zone.name, state: zone.state,
-                                  uuid: zone.uuid, brand: zone.brand,
-                                  image: zone.image),
+                                  name: zone.name, state: zone.state, uuid: zone.uuid,
+                                  brand: zone.brand, image: zone.image),
                            prefix: false)
             end
           end
@@ -88,9 +98,8 @@ module Vagrant
             with_zone(name) do |zone|
               zone.start
               @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.start',
-                                  name: zone.name, state: zone.state,
-                                  uuid: zone.uuid, brand: zone.brand,
-                                  image: zone.image))
+                                  name: zone.name, state: zone.state, uuid: zone.uuid,
+                                  brand: zone.brand, image: zone.image))
             end
           end
 
