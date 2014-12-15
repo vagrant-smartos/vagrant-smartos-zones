@@ -11,17 +11,7 @@ module Vagrant
 
             def execute
               return warn_zone_config unless zone_valid?
-              return update_zone if zone_exists?
-              create_zone
-            end
-
-            def create_zone
-              zone_info.create(machine.config.zone.name)
-            end
-
-            def update_zone
-              ui.info "Zone #{machine.config.zone.name} exists"
-              zone_info.update(machine.config.zone.name)
+              Models::Zone.create_or_update(machine.config.zone.name, machine)
             end
 
             def warn_zone_config
@@ -32,10 +22,6 @@ module Vagrant
               ui.info "      config.zone.brand     = 'joyent'"
               ui.info '      config.zone.memory    = 2048'
               ui.info '      config.zone.disk_size = 5'
-            end
-
-            def zone_json
-              Util::ZoneJson.new(machine).to_json
             end
           end
         end

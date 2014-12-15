@@ -1,6 +1,6 @@
 require 'vagrant/smartos/zones/cap/base'
 require 'vagrant/smartos/zones/models/zone'
-require 'vagrant/smartos/zones/util/zone_info'
+require 'vagrant/smartos/zones/util/zones'
 
 module Vagrant
   module Smartos
@@ -17,8 +17,8 @@ module Vagrant
               machine.config.zone && machine.config.zone.image && machine.config.zone.name
             end
 
-            def zone_info
-              @zone_info ||= Util::ZoneInfo.new(machine)
+            def zones
+              @zones ||= Util::Zones.new(machine)
             end
 
             def zone

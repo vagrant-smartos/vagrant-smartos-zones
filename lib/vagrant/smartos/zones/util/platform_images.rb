@@ -38,7 +38,7 @@ module Vagrant
           end
 
           def latest
-            latest_html = Zones::Util::Downloader.new(platform_image_latest_url).read
+            latest_html = Vagrant::Smartos::Zones::Util::Downloader.new(platform_image_latest_url).read
             latest = latest_html.match(/(\d{8}T\d{6}Z)/)
             return unless latest
             latest[1]
@@ -55,7 +55,7 @@ module Vagrant
           def download_checksum_file
             return if machine && machine.config.global_zone.platform_image_url
             ui.info "Downloading checksums for SmartOS platform image #{image}"
-            Zones::Util::Downloader.get(platform_image_checksum_url, platform_image_checksum_path)
+            Vagrant::Smartos::Zones::Util::Downloader.get(platform_image_checksum_url, platform_image_checksum_path)
           end
 
           def download_platform_image

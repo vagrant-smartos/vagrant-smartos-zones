@@ -9,7 +9,11 @@ module Vagrant
   module Smartos
     module Zones
       module Util
-        class ZoneInfo
+        # Service object for creating zones
+        #
+        # Wraps up creation of associated things within a zone
+        #
+        class Zones
           include GlobalZone::Helper
 
           attr_reader :machine

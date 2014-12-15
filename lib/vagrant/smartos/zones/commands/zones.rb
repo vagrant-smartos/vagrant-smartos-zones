@@ -2,7 +2,7 @@ require 'vagrant'
 require 'vagrant/smartos/zones/errors'
 require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/smartos/zones/util/snapshots'
-require 'vagrant/smartos/zones/util/zone_info'
+require 'vagrant/smartos/zones/util/zones'
 require_relative 'multi_command'
 
 module Vagrant
@@ -36,13 +36,14 @@ module Vagrant
           end
 
           def create(name)
-            zones.create(name).tap do |zone|
-              return unless zone
-              @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.create',
-                                  name: zone.name, state: zone.state,
-                                  uuid: zone.uuid, brand: zone.brand,
-                                  image: zone.image),
-                           prefix: false)
+            with_target_vms('default') do |machine|
+              Models::Zone.create(name, machine).tap do |zone|
+                @env.ui.info(I18n.t('vagrant.smartos.zones.commands.zones.create',
+                                    name: zone.name, state: zone.state,
+                                    uuid: zone.uuid, brand: zone.brand,
+                                    image: zone.image),
+                             prefix: false)
+              end
             end
           end
 
@@ -105,21 +106,13 @@ module Vagrant
 
           private
 
-          def zones
-            zones = nil
-            with_target_vms('default') { |machine| zones = Util::ZoneInfo.new(machine) }
-            zones
-          end
-
           def ui
             @env.ui
           end
 
-          def with_zone(name)
+          def with_zone(name, &blk)
             with_target_vms('default', single_target: true) do |machine|
-              Models::Zone.find(machine, name).tap do |zone|
-                yield zone
-              end
+              Models::Zone.find(machine, name).tap { |zone| blk.call(zone) }
             end
           rescue ZoneNotFound
             ui.warn(I18n.t('vagrant.smartos.zones.warning.zone_not_found',
