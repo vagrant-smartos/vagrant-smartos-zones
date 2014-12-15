@@ -10,11 +10,11 @@ module Vagrant
 
           def initialize
             @brand = UNSET_VALUE
-            @disk_size = UNSET_VALUE
-            @image = UNSET_VALUE
+            @disk_size = nil
+            @image = nil
             @kernel_version = UNSET_VALUE
-            @memory = UNSET_VALUE
-            @name = UNSET_VALUE
+            @memory = nil
+            @name = nil
             @synced_folders = []
           end
 
@@ -24,11 +24,7 @@ module Vagrant
 
           def finalize!
             @brand = 'joyent' if @brand == UNSET_VALUE
-            @disk_size = nil if @disk_size == UNSET_VALUE
-            @image = nil if @image == UNSET_VALUE
             @kernel_version = '3.16' if @kernel_version == UNSET_VALUE
-            @memory = nil if @memory == UNSET_VALUE
-            @name = nil if @name == UNSET_VALUE
           end
         end
       end
