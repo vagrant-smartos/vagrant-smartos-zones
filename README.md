@@ -72,6 +72,8 @@ Vagrant.configure('2') do |config|
     v.memory = 3072
   end
 
+  config.ssh.insert_key = false
+
   # See https://vagrantcloud.com/livinginthepast for SmartOS boxes
   config.vm.box = "livinginthepast/smartos"
   config.vm.synced_folder ".", "/vagrant", disabled: true
