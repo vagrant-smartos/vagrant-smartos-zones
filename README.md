@@ -231,6 +231,19 @@ group with which to connect. This user should have `Primary
 Administrator` privileges. When creating a local zone, a `vagrant`
 user and group are also created in the zone.
 
+## Tests
+
+There is a basic test suite that uses `test-kitchen` to converge
+different brands of zones. Although it might not be comprehensive, it
+should be ran after new features or after any significant refactoring to
+ensure that nothing breaks the ability to stand up a zone.
+
+```bash
+bundle exec kitchen test
+```
+
+This may take a while...
+
 ## References / Alternatives
 
 Any success of this project depends heavily on the work of others,
