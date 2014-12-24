@@ -10,3 +10,8 @@ end
 group :plugins do
   gem 'vagrant-smartos-zones', path: '.'
 end
+
+group :integration do
+  gem 'test-kitchen'
+  gem 'kitchen-vagrant'
+end

@@ -1,0 +1,30 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: shell
+  script: test/templates/bootstrap.sh
+
+platforms:
+- name: smartos
+  driver_config:
+    box: livinginthepast/smartos-base64
+    box_url: https://atlas.hashicorp.com/livinginthepast/boxes/smartos-base64
+    vagrantfile_erb: test/templates/Vagrantfile.smartos.erb
+    zone:
+      name: base64
+      brand: joyent
+      image: d34c301e-10c3-11e4-9b79-5f67ca448df0
+- name: lx
+  driver_config:
+    box: livinginthepast/smartos
+    box_url: https://atlas.hashicorp.com/livinginthepast/boxes/smartos
+    vagrantfile_erb: test/templates/Vagrantfile.smartos.erb
+    zone:
+      name: lx_zone
+      brand: lx
+      image: 14a960b0-614e-11e4-a095-eb789315ae39
+
+suites:
+  - name: default
