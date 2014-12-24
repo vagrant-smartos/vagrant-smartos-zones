@@ -16,6 +16,7 @@ module Vagrant
           end
 
           def create(project, users, comment)
+            return if zone.lx_brand?
             zone.zlogin("projadd -c \"#{comment}\" -U #{users.join(',')} #{project}")
           end
         end
