@@ -24,7 +24,7 @@ install_ruby() {
 }
 
 install_ruby_linux() {
-  apt-get install ruby
+  apt-get -y install ruby
 }
 
 install_ruby_smartos() {
