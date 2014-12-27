@@ -40,6 +40,7 @@ module Vagrant
         end
 
         command 'zones' do
+          load_il8n
           require_relative 'commands/zones'
           Command::Zones
         end

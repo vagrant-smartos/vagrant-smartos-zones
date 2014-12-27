@@ -31,10 +31,18 @@ module Vagrant
           end
 
           def delete(name, *_args)
-            hash.delete(name)
+            if hash.delete(name)
+              env.ui.info(I18n.t('vagrant.smartos.zones.config.delete.success',
+                                 key: name))
+            else
+              env.ui.info(I18n.t('vagrant.smartos.zones.config.delete.failed',
+                                 key: name))
+            end
           end
 
           def set(name, value)
+            env.ui.info(I18n.t('vagrant.smartos.zones.config.set',
+                               key: name, value: value))
             hash[name] = value
           end
 

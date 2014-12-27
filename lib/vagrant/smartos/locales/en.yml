@@ -35,6 +35,15 @@ en:
               Started zone %{name} %{uuid}
             stop: |-
               Stopped zone %{name} %{uuid}
+        config:
+          set: |-
+            Setting configuration: %{key} => %{value}
+          delete:
+            success: |-
+              Deleting configuration for: %{key}
+            failed: |-
+              Unable to delete configuration key: %{key}
+              Was key actually set?
         warning:
           zone_not_found: |-
             Unable to find zone with name %{name}
