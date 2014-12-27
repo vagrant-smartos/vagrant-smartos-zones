@@ -1,3 +1,4 @@
+require 'vagrant/smartos/zones/models/config'
 require 'vagrant/smartos/zones/models/zone'
 require 'vagrant/smartos/zones/util/global_zone/helper'
 require 'vagrant/smartos/zones/util/zone_group'
@@ -30,6 +31,7 @@ module Vagrant
             with_gz("echo '#{zone_json}' | #{sudo} vmadm create")
             with_zone(name) do |zone|
               create_zone_users(zone)
+              configure_pkgsrc_mirror(zone)
             end
           end
 
@@ -41,6 +43,14 @@ module Vagrant
           end
 
           private
+
+          def configure_pkgsrc_mirror(zone)
+            return if zone.lx_brand?
+            return unless pkgsrc_mirror
+            machine.ui.info(I18n.t('vagrant.smartos.zones.pkgsrc.mirror',
+                                   uuid: zone.uuid, mirror: pkgsrc_mirror))
+            zone.zlogin("sed -i -e \\'s@http://pkgsrc.joyent.com@#{pkgsrc_mirror}@\\' /opt/local/etc/pkgin/repositories.conf")
+          end
 
           def create_zone_users(zone)
             create_zone_vagrant_user(zone)
@@ -60,6 +70,14 @@ module Vagrant
 
           def overwrite_password(zone, user, pw, ts)
             zone.zlogin("sed -i -e \\'s@#{user}:.*@#{user}:#{pw}:#{ts}::::::@\\' /etc/shadow")
+          end
+
+          def pkgsrc_mirror
+            plugin_config['local.pkgsrc']
+          end
+
+          def plugin_config
+            @plugin_config ||= Models::Config.config(machine.env).hash
           end
 
           def zone_json

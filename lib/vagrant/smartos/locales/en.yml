@@ -44,6 +44,9 @@ en:
             failed: |-
               Unable to delete configuration key: %{key}
               Was key actually set?
+        pkgsrc:
+          mirror:
+            Configuring pkgsrc mirror for %{uuid} => %{mirror}
         warning:
           zone_not_found: |-
             Unable to find zone with name %{name}
