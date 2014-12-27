@@ -107,6 +107,7 @@ vagrant smartos install [platform_image]
 Interact with zones running in a box:
 
 ```bash
+vagrant zones config
 vagrant zones list
 vagrant zones show [name]
 vagrant zones start [name]
@@ -243,6 +244,27 @@ bundle exec kitchen test
 ```
 
 This may take a while...
+
+## Plugin configuration
+
+The plugin allows for local configuration through the `vagrant zones
+config` command. This can be used for local overrides of zone
+configuration.
+
+```bash
+vagrant zones config
+vagrant zones config key value
+vagrant zones config --delete key
+```
+
+### Pkgsrc mirror
+
+```bash
+vagrant zones config local.pkgsrc http://mirror.domain.com
+```
+
+This will replace the protocol and domain of the pkgsrc mirror used by
+pkgin in a SmartOS zone.
 
 ## References / Alternatives
 
