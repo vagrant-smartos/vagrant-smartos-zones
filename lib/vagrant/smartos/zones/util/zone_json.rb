@@ -51,7 +51,7 @@ module Vagrant
 
           def nics
             {
-              'nics' => [nic_info('stub0', '10.0.0.2')]
+              'nics' => [nic_info('stub0', '172.16.0.2')]
             }
           end
 
@@ -60,7 +60,7 @@ module Vagrant
               'nic_tag' => tag,
               'ip' => ip,
               'netmask' => '255.255.255.0',
-              'gateway' => '10.0.0.1',
+              'gateway' => '172.16.0.1',
               'allow_ip_spoofing' => true
             }
           end
