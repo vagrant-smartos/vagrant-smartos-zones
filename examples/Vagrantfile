@@ -8,6 +8,8 @@ Vagrant.configure('2') do |config|
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.vm.communicator = 'smartos'
 
+  config.ssh.insert_key = false
+
   config.global_zone.platform_image = 'latest'
 
   config.zone.name = 'base64'
