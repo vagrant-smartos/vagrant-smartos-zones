@@ -312,11 +312,5 @@ references have fallen by the wayside.
 
 ## Contributing
 
-1. Fork it ( https://github.com/vagrant-smartos/vagrant-smartos-zones/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
-
-When creating a new Pull Request, `/cc @sax` in the notes to make sure
-I get an email about it.
+See the [Contributing](https://github.com/vagrant-smartos/vagrant-smartos-zones/wiki/Contributing)
+page for guidelines/recommendations on contributions.
