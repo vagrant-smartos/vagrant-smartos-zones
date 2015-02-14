@@ -3,13 +3,13 @@
 dladm create-etherstub stub0
 dladm create-vnic -l stub0 vnic0
 ipadm create-if vnic0
-ipadm create-addr -T static -a 172.16.0.1/24 vnic0/static
+ipadm create-addr -T static -a <gz_addr> vnic0/static
 
-echo 'map e1000g0 172.16.0.0/24 -> 0.0.0.0/32' | ipnat -f -
+echo 'map e1000g0 <zone_network> -> 0.0.0.0/32' | ipnat -f -
 
 # When we SSH into port 2222, ensure that that goes to 22 in the GZ
 # and is never forwarded to the zone.
-echo 'rdr e1000g0 0.0.0.0/0 port 2222 -> 172.16.0.1 port 22' | ipnat -f -
+echo 'rdr e1000g0 0.0.0.0/0 port 2222 -> <gz_ip> port 22' | ipnat -f -
 
 routeadm -u -e ipv4-forwarding
 routeadm -u -e ipv4-routing
