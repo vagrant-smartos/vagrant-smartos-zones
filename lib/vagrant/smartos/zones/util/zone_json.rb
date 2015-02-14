@@ -1,3 +1,5 @@
+require 'vagrant/smartos/zones/models/network'
+
 module Vagrant
   module Smartos
     module Zones
@@ -51,7 +53,7 @@ module Vagrant
 
           def nics
             {
-              'nics' => [nic_info('stub0', '172.16.0.2')]
+              'nics' => [nic_info('stub0', network.zone_ip)]
             }
           end
 
@@ -60,7 +62,7 @@ module Vagrant
               'nic_tag' => tag,
               'ip' => ip,
               'netmask' => '255.255.255.0',
-              'gateway' => '172.16.0.1',
+              'gateway' => network.gz_stub_ip,
               'allow_ip_spoofing' => true
             }
           end
@@ -69,6 +71,10 @@ module Vagrant
 
           def lx_brand?
             machine.config.zone.brand == 'lx'
+          end
+
+          def network
+            @network ||= Models::Network.new(machine.env)
           end
         end
       end

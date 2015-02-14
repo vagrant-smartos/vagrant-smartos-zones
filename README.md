@@ -257,6 +257,23 @@ vagrant zones config key value
 vagrant zones config --delete key
 ```
 
+### Network
+
+Networks conflict, particularly when assumptions are made about local
+networks. For this reason, the network chosen by the plugin when
+configuring the Global Zone and its local zone can be globally
+overridden.
+
+```bash
+vagrant zones config network 10.0.0.0/24
+```
+
+What can go wrong? Well... basically, what can go wrong is that the
+Global Zone port forwarding will break, and we won't actually be able to
+create zones. It should be pretty obvious when this is the case.
+
+* Does your network overlap with VirtualBox's local network space?
+
 ### Pkgsrc mirror
 
 ```bash
