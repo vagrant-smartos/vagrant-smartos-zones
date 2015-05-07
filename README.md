@@ -264,6 +264,9 @@ networks. For this reason, the network chosen by the plugin when
 configuring the Global Zone and its local zone can be globally
 overridden.
 
+Since this is a facet of your current location and not of the box
+itself, this is configured in the plugin rather than in the Vagrantfile.
+
 ```bash
 vagrant zones config network 10.0.0.0/24
 ```
