@@ -13,12 +13,11 @@ Vagrant.configure('2') do |config|
 
   config.ssh.insert_key = false
 
-  config.global_zone.platform_image = 'hourly-20141121'
-  config.global_zone.platform_image_url = 'https://us-east.manta.joyent.com/nahamu/public/smartos/platform-hourly.iso'
+  config.global_zone.platform_image = 'latest'
 
-  config.zone.name = 'lx'
+  config.zone.name = 'lx-ubuntu-14.04_20150415'  # images are available through https://images.joyent.com/images
   config.zone.brand = 'lx'
-  config.zone.image = 'b7493690-f019-4612-958b-bab5f844283e'
+  config.zone.image = '430da066-e3a7-11e4-9657-332a2dbdf565'
   config.zone.memory = 1536
   config.zone.disk_size = 5
 end
