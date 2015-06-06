@@ -1,4 +1,5 @@
 require 'vagrant/smartos/zones/util/global_zone/connection'
+require 'vagrant/smartos/zones/util/rsync'
 
 module Vagrant
   module Smartos
@@ -8,6 +9,23 @@ module Vagrant
           def initialize(machine)
             @machine = machine
             super
+          end
+
+          def gz_download(from, to = nil)
+            @logger.debug("Downloading from global zone: #{from} to #{to}")
+
+            if gz_rsync_connector.available?
+              gz_rsync_connector.download(from, to)
+            else
+              gz_scp_connect do |scp|
+                binding.pry
+                scp.download!(from, to) do |ch, name, sent, total|
+                  percent = (sent.to_f / total) * 100
+                  print "#{name}: #{sent}/#{total} : #{percent.to_i}%\r"
+                  $stdout.flush
+                end
+              end
+            end
           end
 
           # rubocop:disable Metrics/MethodLength
@@ -70,6 +88,15 @@ module Vagrant
             exit_status
           end
 
+          def gz_scp_connect
+            global_zone_connector.with_connection do |connection|
+              yield connection.scp
+            end
+          rescue Net::SCP::Error => e
+            raise Vagrant::Errors::SCPUnavailable if e.message =~ /\(127\)/
+            raise
+          end
+
           def gz_test(command, opts = nil)
             opts = { error_check: false }.merge(opts || {})
             gz_execute(command, opts) == 0
@@ -79,6 +106,10 @@ module Vagrant
 
           def global_zone_connector
             @global_zone_connector ||= Vagrant::Smartos::Zones::Util::GlobalZone::Connection.new(@machine, @logger)
+          end
+
+          def gz_rsync_connector
+            @gz_rsync_connector ||= Vagrant::Smartos::Zones::Util::Rsync.new(global_zone_connector.connect)
           end
         end
       end

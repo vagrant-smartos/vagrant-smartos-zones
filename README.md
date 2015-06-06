@@ -114,6 +114,14 @@ vagrant zones start [name]
 vagrant zones stop [name]
 ```
 
+Export a running zone as a dataset (image) in the local file system:
+
+```bash
+vagrant dataset create [zone] [identifier]
+vagrant dataset delete [identifier]
+vagrant dataset list
+```
+
 ## Single zone usage
 
 When a single zone is configured (currently the only configuration
@@ -232,19 +240,6 @@ group with which to connect. This user should have `Primary
 Administrator` privileges. When creating a local zone, a `vagrant`
 user and group are also created in the zone.
 
-## Tests
-
-There is a basic test suite that uses `test-kitchen` to converge
-different brands of zones. Although it might not be comprehensive, it
-should be ran after new features or after any significant refactoring to
-ensure that nothing breaks the ability to stand up a zone.
-
-```bash
-bundle exec kitchen test
-```
-
-This may take a while...
-
 ## Plugin configuration
 
 The plugin allows for local configuration through the `vagrant zones
@@ -277,6 +272,32 @@ create zones. It should be pretty obvious when this is the case.
 
 * Does your network overlap with VirtualBox's local network space?
 
+### Using local zone images
+
+When running vagrant from a location far away from where SmartOS images
+are hosted (anywhere other than the east coast of the USA, basically),
+setting up a zone can be very slow.
+
+Zones can be modified in Vagrant, then exported locally to save time on
+repeated tasks. After modifying a zone, for instance by installing build
+tools, you can export the zone as follows (warning: this will take a
+while):
+
+```bash
+# vagrant dataset create [zone] [identifier]
+vagrant dataset create base64 base64-15.1.1-build-essential
+```
+
+NOTE: config overrides are currently WIP. Do not rely on them working
+until this officially released.
+
+The vagrant-smartos-zones plugin can be configured to use a local zone
+image in place of a remote one as follows:
+
+```bash
+vagrant zones config dataset.0edf00aa-0562-11e5-b92f-879647d45790 base64-15.1.1-build-essential
+```
+
 ### Pkgsrc mirror
 
 ```bash
@@ -285,6 +306,19 @@ vagrant zones config local.pkgsrc http://mirror.domain.com
 
 This will replace the protocol and domain of the pkgsrc mirror used by
 pkgin in a SmartOS zone.
+
+## Tests
+
+There is a basic test suite that uses `test-kitchen` to converge
+different brands of zones. Although it might not be comprehensive, it
+should be ran after new features or after any significant refactoring to
+ensure that nothing breaks the ability to stand up a zone.
+
+```bash
+bundle exec kitchen test
+```
+
+This may take a while...
 
 ## References / Alternatives
 

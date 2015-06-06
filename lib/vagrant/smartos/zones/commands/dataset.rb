@@ -39,7 +39,9 @@ module Vagrant
           end
 
           def create(zonename, dataset)
+            setup_local_directory
             with_zone(zonename) do |zone|
+              ui.info(I18n.t('vagrant.smartos.zones.commands.dataset.create', uuid: zone.uuid, dataset: dataset))
               Models::Dataset.create(dataset, zone)
             end
           end
@@ -79,6 +81,12 @@ module Vagrant
           rescue ZoneNotFound
             ui.warn(I18n.t('vagrant.smartos.zones.warning.zone_not_found',
                            name: name), prefix: false)
+          end
+
+          def setup_local_directory
+            home_path = @env.respond_to?(:home_path) ? @env.home_path : @env[:home_path]
+            image_path = home_path.join('smartos', 'datasets')
+            FileUtils.mkdir_p(image_path)
           end
         end
       end

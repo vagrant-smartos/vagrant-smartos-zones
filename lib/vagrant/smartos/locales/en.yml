@@ -3,6 +3,17 @@ en:
     smartos:
       zones:
         commands:
+          dataset:
+            create: |-
+              Creating a new dataset %{dataset} from zone: %{uuid}
+            prepare_image: |-
+              Preparing zone for dataset
+            save: |-
+              Saving zone file system
+            start_zone: |-
+              Restarting zone
+            stop_zone: |-
+              Stopping zone
           zones:
             list: |-
               name                      state      uuid 
