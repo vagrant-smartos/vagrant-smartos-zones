@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 module Vagrant
   module Smartos
     module Zones
@@ -18,6 +20,14 @@ module Vagrant
           def setup_smartos_directories
             env.setup_home_path if env.respond_to?(:setup_home_path)
             FileUtils.mkdir_p(dataset_dir)
+          end
+
+          def sha1(name)
+            Digest::SHA1.file(dataset_dir.join("#{name}.zfs.bz2")).hexdigest
+          end
+
+          def size(name)
+            ::File.size(dataset_dir.join("#{name}.zfs.bz2"))
           end
 
           private

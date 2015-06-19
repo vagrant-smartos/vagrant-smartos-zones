@@ -1,5 +1,6 @@
 require 'vagrant/smartos/zones/models/snapshot'
 require 'vagrant/smartos/zones/util/datasets'
+require 'vagrant/smartos/zones/util/datasets/manifest'
 require 'vagrant/smartos/zones/util/global_zone/helper'
 
 module Vagrant
@@ -22,9 +23,10 @@ module Vagrant
           end
 
           def create
-            Zones::Util::Dataset.new(machine.env).setup_smartos_directories
+            Zones::Util::Datasets.new(machine.env).setup_smartos_directories
             create_dataset
             download
+            write_manifest
           end
 
           def exists?
@@ -60,12 +62,26 @@ module Vagrant
             machine.communicate.gz_download(remote_filename, local_filename)
           end
 
+          def write_manifest
+            File.open(local_manifest_filename, 'w') do |f|
+              f.write Zones::Util::Datasets::Manifest.new(name, machine.env).to_json
+            end
+          end
+
           def filename
             '%s.zfs.bz2' % name
           end
 
           def local_filename
             machine.env.home_path.join('smartos', 'datasets', filename).to_s
+          end
+
+          def local_manifest_filename
+            machine.env.home_path.join('smartos', 'datasets', manifest_filename).to_s
+          end
+
+          def manifest_filename
+            '%s.dsmanifest' % name
           end
 
           def remote_filename
