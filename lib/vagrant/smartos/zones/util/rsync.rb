@@ -10,15 +10,15 @@ module Vagrant
           end
 
           def available?
-            Vagrant::Util::Subprocess.execute(*%w'which rsync').exit_code == 0
+            Vagrant::Util::Subprocess.execute(*%w(which rsync)).exit_code == 0
           end
 
           def download(from, to)
-            command = %W'
+            command = %w(
               rsync
               -avz
               --progress
-            '
+            )
             Vagrant::Util::Subprocess.execute(*command, '-e', ssh_command, remote(from), to, notify: [:stdout])
           end
 

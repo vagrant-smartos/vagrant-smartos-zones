@@ -18,8 +18,7 @@ module Vagrant
               gz_rsync_connector.download(from, to)
             else
               gz_scp_connect do |scp|
-                binding.pry
-                scp.download!(from, to) do |ch, name, sent, total|
+                scp.download!(from, to) do |_ch, name, sent, total|
                   percent = (sent.to_f / total) * 100
                   print "#{name}: #{sent}/#{total} : #{percent.to_i}%\r"
                   $stdout.flush
