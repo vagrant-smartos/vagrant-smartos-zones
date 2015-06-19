@@ -90,6 +90,11 @@ module Vagrant
           Cap::Zone::Stop
         end
 
+        host_capability 'bsd', 'dataset_list' do
+          require_relative 'cap/dataset/list'
+          Cap::Dataset::List
+        end
+
         host_capability 'bsd', 'platform_image_install' do
           require_relative 'cap/platform_image/install'
           Cap::PlatformImage::Install
