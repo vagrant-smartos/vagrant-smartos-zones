@@ -8,14 +8,12 @@ module Vagrant
           def initialize(env, machine = nil)
             @env = env
             @machine = machine
-            setup_smartos_directories
           end
 
           def list
+            setup_smartos_directories
             ui.info(datasets.join("\n"), prefix: false)
           end
-
-          protected
 
           def setup_smartos_directories
             env.setup_home_path if env.respond_to?(:setup_home_path)
@@ -33,7 +31,7 @@ module Vagrant
           end
 
           def datasets
-            Dir[dataset_dir.join('*')].map do |f|
+            Dir[dataset_dir.join('*.zfs.bz2')].map do |f|
               File.basename(f, '.zfs.bz2')
             end.sort
           end

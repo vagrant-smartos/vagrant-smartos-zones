@@ -1,4 +1,5 @@
 require 'vagrant/smartos/zones/models/snapshot'
+require 'vagrant/smartos/zones/util/datasets'
 require 'vagrant/smartos/zones/util/global_zone/helper'
 
 module Vagrant
@@ -21,6 +22,7 @@ module Vagrant
           end
 
           def create
+            Zones::Util::Dataset.new(machine.env).setup_smartos_directories
             create_dataset
             download
           end
