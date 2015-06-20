@@ -12,20 +12,25 @@ module Vagrant
 
           attr_reader :name, :zone, :machine
 
-          def initialize(name, zone)
+          def initialize(name, zone, machine)
             @name = name
             @zone = zone
-            @machine = zone.machine
+            @machine = machine
           end
 
           def self.create(name, zone)
             new(name, zone).create
           end
 
+          def self.install(name, machine)
+            new(name, nil, machine).install
+          end
+
           def create
             Zones::Util::Datasets.new(machine.env).setup_smartos_directories
-            create_dataset
-            download
+            prepare_gz
+            # create_dataset
+            # download
             write_manifest
           end
 
@@ -37,7 +42,22 @@ module Vagrant
             false
           end
 
+          def install
+            prepare_gz
+            upload
+            self
+          end
+
+          def remote_filename
+            '/zones/vagrant/%s' % filename
+          end
+
           private
+
+          def prepare_gz
+            with_gz('pfexec mkdir /zones/vagrant')
+            with_gz('pfexec chown vagrant:vagrant /zones/vagrant')
+          end
 
           def create_dataset
             return machine.ui.info('Dataset already exists in global zone') if exists?
@@ -62,10 +82,13 @@ module Vagrant
             machine.communicate.gz_download(remote_filename, local_filename)
           end
 
+          def upload
+            machine.ui.info 'Installing %s in global zone' % filename
+            machine.communicate.gz_upload(local_filename, remote_filename)
+          end
+
           def write_manifest
-            File.open(local_manifest_filename, 'w') do |f|
-              f.write Zones::Util::Datasets::Manifest.new(name, machine.env).to_json
-            end
+            Zones::Util::Datasets::Manifest.new(name, machine.env).write!
           end
 
           def filename
@@ -74,18 +97,6 @@ module Vagrant
 
           def local_filename
             machine.env.home_path.join('smartos', 'datasets', filename).to_s
-          end
-
-          def local_manifest_filename
-            machine.env.home_path.join('smartos', 'datasets', manifest_filename).to_s
-          end
-
-          def manifest_filename
-            '%s.dsmanifest' % name
-          end
-
-          def remote_filename
-            '/zones/%s' % filename
           end
         end
       end

@@ -14,6 +14,20 @@ module Vagrant
               @env = env
             end
 
+            def write!
+              File.open(local_filename, 'w') do |f|
+                f.write to_json
+              end
+              self
+            end
+
+            def load!
+              json = JSON.load(File.read(local_filename))
+              @creator = json['creator_uuid']
+              @uuid = json['uuid']
+              self
+            end
+
             def to_json
               {
                 'creator_name' => 'vagrant-smartos-zones',
@@ -28,6 +42,18 @@ module Vagrant
                 'uuid' => uuid,
                 'version' => '1.0.0'
               }.to_json
+            end
+
+            def local_filename
+              env.home_path.join('smartos', 'datasets', manifest_filename).to_s
+            end
+
+            def remote_filename
+              '/zones/vagrant/%s' % manifest_filename
+            end
+
+            def uuid
+              @uuid ||= SecureRandom.uuid
             end
 
             private
@@ -58,8 +84,8 @@ module Vagrant
               "smartos:vagrant-smartos-zones:#{name}:1.0.0"
             end
 
-            def uuid
-              @uuid ||= SecureRandom.uuid
+            def manifest_filename
+              '%s.dsmanifest' % name
             end
           end
         end

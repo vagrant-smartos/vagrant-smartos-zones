@@ -19,12 +19,14 @@ module Vagrant
             Models::ZoneGroup.new.tap do |g|
               g.name = group
               with_gz("#{sudo} zlogin #{zone.uuid} gid -g #{group}") do |_type, output|
-                g.gid = output.chomp
+                g.gid = output.chomp if output
               end
             end
           end
 
           def create(group)
+            gid = find(group).gid
+            return unless gid.nil? || gid.empty?
             zone.zlogin("groupadd #{group}")
           end
         end

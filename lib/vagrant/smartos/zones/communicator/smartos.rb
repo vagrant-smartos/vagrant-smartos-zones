@@ -27,6 +27,22 @@ module Vagrant
             end
           end
 
+          def gz_upload(from, to)
+            @logger.debug("Uploading to global zone: #{from} to #{to}")
+
+            if gz_rsync_connector.available?
+              gz_rsync_connector.upload(from, to)
+            else
+              gz_scp_connect do |scp|
+                scp.upload!(from, to) do |_ch, name, sent, total|
+                  percent = (sent.to_f / total) * 100
+                  print "#{name}: #{sent}/#{total} : #{percent.to_i}%\r"
+                  $stdout.flush
+                end
+              end
+            end
+          end
+
           # rubocop:disable Metrics/MethodLength
           def gz_execute(command, opts = {}, &block)
             opts = {

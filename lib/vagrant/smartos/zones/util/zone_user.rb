@@ -20,12 +20,14 @@ module Vagrant
             Models::ZoneUser.new.tap do |u|
               u.name = username
               machine.communicate.gz_execute("#{sudo} zlogin #{zone.uuid} id -u #{username}") do |_type, output|
-                u.uid = output.chomp
+                u.uid = output.chomp if output
               end
             end
           end
 
           def create(username, group, role = nil)
+            uid = find(username).uid
+            return unless uid.nil? || uid.empty?
             zone.zlogin("useradd #{flags(group)} #{username}")
             grant_role(username, role)
             install_public_key(group)
