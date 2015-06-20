@@ -41,7 +41,7 @@ module Vagrant
           def create(zonename, dataset)
             with_zone(zonename) do |zone|
               ui.info(I18n.t('vagrant.smartos.zones.commands.dataset.create', uuid: zone.uuid, dataset: dataset))
-              Models::Dataset.create(dataset, zone)
+              Models::Dataset.create(dataset, zone, zone.machine)
             end
           end
 

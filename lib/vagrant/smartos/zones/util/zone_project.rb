@@ -15,8 +15,13 @@ module Vagrant
             @zone = zone
           end
 
+          def exists?(project)
+            machine.communicate.gz_test("#{sudo} zlogin #{zone.uuid} projects -l #{project}")
+          end
+
           def create(project, users, comment)
             return if zone.lx_brand?
+            return if exists?(project)
             zone.zlogin("projadd -c \"#{comment}\" -U #{users.join(',')} #{project}")
           end
         end

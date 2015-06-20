@@ -27,8 +27,8 @@ module Vagrant
           end
 
           def create(name)
-            machine.ui.info "Creating zone #{machine.config.zone.name} with image #{machine.config.zone.image}"
-            with_gz("echo '#{zone_json}' | #{sudo} vmadm create")
+            machine.ui.info "Creating zone #{machine.config.zone.name} with image #{zone_json.image}"
+            with_gz("echo '#{zone_json.to_json}' | #{sudo} vmadm create")
             with_zone(name) do |zone|
               create_zone_users(zone)
               configure_pkgsrc_mirror(zone)
@@ -38,7 +38,7 @@ module Vagrant
           def update(name)
             with_zone(name) do |zone|
               machine.ui.info "Updating zone #{name}..."
-              with_gz("echo '#{zone_json}' | #{sudo} vmadm update #{zone.uuid}")
+              with_gz("echo '#{zone_json.to_json}' | #{sudo} vmadm update #{zone.uuid}")
             end
           end
 
@@ -81,7 +81,7 @@ module Vagrant
           end
 
           def zone_json
-            Util::ZoneJson.new(machine).to_json
+            Util::ZoneJson.new(machine)
           end
 
           def with_zone(name)

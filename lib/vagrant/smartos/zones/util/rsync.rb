@@ -14,12 +14,15 @@ module Vagrant
           end
 
           def download(from, to)
-            command = %w(
-              rsync
-              -avz
-              --progress
-            )
-            Vagrant::Util::Subprocess.execute(*command, '-e', ssh_command, remote(from), to, notify: [:stdout])
+            Vagrant::Util::Subprocess.execute(*rsync_command, '-e', ssh_command, remote(from), to, notify: [:stdout])
+          end
+
+          def upload(from, to)
+            Vagrant::Util::Subprocess.execute(*rsync_command, '-e', ssh_command, from, remote(to), notify: [:stdout])
+          end
+
+          def rsync_command
+            %w(rsync -avz --progress)
           end
 
           def ssh_command

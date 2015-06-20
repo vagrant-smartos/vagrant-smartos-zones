@@ -1,4 +1,5 @@
 require 'vagrant/smartos/zones/models/network'
+require 'vagrant/smartos/zones/util/zone_image'
 
 module Vagrant
   module Smartos
@@ -23,7 +24,7 @@ module Vagrant
             {
               'brand' => machine.config.zone.brand,
               'alias' => machine.config.zone.name,
-              'dataset_uuid' => machine.config.zone.image,
+              'dataset_uuid' => image,
               'quota' => machine.config.zone.disk_size || 1,
               'max_physical_memory' => machine.config.zone.memory || 64
             }
@@ -67,6 +68,10 @@ module Vagrant
             }
           end
 
+          def image
+            zone_image.install_override? ? zone_image.override_uuid : machine.config.zone.image
+          end
+
           private
 
           def lx_brand?
@@ -75,6 +80,10 @@ module Vagrant
 
           def network
             @network ||= Models::Network.new(machine.env)
+          end
+
+          def zone_image
+            @zone_image ||= Util::ZoneImage.new(machine)
           end
         end
       end
