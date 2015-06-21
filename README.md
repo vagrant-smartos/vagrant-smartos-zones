@@ -288,15 +288,16 @@ while):
 vagrant dataset create base64 base64-15.1.1-build-essential
 ```
 
-NOTE: config overrides are currently WIP. Do not rely on them working
-until this officially released.
-
 The vagrant-smartos-zones plugin can be configured to use a local zone
 image in place of a remote one as follows:
 
 ```bash
 vagrant zones config dataset.0edf00aa-0562-11e5-b92f-879647d45790 base64-15.1.1-build-essential
 ```
+
+Now any Vagrantfile configured to use a local zone with the image
+0edf00aa-0562-11e5-b92f-879647d45790 will instead install and use the
+local image.
 
 ### Pkgsrc mirror
 
