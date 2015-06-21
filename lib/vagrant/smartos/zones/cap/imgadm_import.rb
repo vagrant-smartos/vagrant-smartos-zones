@@ -43,7 +43,7 @@ module Vagrant
             ui.info "Zone image #{uuid}: installed" && return if installed?(uuid)
             dataset = Models::Dataset.install(zone_image.override, machine)
             machine.communicate.gz_upload(manifest.local_filename, manifest.remote_filename)
-            ui.info "  Installing zone image #{uuid}..."
+            ui.info "  Unpacking #{uuid}..."
             machine.communicate.gz_execute("#{sudo} imgadm install -m #{manifest.remote_filename} -f #{dataset.remote_filename}")
           end
 
