@@ -23,11 +23,11 @@ module Vagrant
           end
 
           def sha1(name)
-            Digest::SHA1.file(dataset_dir.join("#{name}.zfs.bz2")).hexdigest
+            Digest::SHA1.file(dataset_dir.join("#{name}.zfs.gz")).hexdigest
           end
 
           def size(name)
-            ::File.size(dataset_dir.join("#{name}.zfs.bz2"))
+            ::File.size(dataset_dir.join("#{name}.zfs.gz"))
           end
 
           private
@@ -41,8 +41,8 @@ module Vagrant
           end
 
           def datasets
-            Dir[dataset_dir.join('*.zfs.bz2')].map do |f|
-              File.basename(f, '.zfs.bz2')
+            Dir[dataset_dir.join('*.zfs.gz')].map do |f|
+              File.basename(f, '.zfs.gz')
             end.sort
           end
 

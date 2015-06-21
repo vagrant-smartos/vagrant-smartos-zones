@@ -61,7 +61,7 @@ module Vagrant
             def files
               [
                 {
-                  'path' => "#{name}.zfs.bz2",
+                  'path' => "#{name}.zfs.gz",
                   'sha1' => sha1,
                   'size' => size
                 }

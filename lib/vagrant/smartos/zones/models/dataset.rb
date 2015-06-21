@@ -18,8 +18,8 @@ module Vagrant
             @machine = machine
           end
 
-          def self.create(name, zone)
-            new(name, zone).create
+          def self.create(name, zone, machine)
+            new(name, zone, machine).create
           end
 
           def self.install(name, machine)
@@ -29,17 +29,13 @@ module Vagrant
           def create
             Zones::Util::Datasets.new(machine.env).setup_smartos_directories
             prepare_gz
-            # create_dataset
-            # download
+            create_dataset
+            download
             write_manifest
           end
 
           def exists?
-            cmd = 'ls %s 2>/dev/null' % remote_filename
-            with_gz(cmd) do |output|
-              return true if output.strip == remote_filename
-            end
-            false
+            machine.communicate.gz_test('ls %s' % remote_filename)
           end
 
           def install
@@ -55,7 +51,7 @@ module Vagrant
           private
 
           def prepare_gz
-            with_gz('pfexec mkdir /zones/vagrant')
+            with_gz('pfexec mkdir -p /zones/vagrant')
             with_gz('pfexec chown vagrant:vagrant /zones/vagrant')
           end
 
@@ -69,7 +65,7 @@ module Vagrant
               zone.stop
               Models::Snapshot.around(zone) do |snapshot|
                 machine.ui.info(I18n.t('vagrant.smartos.zones.commands.dataset.save'))
-                cmd = 'pfexec /usr/bin/bash -l -c "/usr/sbin/zfs send %s | /usr/bin/bzip2 > %s"'
+                cmd = 'pfexec /usr/bin/bash -l -c "/usr/sbin/zfs send %s | /usr/bin/gzip > %s"'
                 with_gz(cmd % [snapshot.path, remote_filename])
               end
             end
@@ -92,7 +88,7 @@ module Vagrant
           end
 
           def filename
-            '%s.zfs.bz2' % name
+            '%s.zfs.gz' % name
           end
 
           def local_filename
