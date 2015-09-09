@@ -30,6 +30,7 @@ module Vagrant
 
             def upload_zonegate
               machine.communicate.upload(LOCAL_ZONEGATE_FOLDER, ZONEGATE_FOLDER)
+              machine.communicate.execute("#{sudo} chmod 0755 %s/zonegate/*" % ZONEGATE_FOLDER)
               machine.communicate.upload(LOCAL_SMF_MANIFEST, '%s/zonegate.xml' % SMF_TMP_FOLDER)
             end
 
