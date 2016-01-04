@@ -327,7 +327,7 @@ Any success of this project depends heavily on the work of others,
 which I've either learned from or pulled in directly.
 
 * https://github.com/joshado/vagrant-smartos - Vagrant plugin for
-  managing zones on a global zone running on an arbitary IP.
+  managing zones on a global zone running on an arbitrary IP.
 * https://github.com/groundwater/vagrant-smartos - Scripts for 
   creating stand-alone boxes where GZ networking is twerked to pretend
   that the local zone is the only thing in the box.
