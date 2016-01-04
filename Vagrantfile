@@ -17,7 +17,7 @@ Vagrant.configure('2') do |config|
 
   config.zone.name = 'base64'
   config.zone.brand = 'joyent'
-  config.zone.image = '5c7d0d24-3475-11e5-8e67-27953a8b237e'
+  config.zone.image = '842e6fa6-6e9b-11e5-8402-1b490459e334'
   config.zone.memory = 1536
   config.zone.disk_size = 5
 
