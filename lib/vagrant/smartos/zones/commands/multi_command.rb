@@ -29,7 +29,7 @@ module Vagrant
             command_method = subcommands.find { |c| c == command }
 
             unless command_method
-              ui.warn option_parser.to_s, prefix: false
+              @env.ui.warn option_parser.to_s, prefix: false
               exit 1
             end
 
@@ -38,7 +38,7 @@ module Vagrant
           end
 
           def fail_options!
-            ui.warn option_parser.to_s, prefix: false
+            @env.ui.warn option_parser.to_s, prefix: false
             exit 1
           end
 
