@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
 
 group :development do
+  gem 'pry-nav'
+  gem 'rake'
+  gem 'rspec'
   gem 'rubocop'
   gem 'vagrant'
-  gem 'rake'
-  gem 'pry-nav'
 end
 
 group :plugins do
@@ -12,6 +13,6 @@ group :plugins do
 end
 
 group :integration do
-  gem 'test-kitchen'
   gem 'kitchen-vagrant'
+  gem 'test-kitchen'
 end

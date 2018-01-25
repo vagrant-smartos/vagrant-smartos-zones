@@ -10,7 +10,7 @@ module Vagrant
           end
 
           def self.config(env)
-            @config ||= new(env).load
+            new(env).load
           end
 
           attr_reader :env, :hash
