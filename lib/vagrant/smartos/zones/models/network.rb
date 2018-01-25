@@ -17,25 +17,25 @@ module Vagrant
           end
 
           def zone_network
-            [cidr.network, cidr.bits].join('/')
+            [cidr.network, cidr.netmask].join
           end
 
           def gz_addr
-            [gz_stub_ip, cidr.bits].join('/')
+            [gz_stub_ip, cidr.netmask].join
           end
 
           def gz_stub_ip
-            cidr[1].ip
+            cidr.nth(1).to_s
           end
 
           def zone_ip
-            cidr[2].ip
+            cidr.nth(2).to_s
           end
 
           private
 
           def cidr
-            @cidr ||= NetAddr::CIDR.create(network)
+            @cidr ||= NetAddr::IPv4Net.parse(network)
           end
 
           def plugin_config
