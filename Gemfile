@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 group :development do
   gem 'rubocop'
-  gem 'vagrant', git: 'https://github.com/mitchellh/vagrant.git'
+  gem 'vagrant'
   gem 'rake'
   gem 'pry-nav'
 end
